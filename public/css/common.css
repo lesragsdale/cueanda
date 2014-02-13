@@ -1,0 +1,103 @@
+.navbar .nav>li>a.brand {
+    padding-left:20px;
+    margin-left:0
+}
+
+.content {
+    margin-top:70px;
+    width:100%
+}
+
+body {
+    background-color:#737373;
+    color:#3b3b3b;
+}
+
+footer {
+    position:fixed;
+    left:0px;
+    bottom:0px;
+    height:30px;
+    width:100%;
+    background:#ddd;
+    -webkit-box-shadow:0 8px 6px 6px black;
+    -moz-box-shadow:0 8px 6px 6px black;
+    box-shadow:0 8px 6px 6px black
+}
+
+footer p {
+    padding:5px 0 12px 10px
+}
+
+.blue-butt {
+  background-color: #1b21a7;
+  background-image: -moz-linear-gradient(top, #375bf6 0%, #1b21a7 100%);
+  background-image: -ms-linear-gradient(top, #375bf6 0%, #1b21a7 100%);
+  background-image: -o-linear-gradient(top, #375bf6 0%, #1b21a7 100%);
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #375bf6), color-stop(1, #1b21a7));
+  background-image: -webkit-linear-gradient(top, #375bf6 0%, #1b21a7 100%);
+  background-image: linear-gradient(top, #375bf6 0%, #1b21a7 100%);
+  border:thin solid #0E1054;
+  border-bottom-width: 5px;
+  box-shadow: 0px 1px 1px #6984F8 inset;
+  text-shadow: 1px 1px #0B0D43;
+  color:#fff;
+
+  margin-left:2%;
+}
+
+.blue-butt:hover {
+  background-color: #375bf6;
+  background-image: none;
+  border:thin solid #0B0D43;
+  border-bottom-width: 5px;
+}
+
+.green-butt {
+  color:#fff;
+  background-color: #2a803a;
+  background-image: -moz-linear-gradient(top, #75a947 0%, #2a803a 100%);
+  background-image: -ms-linear-gradient(top, #75a947 0%, #2a803a 100%);
+  background-image: -o-linear-gradient(top, #75a947 0%, #2a803a 100%);
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #75a947), color-stop(1, #2a803a));
+  background-image: -webkit-linear-gradient(top, #75a947 0%, #2a803a 100%);
+  background-image: linear-gradient(top, #75a947 0%, #2a803a 100%);  
+  box-shadow:         inset 0px 1px 1px #bae396;
+  
+  text-shadow:1px 1px #10571e;
+  border:thin solid #10571e;
+  border-bottom:5px solid #10571e;
+}
+
+.green-butt:hover {
+  color:#fff;
+  background-color: #75a947;
+  background-image: none;
+  border:thin solid #10571e;
+  border-bottom-width: 5px;
+}
+
+.orange-butt {
+    background-color: #D85700;
+  background-image: -moz-linear-gradient(top, #FF841A 0%, #D85700 100%);
+  background-image: -ms-linear-gradient(top, #FF841A 0%, #D85700 100%);
+  background-image: -o-linear-gradient(top, #FF841A 0%, #D85700 100%);
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #FF841A), color-stop(1, #D85700));
+  background-image: -webkit-linear-gradient(top, #FF841A 0%, #D85700 100%);
+  background-image: linear-gradient(top, #FF841A 0%, #D85700 100%);
+  border:thin solid #A24100;
+  border-bottom-width: 5px;
+  box-shadow: 0px 1px 1px #FF9933 inset;
+  text-shadow: 1px 1px #A24100;
+}
+
+.orange-butt:hover {
+  background-color: #FF841A;
+  background-image: none;
+  border:thin solid #A24100;
+  border-bottom-width: 5px;
+}
+
+.form-group .help-block {
+  color:#525252;
+}

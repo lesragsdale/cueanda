@@ -1,0 +1,218 @@
+.question-list-item {
+	margin-bottom: 20px;
+	position:relative;
+}
+
+.question-list-item,
+.question-list-item .answers {
+	display:table;
+	width:100%;
+}
+
+.question-list-item .side {
+	display:table-cell;
+	vertical-align: top;
+}
+
+.question-list-item .side.left {
+	width:80px;
+}
+
+.question-list-item .side.right {
+	background-color: #E7E6E6;
+	border-radius: 10px;
+	padding:10px 20px;
+	cursor:pointer;
+}
+.question-list-item .side.left .img-hold{
+	border-radius:10px;
+	border:thin solid #333;
+	display: inline-block;
+}
+.question-list-item .side.left .img-hold img {
+	border-radius: 10px;
+	display: block;
+}
+
+.question-list-item .answers {
+	font-size:.85em;
+}
+
+.question-list-item .answers .opb {
+	text-align: right;
+}
+
+.question-list-item .question-user-name .muted {
+	color:#757575;
+	font-size:.9em;
+}
+.question-list-item .question-title{
+	font-size:1.2em;
+	margin-top:5px;
+	word-wrap: break-word;
+	word-break:break-all;
+}
+.vote-bar {
+	border-radius:5px;
+	overflow: hidden;
+	width:100%;
+	margin:10px 0px;
+}
+.vote-bar,
+.vote-bar .vote-sec  {
+	height: 15px;
+}
+.vote-bar .vote-sec {
+	display: inline-block;
+}
+.vote-bar .vote-sec-0 {
+	background-color:#FF841A;
+
+	background-image: linear-gradient(top, #FF841A 0%, #D85700 100%);
+	background-image: -webkit-linear-gradient(top, #FF841A 0%, #D85700 100%);
+}
+.vote-bar .vote-sec-1 {
+	background-color:#375bf6;
+
+	background-image: linear-gradient(top, #375bf6 0%, #1b21a7 100%);
+	background-image: -webkit-linear-gradient(top, #375bf6 0%, #1b21a7 100%);
+}
+
+
+.question-list-item .right:before {
+	position: absolute;
+	display: inline-block;
+	border-top: 12px solid transparent;
+	border-right: 12px solid #E7E6E6;
+	border-bottom: 12px solid transparent;
+	border-right-color: rgba(0, 0, 0, 0.2);
+	left: 68px;
+	top: 14px;
+	content: '';
+}
+
+.question-list-item .right:after {
+	position: absolute;
+	display: inline-block;
+	border-top: 12px solid transparent;
+	border-right: 12px solid #E7E6E6;
+	border-bottom: 12px solid transparent;
+	left: 69px;
+	top: 15px;
+	content: '';
+}
+
+
+#viewQuestion .modal-title {
+	margin-right:15px;
+	text-align: center;
+	word-wrap: break-word;
+	word-break:break-all;
+}
+#viewQuestion .answer.selected .fa {
+	color:#00CC00;
+	font-size:28px;
+	line-height: 14px;
+	position: relative;
+	bottom:-4px;
+	display: inline;
+}
+#viewQuestion .answer .fa {
+	display: none;
+}
+
+#viewQuestion .answer {
+	display: inline-block;
+	padding:10px;
+	color:#fff;
+	font-weight: bold;
+	cursor:pointer;
+	width:48%;
+	text-align: center;
+	border-radius: 5px;
+	vertical-align: middle;
+
+}
+#viewQuestion .answer-0 {
+	margin-right:2%;
+}
+#viewQuestion .answer-1 {
+	margin-left:2%;
+}
+#viewQuestion .answer:active{
+	position: relative;
+	top:1px;
+}
+#viewQuestion .create-comment {
+	margin-bottom: 10px;
+}
+#viewQuestion .create-comment textarea {
+	width:100%;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	border-bottom-right-radius: 0px;
+	border-bottom-left-radius: 0px;
+}
+#viewQuestion .comment-submit {
+	width:100%;
+	border-top-left-radius: 0px;
+	border-top-right-radius: 0px;
+	border-bottom-right-radius: 5px;
+	border-bottom-left-radius: 5px;
+}
+
+.categories {
+	margin-top:10px;
+}
+
+.categories .category {
+	padding:10px;
+	border-left:3px solid #fff;
+	color:#fff;
+	font-weight: bold;
+	text-shadow:1px 1px #333;
+}
+.categories .category .glyphicon{
+	margin-right:7px;
+}
+
+.comment {
+	display: table;
+	width:100%;
+}
+.comment.comment-0 {
+	background-color: #FFE2CC;
+	border-top:2px solid #FFF0E6;
+	border-bottom:2px solid #F0C8AD;
+}
+.comment.comment-1 {
+	background-color: #D4D6FA;
+	border-top:2px solid #ECEDFD;
+	border-bottom:2px solid #BFC1EB;
+}
+.comment.comment-0 .comment-main {
+	text-align: right;
+}
+.comment .comment-vote, .comment .comment-main, .comment .comment-img {
+	display: table-cell;
+	vertical-align: top;
+	padding:5px;
+}
+.comment .comment-vote,.comment .comment-img {
+	width:80px;
+	text-align: center;
+}
+.comment .comment-vote .vote-butt-up {
+	padding-bottom: 0px;
+}
+.comment .comment-vote .vote-butt-down {
+	padding-top: 0px;
+}
+.comment .comment-vote .vote-score {
+	padding-top:0px;
+	padding-bottom: 0px;
+	cursor: default;
+}
+.comment .comment-vote .fa {
+	font-size:20px;
+}
