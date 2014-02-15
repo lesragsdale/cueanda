@@ -5,7 +5,9 @@
  */
 var mongoose = require('mongoose'),
     User = mongoose.model('User'),
+    Follow = mongoose.model('Follow'),
     fs = require('fs'),
+    _ = require('lodash'),
     gm = require('gm');
 
 
@@ -76,18 +78,64 @@ exports.update = function(req, res, next) {
     res.redirect('/#!/user/'+req.user.username);
 };
 
-var saveImg = function(widthLarger, path, user){
+exports.uploadUsrImg = function(req, res, next){
+    //console.log(req.files);
+    if(req.files.file.originalFilename != ''){
+        var imgPath = req.files.file.path;
+        console.log(imgPath);
+
+        gm(imgPath).size(function(err,size){
+            if(!err)
+                var val = (size.width > size.height? true : false );
+                saveImg(val,imgPath,req.user,res);
+                deleteOldImages(req.user);
+        });
+    }
+}
+var updateUserDoc = function(user,rnd, res){
+    User.findByIdAndUpdate(user._id, {image:user.username+rnd}, function(err, user){
+        if(!err){
+            console.log('just updated the user..')           
+            res.jsonp(_.omit(user,['_v','hashed_password','provider','salt']));
+        }
+    });
+}
+
+var deleteOldImages = function(user){
+    if(user.image){
+        fs.unlink('public/img/user/'+user.image+'-sml.png',function(err){
+            if(err){ console.log(err)}
+            if(!err){
+                console.log('deleted public/img/user/'+user.image+'-sml.png');
+                fs.unlink('public/img/user/'+user.image+'-lrg.png',function(err){
+                    if(err){ console.log(err)}
+                    if(!err){
+                        console.log('deleted public/img/user/'+user.image+'-lrg.png');
+                    }
+                });
+            }
+        });
+    }
+}
+
+var saveImg = function(widthLarger, path, user, res){
     var rWidth = (widthLarger?[null,null]:[50,200]);
     var rHeight = (widthLarger?[50,200]:[null,null]);
+    var rnd = _.random(100);
 
     gm(path).resize(rWidth[0],rHeight[0]).crop(50,50,0,0)
-    .write('public/img/user/'+user.username+'-sml.png', function (err) {
-      if (!err) console.log('done');
+    .write('public/img/user/'+user.username+rnd+'-sml.png', function (err) {
+      if (!err) {
+            console.log('done');
+        }
     });
 
     gm(path).resize(rWidth[1],rHeight[1]).crop(200,200,0,0)
-    .write('public/img/user/'+user.username+'-lrg.png', function (err) {
-      if (!err) console.log('done');
+    .write('public/img/user/'+user.username+rnd+'-lrg.png', function (err) {
+        if (!err) {
+            console.log('done');
+            updateUserDoc(user,rnd, res);
+        }
     });
 }
 
@@ -137,14 +185,21 @@ exports.show = function(req, res) {
  * Find user by id
  */
 exports.user = function(req, res, next, id) {
-    User
-        .findOne({
-            username: id
-        })
-        .exec(function(err, user) {
-            if (err) return next(err);
-            if (!user) return next(new Error('Failed to load User ' + id));
-            req.profile = user;
+    var theUser = null;
+    User.findOne({username: id}).exec(function(err, user) {
+        if (err) return next(err);
+        if (!user) return next(new Error('Failed to load User ' + id));
+
+        theUser = user
+        /////////////
+        Follow.find({$or: [{follower:theUser._id},{followee:theUser._id}] }).populate('followee', 'name username image').populate('follower', 'name username image').exec(function(err, follows) {            
+            theUser.follows = follows;
+            req.profile = theUser;
             next();
         });
+        ////////////
+
+        //req.profile = user;
+        //next();
+    });
 };

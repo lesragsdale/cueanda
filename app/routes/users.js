@@ -13,6 +13,8 @@ module.exports = function(app, passport) {
     app.get('/users/me', users.me);
     app.get('/user/:userId', users.show);
     app.post('/user/:userId',connect.bodyParser(),users.update)
+    //uploadUsrImg
+    app.post('/user/:userId/img',connect.bodyParser(),users.uploadUsrImg)
     // Setting up the users api
     app.post('/users', users.create);
 

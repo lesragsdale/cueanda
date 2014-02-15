@@ -24,10 +24,17 @@ module.exports = function(app) {
             next();
     };
 
+    var comment = function(req, res, next, id) {
+            req.comment = id;
+            next();
+    };
+
 
     app.post('/vote/:questionId/:answerOption',vote.create)
+    app.post('/vote/:questionId/:commentId/:answerOption',vote.createForComment)
     // Finish with setting up the questionId param
     app.param('questionId', question);
     app.param('answerOption', answerOption);
+    app.param('commentId', comment);
 
 };

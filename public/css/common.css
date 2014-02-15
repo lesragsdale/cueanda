@@ -29,7 +29,15 @@ footer p {
     padding:5px 0 12px 10px
 }
 
-.blue-butt {
+.blue-butt:focus,
+.red-butt:focus,
+.orange-butt:focus,
+.green-butt:focus {
+  color:#fff;
+}
+
+.blue-butt,
+.vote-bar .vote-sec-1  {
   background-color: #1b21a7;
   background-image: -moz-linear-gradient(top, #375bf6 0%, #1b21a7 100%);
   background-image: -ms-linear-gradient(top, #375bf6 0%, #1b21a7 100%);
@@ -77,7 +85,36 @@ footer p {
   border-bottom-width: 5px;
 }
 
-.orange-butt {
+.red-butt {
+  color:#fff;
+  background-color: #ba3939;
+  background-image: -moz-linear-gradient(top, #eb504f 0%, #ba3939 100%);
+  background-image: -ms-linear-gradient(top, #eb504f 0%, #ba3939 100%);
+  background-image: -o-linear-gradient(top, #eb504f 0%, #ba3939 100%);
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #eb504f), color-stop(1, #ba3939));
+  background-image: -webkit-linear-gradient(top, #eb504f 0%, #ba3939 100%);
+  background-image: linear-gradient(top, #eb504f 0%, #ba3939 100%);
+
+
+  -moz-box-shadow:    inset 0px 1px 1px #f28080;
+  -webkit-box-shadow: inset 0px 1px 1px #f28080;
+  box-shadow:         inset 0px 1px 1px #f28080;
+
+  text-shadow:1px 1px #993535;
+  border:thin solid #993535;
+  border-bottom:5px solid #993535;
+}
+
+.red-butt:hover {
+  color:#fff;
+  background-color: #eb504f;
+  background-image: none;
+  border:thin solid #993535;
+  border-bottom-width: 5px;
+}
+
+.orange-butt, 
+.vote-bar .vote-sec-0 {
     background-color: #D85700;
   background-image: -moz-linear-gradient(top, #FF841A 0%, #D85700 100%);
   background-image: -ms-linear-gradient(top, #FF841A 0%, #D85700 100%);

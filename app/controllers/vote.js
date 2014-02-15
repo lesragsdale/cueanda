@@ -40,11 +40,23 @@ exports.create = function(req, res) {
 
 };
 
-var getVote = function(question,user){
-    Vote.find({question:question,user:user}).exec(function(err,vote){
-        return vote;
+exports.createForComment = function(req, res) {
+
+    var voteObject = {
+        question : req.question,
+        comment : req.comment,
+        user : req.user._id,
+        answer : req.answerOption
+    };
+
+    var criteria = {question:req.question, user:req.user._id, comment: req.comment};
+    var options = { upsert: true}
+
+    Vote.findOneAndUpdate( criteria, voteObject, options,function(err, vote){
+        res.jsonp(vote);
     })
-}
+
+};
 
 /**
  * Update a vote

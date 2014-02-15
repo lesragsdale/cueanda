@@ -8,17 +8,20 @@ var users = [
 				{
 					name: "Leslie Ragsdale",
 					email: "lesIsMore@gmail.com",
-					username: "lesIsMore"
+					username: "lesIsMore",
+					image:'lesIsMore'
 				},
 				{
 					name: "Joe Becker",
 					email: "joe@gmail.com",
-					username: "joe"
+					username: "joe",
+					image:'joe'
 				},
 				{
 					name: "Gboyega Adebayo",
 					email: "gade@gmail.com",
-					username: "gboyega"
+					username: "gboyega",
+					image:'gboyega'
 				},
 				{
 					name: "Danaryes Targaryen",
@@ -29,7 +32,8 @@ var users = [
 				{
 					name: "Your Brother",
 					email: "yb@gmail.com",
-					username: "yoBro"
+					username: "yoBro",
+					image:'yoBro'
 				},
 				{
 					name: "Barrack Obama",
@@ -78,7 +82,92 @@ var categories = [
 						name: "Law & Justice",
 						machine_name: "law_justice",
 						type: 1
+					},
+					{
+						name: "Misc",
+						machine_name: "misc",
+						type: 1
 					},  
+					{
+						name: "Music",
+						machine_name: "music",
+						type: 1
+					},  
+					{
+						name: "Politics",
+						machine_name: "politics",
+						type: 1
+					},  
+					{
+						name: "Religion & Spirituality",
+						machine_name: "religion_spirituality",
+						type: 1
+					},
+					{
+						name: "Sex & Relationships",
+						machine_name: "sex_relationships",
+						type: 1
+					},  
+					{
+						name: "Sports",
+						machine_name: "sports",
+						type: 1
+					},  
+					{
+						name: "Technology",
+						machine_name: "technology",
+						type: 1
+					},  
+					{
+						name: "Travel",
+						machine_name: "travel",
+						type: 1
+					},  
+					{
+						name: "Academics",
+						machine_name: "academica",
+						type: 2
+					},  
+					{
+						name: "Athletics",
+						machine_name: "athletics",
+						type: 2
+					},  
+					{
+						name: "Clubs & Organizations",
+						machine_name: "clubs_organizations",
+						type: 2
+					},  
+					{
+						name: "Food & Drink",
+						machine_name: "food_drink",
+						type: 2
+					},  
+					{
+						name: "Gossip",
+						machine_name: "gossip",
+						type: 2
+					},  
+					{
+						name: "Greek Life",
+						machine_name: "greek_life",
+						type: 2
+					},  
+					{
+						name: "Housing",
+						machine_name: "housing",
+						type: 2
+					},  
+					{
+						name: "Misc",
+						machine_name: "misc",
+						type: 2
+					},  
+					{
+						name: "Nightlife",
+						machine_name: "nightlife",
+						type: 2
+					}
 				];
 
 var getSomeComments = function(){

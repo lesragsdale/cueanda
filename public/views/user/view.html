@@ -1,7 +1,36 @@
-<section data-ng-controller="UserController" data-ng-init="">
-	<div>
-		<span>{{userProfile.username}}</span>
-		<span>({{userProfile.name}})</span>
-		<a href="#!/user/{{userProfile.username}}/edit"><button class="btn blue-butt">Manage Account</button></a>
+<section data-ng-controller="UserController" class="user-profile" data-ng-init="">
+	<div class="row">
+		<div class="col-sm-3 user-img">
+			<img src="../../img/user/{{userProfile.image}}-lrg.png" />
+			<div class="name">
+				{{userProfile.username}}
+				<span class="muted">({{userProfile.name}})</span>
+			</div>
+			<button ng-show="userProfile.username != currentUser.username" class="btn" ng-click="toggleFollow()" ng-class="{'green-butt':!isFollowing,'red-butt':isFollowing}">{{(isFollowing?"Un-Follow Me":"Follow Me")}}</button>
+			<a ng-show="userProfile.username == currentUser.username" href="#!/user/{{userProfile.username}}/edit">
+				<button class="btn blue-butt">Manage Account</button>
+			</a>
+
+			<!-- Bio -->
+			<div class="bio">This is where some short bio will go. We havent added this field to the db yet tho..so errbody gets the same thing for now....cool? cool.</div>
+			<!-- Followers -->
+			<div class="title">Who They Follow</div>
+			<div>
+				<img class="user-follow-item" ng-repeat="usr in userProfile.follows" src="../../img/user/{{usr.followee.image}}-sml.png" />
+			</div>
+			<!-- Following -->
+			<div class="title">Whose Following Them</div>
+			<div>
+				<img class="user-follow-item" ng-repeat="usr in userProfile.follows" src="../../img/user/{{usr.follower.image}}-sml.png" />
+			</div>
+		</div>
+		<div class="col-sm-9">
+			<!-- Recently Asked -->
+			<!-- Recently Answered -->
+			<!-- Mentions -->
+			<!-- Communities -->
+
+		</div>
+	
 	</div>
 </section>

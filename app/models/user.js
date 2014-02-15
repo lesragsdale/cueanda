@@ -21,6 +21,7 @@ var UserSchema = new Schema({
     provider: String,
     salt: String,
     image: String,
+    follows:{},
     facebook: {},
     twitter: {},
     github: {},

@@ -1,0 +1,41 @@
+<div>
+	<div class="comment-title" style="overflow:hidden;">
+		<div style="display:inline-block; float:left">
+	      <span class="badge pull-right" style="margin-left:5px;">{{question.comments.length}}</span>
+	      Comments
+	    </div> 
+		<div class='btn-group pull-right'>
+			<button class='btn btn-sm vote-butt-up' ng-click="castCommentVote(comment._id,1)">
+				<span class='fa fa-clock-o'></span>
+			</button>
+			<button class='btn btn-sm'><span class='glyphicon glyphicon-stats'></span></button>
+		</div>
+	</div>
+	<div ng-repeat="comment in question.comments" class="{{'comment comment-'+question.votesByUser[comment.user._id][0].answer}}">
+		
+		<!-- Img Block -->
+		<div class='comment-img' ng-class="{'pull-right': question.votesByUser[comment.user._id][0].answer == 1 , 'pull-left': question.votesByUser[comment.user._id][0].answer == 0}">
+			<img src='../../img/user/{{comment.user.username}}-sml.png'>
+		</div>
+
+		<!-- Main Block -->
+		<div class='comment-main' ng-class="{'pull-right': question.votesByUser[comment.user._id][0].answer == 1 , 'pull-left': question.votesByUser[comment.user._id][0].answer == 0}">
+			<div class='title'><span class='name'>{{comment.user.username}}</span>{{comment.created}}</div>
+			<div class='body'>{{comment.body}}</div>
+		</div>
+
+		<!-- Vote Block -->
+		<div class='comment-vote' ng-class="{'pull-right': question.votesByUser[comment.user._id][0].answer == 0 , 'pull-left': question.votesByUser[comment.user._id][0].answer == 1}">
+			<div class='btn-group-vertical'>
+				<button class='btn btn-sm vote-butt-up' ng-click="castCommentVote(comment._id,1)">
+					<span class='fa fa-thumbs-o-up'></span>
+				</button>
+				<button class='btn btn-sm vote-score'>{{question.commentScores[comment._id] || 0}}</button>
+				<button class='btn btn-sm vote-butt-down' ng-click="castCommentVote(comment._id,-1)">
+					<span class='fa fa-thumbs-o-down'></span>
+				</button>
+			</div>
+		</div>
+
+	</div>
+</div>

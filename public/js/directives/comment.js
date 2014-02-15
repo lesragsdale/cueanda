@@ -1,62 +1,69 @@
 'use strict';
 
-angular.module('cueanda').directive('comment',
-	function() {
+angular.module('cueanda').directive('comment',[ '$resource',
+	function($resource) {
 		return {
+			scope: {
+				question: "="
+			},
 			restrict: 'E',
 			replace: true,
+			templateUrl: 'views/question/comment.html',
 			link: function(scope, element, attrs) {
 
-				scope.$watch(attrs.comments, function(value) {
-					scope.comments = scope.$eval(attrs.comments);
-					scope.votes = scope.$eval(attrs.votes);
-					buildComments(scope.comments, scope.votes);
-				});
+				var Vote = $resource('vote/:questionId/:commentId/:answerOption',
+									{ questionId: '@question', commentId: '@comment', answerOption: '@answer' }, 
+									{ update: { method: 'PUT' } }
+								);
 
-				scope.$watch(attrs.votes, function(value) {
-					scope.comments = scope.$eval(attrs.comments);
-					scope.votes = scope.$eval(attrs.votes);
-					buildComments(scope.comments, scope.votes);
-				});
+				scope.castCommentVote = function(comment, option){
+					console.log('got Called'+comment+' '+option);
+					/*** EXIT IF ANSWER IS NOT NEW ***/
+					var oldAnswerExists = false;
 
-				var buildComments = function(comments, votes){
-					var userVotes = _.groupBy(votes,function(vote){return vote.user;});
-					var htmlOutput = "<div class='comments'>";
+					var currentAnswerToComment = _.find(scope.question.votes,function(vote){
+						return vote.comment == comment && vote.user == user._id;
+					})
+					if(!_.isUndefined(currentAnswerToComment)){
+						oldAnswerExists = true;
+						if(currentAnswerToComment.answer == option){
+							console.log('already gave this comment that answer!');
+							return;
+						}
+					}
 
-					_.each(comments,function(comment){
-						
-						var usrVote = userVotes[comment.user._id][0].answer;
+					/*** PERSIST ANSWER ***/
+					var aCmtVote = new Vote({
+						question: scope.question._id,
+						comment: comment,
+						answer:option
+					});
+					aCmtVote.$save(function(response){
+						if(oldAnswerExists){
+							console.log('try to delete old vote. current vote size: '+_.size(scope.question.votes))
+							scope.question.votes = _.reject( scope.question.votes, function(vote){
+								return (vote.user == user._id && vote.comment == comment);
+							} );
+							console.log('size after: '+_.size(scope.question.votes))
+						}
+						console.log('result of vote save:')
+						console.log(response);				
+						scope.question.votes = _.union([response],scope.question.votes);	
 
-						htmlOutput += "<div class='comment comment-"+usrVote+"' >";
+						//Update comment Scores
+						var commentVotes = _.filter(scope.question.votes,function(vote){ return !_.isUndefined(vote.comment); });
+						var commentVoteGrouped = _.groupBy(commentVotes,'comment');
+						_.each(commentVoteGrouped, function(votes, key){
+							scope.question.commentScores[key] = _.reduce(votes,function(memo, vote){
+								return memo + vote.answer;
+							},0);
+						})
 
-							var cmtImage = "<div class='comment-img'><img src='../../img/user/"+comment.user.username+"-sml.png'></div>";
-							
-							var cmtMiddle = "<div class='comment-main'>";
-							cmtMiddle += 	"<div class='title'><span class='name'>"+comment.user.username+"</span>"+comment.created+"</div>";
-							cmtMiddle += 	"<div class='body'>"+comment.body+"</div>";
-							cmtMiddle += "</div>";
 
-							var cmtVote = "<div class='comment-vote'><div class='btn-group-vertical'>";
-							cmtVote +=	"<button class='btn btn-sm vote-butt-up'><span class='fa fa-thumbs-o-up'></span></button>";
-							cmtVote +=	"<button class='btn btn-sm vote-score'>28</button>";
-							cmtVote +=	"<button class='btn btn-sm vote-butt-down'><span class='fa fa-thumbs-o-down'></span></button>";
-							cmtVote +="</div></div>";
-
-							if(usrVote){
-								htmlOutput += cmtImage + cmtMiddle + cmtVote;
-							}else{
-								htmlOutput += cmtVote + cmtMiddle + cmtImage;
-							}
-
-						htmlOutput += "</div>";
 					});
 
-					htmlOutput += "</div>";
-
-					$(element).html(htmlOutput);
 				}
-
 			}
 		};
-	}	
+	}]	
 );

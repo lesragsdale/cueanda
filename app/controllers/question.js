@@ -49,7 +49,7 @@ exports.update = function(req, res) {
 
     var updateBody = _.omit(req.body,'_id');
 
-    Question.findByIdandUpdate(question._id, updateBody, function(err, question){
+    Question.findByIdAndUpdate(question._id, updateBody, function(err, question){
         if(!err){
             console.log(question)
             res.jsonp(question);

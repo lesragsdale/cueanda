@@ -15,8 +15,9 @@ angular.module('cueanda').directive('votingBar',
 				});
 
 				var buildBar = function(votes){
-					var counts = _.countBy(votes,function(vote){return vote.answer;});
-					var vCount = _.size(votes);
+					var qVotes = _.filter(votes,function(vote){ return _.isUndefined(vote.comment); } )
+					var counts = _.countBy(qVotes,function(vote){return vote.answer;});
+					var vCount = _.size(qVotes);
 
 					var htmlOutput = "<div class='vote-bar'>";
 

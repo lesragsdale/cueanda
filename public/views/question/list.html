@@ -1,8 +1,8 @@
 <section data-ng-controller="QuestionController" data-ng-init="pullQuestions()">
 	<div class="row">
 
-		<div class="col-md-3">
-			<button class="btn btn-primary orange-butt" ng-click="newQuestion = {}" data-toggle="modal" data-target="#questionModal">Add a Question!</button>
+		<div class="col-sm-3">
+			<button class="btn btn-primary orange-butt" style="padding:8px; width:100%" ng-click="newQuestion = {}" data-toggle="modal" data-target="#questionModal">Add a Question!</button>
 
       <div class="categories">
         <div ng-repeat="category in categories" class="category category-{{category.machine_name}}">
@@ -11,10 +11,16 @@
       </div>
 
 		</div>
-		<div class="col-md-9">
+		<div class="col-sm-9 question-list">
 			<div>
 				<!-- <question-in-list ng-repeat="question in questions" active-question="activeQuestion" question="question" cat-icons="catIcons">			
 				</question-in-list> -->
+        <select ui-select2 ng-model="questionFilter" style="width:100%;" data-placeholder="Choose a Category...">
+          <option  value="all">All</option>
+          <option  value="follow">People I Follow</option>
+          <option  value="private">Private & Recommended</option>
+        </select>
+
 
         <div ng-repeat="question in questions" class="question-list-item qli-{{question._id}}">
           <div class="side left">
@@ -24,7 +30,7 @@
           </div>
           <div class="side right" ng-click="questionModal(question)">
             <div class="question-user-name">
-              <a href="#!/user/{{question.user.username}}" ng-click="disablePopup = true">{{question.user.username}}</a>
+              <a href="#!/user/{{question.user.username}}" ng-click="clickUserLink()">{{question.user.username}}</a>
               <span class="muted">({{question.user.name}})</span>
 
               <span class="pull-right glyphicon glyphicon-{{catIcons[question.category.machine_name]}}" ></span>
@@ -69,7 +75,7 @@
         <div class="control-group">
 			<label class="control-label">select:</label>
 			<div class="controls">
-				<select ui-select2 ng-model="newQuestion.category" style="width:100%;" placeholder="Choose a Category...">
+				<select ui-select2 ng-model="newQuestion.category" style="width:100%;" data-placeholder="Choose a Category...">
 					<option  ng-repeat="category in categories" value="category.machine_name">{{category.name}}</option>
 				</select>
 			</div>
@@ -112,15 +118,15 @@
           {{answer.title}}</div>
       	</div>
 
-      	<div> <voting-bar votes="activeQuestion.votes"></voting-bar> </div>
+      	<div ng-show="activeQuestion.currentAnswer"> <voting-bar votes="activeQuestion.votes"></voting-bar> </div>
 
-      	<div class="create-comment">
+      	<div ng-show="activeQuestion.currentAnswer" class="create-comment">
       	<textarea class="form-control" ng-model="activeQuestion.newComment" placeholder="Provide a comment..."></textarea>
         <button class="btn comment-submit green-butt" ng-click="createComment()" >Submit Comment</button>
       	</div>
 
-      	<div class="comments">
-          <comment comments="activeQuestion.comments" votes="activeQuestion.votes"></comment>
+      	<div ng-show="activeQuestion.currentAnswer" class="comments">
+          <comment question="activeQuestion"></comment>
       	</div>
 
       </div>

@@ -6,6 +6,7 @@ angular.module('cueanda').controller('QuestionController',
 		$scope.questionVariable = "Poo man it works!";
 		$scope.activeQuestion = {};
 		$scope.disablePopup = false;
+		$scope.questionFilter = 'all';
 
 		var Question = $resource(	'questions/:questionId',
 									{ questionId: '@_id' }, 
@@ -46,6 +47,10 @@ angular.module('cueanda').controller('QuestionController',
 	        });
 	    }
 
+	    $scope.clickUserLink = function(){
+	    	$scope.disablePopup = true;
+	    }
+
 		$scope.castVote = function(option){
 
 			/*** EXIT IF ANSWER IS NOT NEW ***/
@@ -69,12 +74,18 @@ angular.module('cueanda').controller('QuestionController',
 						return (vote.user == user._id && vote.question == $scope.activeQuestion._id);
 					} );
 				}				
-				$scope.activeQuestion.votes = _.union([response],$scope.activeQuestion.votes);								
+				$scope.activeQuestion.votes = _.union([response],$scope.activeQuestion.votes);
+				$scope.activeQuestion.votesByUser =  _.groupBy($scope.activeQuestion.votes,function(vote){return vote.user;});								
 			});
 
 		}
 
 		$scope.createComment = function(){
+
+			if(_.isUndefined($scope.activeQuestion.newComment) || $scope.activeQuestion.newComment == ""){
+				return;
+			}
+
 			var comm = new Comment({
 									question: $scope.activeQuestion._id,
 									body: $scope.activeQuestion.newComment
@@ -89,9 +100,22 @@ angular.module('cueanda').controller('QuestionController',
 		$scope.questionModal = function(question){
 			if(!$scope.disablePopup){
 				$scope.activeQuestion = question;
+
+				var questionVotes = _.filter($scope.activeQuestion.votes,function(vote){ return _.isUndefined(vote.comment); });
+				$scope.activeQuestion.votesByUser =  _.groupBy(questionVotes,'user');
 				$scope.activeQuestion.currentAnswer = _.find(question.votes,function(vote){
-					return vote.user == user._id;
+					return vote.user == user._id && _.isUndefined(vote.comment);
 				})
+
+				var commentVotes = _.filter($scope.activeQuestion.votes,function(vote){ return !_.isUndefined(vote.comment); });
+				var commentVoteGrouped = _.groupBy(commentVotes,'comment');
+				$scope.activeQuestion.commentScores = {};
+				_.each(commentVoteGrouped, function(votes, key){
+					$scope.activeQuestion.commentScores[key] = _.reduce(votes,function(memo, vote){
+						return memo + vote.answer;
+					},0);
+				});
+
 				$("#viewQuestion").modal("show");
 			}else{$scope.disablePopup = false;}
 		}
