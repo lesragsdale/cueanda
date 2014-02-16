@@ -29,7 +29,12 @@ exports.create = function(req, res) {
 
     follow.save(function(err, follow) {
         if (!err) {
-            res.jsonp(follow);
+            //res.jsonp(follow.populate('followee', 'name username image').populate('follower', 'name username image'));
+            Follow.findOne({follower: req.user._id, followee: req.followee})
+                .populate('followee', 'name username image').populate('follower', 'name username image')
+                    .exec(function(err,follow){
+                        res.jsonp(follow);
+                    })
         }
     });
 

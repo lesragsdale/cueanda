@@ -14,7 +14,13 @@ var hasAuthorization = function(req, res, next) {
 
 module.exports = function(app) {
 
+    var communityId = function(req, res, next, id) {
+        req.community = id;
+        next();
+    }
+
     app.get('/questions', questions.all);
+    app.get('/questions/:communityId', questions.all);
     app.post('/questions', authorization.requiresLogin, questions.create);
     app.get('/questions/:questionId', questions.show);
     app.put('/questions/:questionId', authorization.requiresLogin, hasAuthorization, questions.update);
@@ -22,5 +28,6 @@ module.exports = function(app) {
 
     // Finish with setting up the questionId param
     app.param('questionId', questions.question);
+    app.param('communityId', communityId);
 
 };

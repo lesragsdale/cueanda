@@ -314,3 +314,40 @@ body .select2-search input {
 .comment .comment-vote .fa {
 	font-size:20px;
 }
+.extra-functions .buttons {
+	padding:0px 20px;
+	text-align: center;
+}
+
+.extra-functions .buttons button {
+	font-size:.85em;
+}
+#viewQuestion .well {
+	border:none;
+	border-radius: 0px;
+	box-shadow: inset 0px 1px 7px #575757;
+	-webkit-box-shadow: inset 0px 1px 7px #575757;
+	background-color: #ccc;
+	min-height: 0px;
+	overflow: hidden;
+}
+#viewQuestion .recommend-well {
+	margin: 0px;
+	padding-left: 20px;
+	padding-right: 20px;
+	-webkit-transition: min-height .5s, max-height .5s, padding-top .5s, padding-bottom .5s;
+	transition: min-height .5s, max-height .5s, padding-top .5s, padding-bottom .5s;
+	min-height: 0px;
+	padding-top:0px;
+	padding-bottom: 0px;
+	max-height: 0px;
+}
+#viewQuestion .recommend-well.open {
+	min-height:72px;
+	max-height: 1000px;
+	padding-top:20px;
+	padding-bottom: 20px;
+}
+#viewQuestion .recommend-well li.select2-search-field {
+	min-width:350px;
+}

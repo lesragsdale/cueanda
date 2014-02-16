@@ -1,7 +1,7 @@
 var databaseURI = "localhost:27017/mean-dev";
 var _ = require('lodash');
 var moment = require("moment");
-var collections = ["questions","categories","votes","users","comments"];
+var collections = ["questions","categories","votes","users","comments","communities","communityTypes"];
 var db = require("mongojs").connect(databaseURI, collections);
 
 var users = [
@@ -167,8 +167,158 @@ var categories = [
 						name: "Nightlife",
 						machine_name: "nightlife",
 						type: 2
+					},
+					{
+						name: "Attractions",
+						machine_name: "attractions",
+						type: 3
+					},  
+					{
+						name: "Business & Finance",
+						machine_name: "business_finance",
+						type: 3
+					},  
+					{
+						name: "Entertainment",
+						machine_name: "entertainment",
+						type: 3
+					},  
+					{
+						name: "Food & Drink",
+						machine_name: "food_drink",
+						type: 3
+					},  
+					{
+						name: "Health & Fitness",
+						machine_name: "health_fitness",
+						type: 3
+					},  
+					{
+						name: "Misc.",
+						machine_name: "misc",
+						type: 3
+					},  
+					{
+						name: "News & Politics",
+						machine_name: "news_politics",
+						type: 3
+					},  
+					{
+						name: "Nightlife",
+						machine_name: "nightlife",
+						type: 3
+					},  
+					{
+						name: "Real Estate",
+						machine_name: "real_estate",
+						type: 3
+					},  
+					{
+						name: "Sports",
+						machine_name: "sports",
+						type: 3
+					},
+					{
+						name: "Draft Central",
+						machine_name: "draft_central",
+						type: 4
+					},  
+					{
+						name: "Drop or Keep",
+						machine_name: "drop_keep",
+						type: 4
+					},  
+					{
+						name: "Head to Head",
+						machine_name: "head_head",
+						type: 4
+					},  
+					{
+						name: "Misc",
+						machine_name: "misc",
+						type: 4
+					},  
+					{
+						name: "Start or Sit",
+						machine_name: "start_sit",
+						type: 4
 					}
 				];
+var communityTypes = [ 
+	{
+		name: "College & Universities",
+		num: 2
+	},
+	{ 
+		name: "Cities",
+		num: 3
+	},
+	{
+		name: "Fantasy Sports",
+		num:4
+	}];
+var communities = [
+	{
+		name:"James Madison University",
+		path:"james_madison",
+		type:2
+	},
+	{
+		name:"Penn State University",
+		path:"penn_state",
+		type:2
+	},
+	{
+		name:"University of Maryland",
+		path:"maryland",
+		type:2
+	},
+	{
+		name:"University of Virginia",
+		path:"virginia",
+		type:2
+	},
+	{
+		name:"Virginia Tech",
+		path:"virgina_tech",
+		type:2
+	},
+	{
+		name:"Baltimore, MD",
+		path:"baltimore",
+		type:3
+	},
+	{
+		name:"Chicago, IL",
+		path:"chicago",
+		type:3
+	},
+	{
+		name:"New York, NY",
+		path:"new_york",
+		type:3
+	},
+	{
+		name:"Richmond, VA",
+		path:"richmond",
+		type:3
+	},
+	{
+		name:"Washington DC",
+		path:"washington_dc",
+		type:3
+	},
+	{
+		name:"Fantasy Basketball",
+		path:"basketball",
+		type:4
+	},
+	{
+		name:"Fantasy Football",
+		path:"football",
+		type:4
+	}
+]
 
 var getSomeComments = function(){
 	var comments = []
@@ -184,6 +334,12 @@ var getSomeComments = function(){
 	return comments
 }
 
+//Drop Communities
+db.communities.remove({},function(err,lastErrorObject){
+});	
+//Drop Community Types
+db.communityTypes.remove({},function(err,lastErrorObject){
+});	
 //Drop Comments
 db.comments.remove({},function(err,lastErrorObject){
 });			
@@ -199,65 +355,82 @@ db.categories.remove({},function(err,lastErrorObject){
 //Drop All Votes
 db.votes.remove({},function(err,lastErrorObject){
 
-	db.categories.insert(categories, function(err, mngCats) {
+	db.communityTypes.insert(communityTypes,function(err,mngCmTp){
+		//console.log('');
+	})
 
-		db.users.insert(users, function(err, mngUsrs) {
-			var newQuestions = [];
-			_.times(30,function(n){
-				//console.log(n);
-				newQuestions.push(
-						{
-							title: questions[_.random( _.size(questions)-1 )],
-							created: moment().valueOf() - _.random(100000),
-							answers:[
-										{title: answers[_.random( _.size(answers)-1 )] },
-										{title: answers[_.random( _.size(answers)-1 )] }
-									],
-							category: mngCats[_.random( _.size(mngCats)-1 )]._id,
-							user: mngUsrs[_.random( _.size(mngUsrs)-1 )]._id
-						}
-					);
-			});
+	db.communities.insert(communities,function(err,mngCommunities){
 
-			db.questions.insert(newQuestions, function(err, mngQuestions) {
-				
-				var newVotes = [];
+		db.categories.insert(categories, function(err, mngCats) {
 
-				_.each(mngQuestions, function(mngQ){
-					_.each(mngUsrs,function(mngU){
-						newVotes.push({
-							question: mngQ._id,
-							user: mngU._id,
-							answer: _.random(0,1)
-						});
-					})
-				})
+			db.users.insert(users, function(err, mngUsrs) {
+				var newQuestions = [];
+				var catsByType = _.groupBy(mngCats,'type')
+				//var comByType = _.groupBy(mngCommunities,'type')
 
+				_.times(70,function(n){
+					//console.log(n);
 
-				db.votes.insert(newVotes, function(err, mngVotes) {
+					var aQue = {
+								title: questions[_.random( _.size(questions)-1 )],
+								created: moment().valueOf() - _.random(100000),
+								answers:[
+											{title: answers[_.random( _.size(answers)-1 )] },
+											{title: answers[_.random( _.size(answers)-1 )] }
+										],
+								category: catsByType[1][_.random( _.size(catsByType[1])-1 )]._id,
+								user: mngUsrs[_.random( _.size(mngUsrs)-1 )]._id
+							}
+					if(_.random(10) > 5){
+						var theComm = mngCommunities[_.random( _.size(mngCommunities)-1 )]
+						var theCats = catsByType[theComm.type]
+						aQue.community = theComm._id
+						aQue.category = theCats[_.random( _.size(theCats)-1 )]._id
+					}
 
-					var newComments = [];
+					newQuestions.push(aQue);
+				});
 
-					_.each(mngQuestions,function(quest){
-						_.times(_.random(1,10),function(d){
-							newComments.push(
-										{
-											user: mngUsrs[_.random( _.size(mngUsrs)-1 )]._id,
-											question: quest._id,
-											created: moment().valueOf() - _.random(100000),
-											body: rComments[_.random( _.size(rComments)-1 )]
-										}
-								);
+				db.questions.insert(newQuestions, function(err, mngQuestions) {
+					
+					var newVotes = [];
+
+					_.each(mngQuestions, function(mngQ){
+						_.each(mngUsrs,function(mngU){
+							newVotes.push({
+								question: mngQ._id,
+								user: mngU._id,
+								answer: _.random(0,1)
+							});
 						})
 					})
 
-					db.comments.insert(newComments, function(err, mngComments) {
-						
-						process.exit(1);
+
+					db.votes.insert(newVotes, function(err, mngVotes) {
+
+						var newComments = [];
+
+						_.each(mngQuestions,function(quest){
+							_.times(_.random(1,10),function(d){
+								newComments.push(
+											{
+												user: mngUsrs[_.random( _.size(mngUsrs)-1 )]._id,
+												question: quest._id,
+												created: moment().valueOf() - _.random(100000),
+												body: rComments[_.random( _.size(rComments)-1 )]
+											}
+									);
+							})
+						})
+
+						db.comments.insert(newComments, function(err, mngComments) {
+							
+							process.exit(1);
+						});
 					});
 				});
-			});
 
+			});
 		});
 	});
 

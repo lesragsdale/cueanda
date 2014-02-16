@@ -92,6 +92,10 @@ angular.module('cueanda').controller('UserController',
             setUploader();
         });
 
+        $scope.recDropChange = function(){
+            console.log($scope.activeQuestion.recommends);
+        }
+
         $scope.toggleFollow = function(){
             console.log('got here');
             var flw = new Follow({followee:$scope.userProfile._id})
@@ -107,6 +111,7 @@ angular.module('cueanda').controller('UserController',
             }else{
                 flw.$save(function(response){
                     console.log('created follow!');
+                    console.log(response);
                     $scope.userProfile.follows.push(response);
                     user.follows.push(response);
                      $scope.isFollowing = true;

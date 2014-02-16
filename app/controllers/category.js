@@ -20,79 +20,21 @@ exports.category = function(req, res, next, id) {
     });
 };
 
-/**
- * Create a category
- */
-exports.create = function(req, res) {
-    var category = new Category(req.body);
 
-    category.save(function(err) {
-        if (err) {
-            return res.send('users/signup', {
-                errors: err.errors,
-                category: category
-            });
-        } else {
-            res.jsonp(category);
+exports.getCatForType = function(req, res) {
+    Category.find({type:req.type}).sort('name').exec(function(err, categories) {
+        if (!err) {
+            res.jsonp(categories);
         }
     });
-};
-
-/**
- * Update a category
- */
-exports.update = function(req, res) {
-    var category = req.category;
-
-    category = _.extend(category, req.body);
-
-    category.save(function(err) {
-        if (err) {
-            return res.send('users/signup', {
-                errors: err.errors,
-                category: category
-            });
-        } else {
-            res.jsonp(category);
-        }
-    });
-};
-
-/**
- * Delete an category
- */
-exports.destroy = function(req, res) {
-    var category = req.category;
-
-    category.remove(function(err) {
-        if (err) {
-            return res.send('users/signup', {
-                errors: err.errors,
-                category: category
-            });
-        } else {
-            res.jsonp(category);
-        }
-    });
-};
-
-/**
- * Show an category
- */
-exports.show = function(req, res) {
-    res.jsonp(req.category);
-};
+}
 
 /**
  * List of Categories
  */
 exports.all = function(req, res) {
     Category.find().sort('-created').exec(function(err, categories) {
-        if (err) {
-            res.render('error', {
-                status: 500
-            });
-        } else {
+        if (!err) {
             res.jsonp(categories);
         }
     });

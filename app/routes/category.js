@@ -14,13 +14,19 @@ var hasAuthorization = function(req, res, next) {
 
 module.exports = function(app) {
 
+    var type = function(req, res, next, id) {
+        req.type = id;
+        next();
+    }
+
     app.get('/category', category.all);
+    app.get('/category/:type', category.getCatForType)
     //app.post('/category', authorization.requiresLogin, category.create);
     //app.get('/category/:categoryId', category.show);
     //app.put('/category/:categoryId', authorization.requiresLogin, hasAuthorization, category.update);
     //app.del('/category/:categoryId', authorization.requiresLogin, hasAuthorization, category.destroy);
 
     // Finish with setting up the articleId param
-    app.param('categoryId', category.category);
+    app.param('type', type);
 
 };

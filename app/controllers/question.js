@@ -88,7 +88,13 @@ exports.show = function(req, res) {
 exports.all = function(req, res) {
     var gQues = [];
     var gVotes = []
-    Question.find().sort('-created').populate('user', 'name username').populate('category').exec(function(err, questions) {
+
+    var criteria = {community : {$exists : false} }
+    if(req.community){
+        criteria = {community:req.community}
+    }
+
+    Question.find(criteria).sort('-created').populate('user', 'name username image').populate('category').exec(function(err, questions) {
         if (err) {
             res.render('error', {
                 status: 500
@@ -99,7 +105,7 @@ exports.all = function(req, res) {
                 if (err2) { res.render('error', { status: 500 });
                 } else {
                     gVotes = votes
-                    Comment.find().populate('user', 'name username').exec(function(err3, comments) {
+                    Comment.find().populate('user', 'name username image').exec(function(err3, comments) {
                         if (err3) { res.render('error', { status: 500 });
                         } else {
                             var vPerQuestion = _.groupBy(gVotes,'question');

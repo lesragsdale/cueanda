@@ -25,6 +25,10 @@ var QuestionSchema = new Schema({
         type: Schema.ObjectId,
         ref: 'Category'
     },
+    community: {
+        type: Schema.ObjectId,
+        ref: 'Community'
+    },
     user: {
         type: Schema.ObjectId,
         ref: 'User'

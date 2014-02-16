@@ -1,20 +1,27 @@
 'use strict';
 
 angular.module('cueanda').controller('QuestionController',
-	['$scope','$resource', 
-	function($scope,$resource) {
+	['$scope','$resource', '$routeParams', 
+	function($scope, $resource, $routeParams) {
 		$scope.questionVariable = "Poo man it works!";
 		$scope.activeQuestion = {};
 		$scope.disablePopup = false;
 		$scope.questionFilter = 'all';
+		$scope.currentUser = user;
+		console.log($scope.currentUser);
 
-		var Question = $resource(	'questions/:questionId',
-									{ questionId: '@_id' }, 
+		var Question = $resource(	'questions/:communityId',
+									{ communityId: '@community' }, 
 									{ update: { method: 'PUT' } }
 								);
 
-		var Category = $resource(	'category/:categoryId',
-									{ categoryId: '@_id' }, 
+		var Category = $resource(	'category/:type',
+									{ type: '@type' }, 
+									{ update: { method: 'PUT' } }
+								);
+
+		var Community = $resource(	'community/byName/:communityName',
+									{ communityName: '@community' }, 
 									{ update: { method: 'PUT' } }
 								);
 
@@ -24,6 +31,11 @@ angular.module('cueanda').controller('QuestionController',
 								);
 
 		var Comment = $resource(	'comment/:questionId',
+									{ questionId: '@question'}, 
+									{ update: { method: 'PUT' } }
+								);
+
+		var Recommend = $resource(	'recommend/:questionId',
 									{ questionId: '@question'}, 
 									{ update: { method: 'PUT' } }
 								);
@@ -38,11 +50,28 @@ angular.module('cueanda').controller('QuestionController',
 		};
 
 	    $scope.pullQuestions = function() {
-	    	Question.query(function(questions) {
+
+	    	if($routeParams.communityId){
+	    		Community.get({communityName: $routeParams.communityId},function(community){
+	    			loadQuestions({communityId: community._id},{type: community.type});
+	    		})
+	    	}else{
+	    		loadQuestions({},{type: 1});
+	    	}
+	    }
+
+	    var loadQuestions = function(qCriteria, cCriteria){
+
+	    	console.log('question criteria');
+	    	console.log(qCriteria);
+	    	console.log('category criteria');
+	    	console.log(cCriteria);
+
+	    	Question.query( qCriteria ,function(questions) {
 	            $scope.questions = questions;
 	        });
 
-	        Category.query(function(categories) {
+	        Category.query( cCriteria ,function(categories) {
 	            $scope.categories = categories;
 	        });
 	    }
@@ -95,6 +124,23 @@ angular.module('cueanda').controller('QuestionController',
 				$scope.activeQuestion.newComment = "";
 				$scope.activeQuestion.comments = _.union([response],$scope.activeQuestion.comments);
 			});
+		}
+
+		$scope.sendRecommendations = function(){
+			var recommends = $scope.activeQuestion.recommends
+
+			var rec = new Recommend({
+				question: $scope.activeQuestion._id,
+				recommends: $scope.activeQuestion.recommends
+			})
+
+			rec.$save(function(response){
+				console.log(response);
+			})
+		}
+
+		$scope.toggleRecommendSection = function(){
+			$(".recommend-well").toggleClass("open");
 		}
 
 		$scope.questionModal = function(question){

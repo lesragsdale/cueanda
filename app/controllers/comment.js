@@ -41,7 +41,7 @@ exports.create = function(req, res) {
             //this is stupid but i have to return it this way because
             //otherwise it wont let me return a custom object for user...smh
             res.jsonp({
-                user: _.pick(req.user,['name','username','_id']),
+                user: _.pick(req.user,['name','username','_id','image']),
                 question: comment.question,
                 created: comment.created,
                 body: comment.body,
