@@ -12,6 +12,10 @@ angular.module('cueanda').controller('UserController',
                                     { followee: '@followee' }, 
                                     { update: { method: 'POST' } }
                                 );
+        var Question = $resource('questions',
+                                    { }, 
+                                    { update: { method: 'POST' } }
+                                );
 
         $scope.currentUser = user;
 
@@ -62,7 +66,7 @@ angular.module('cueanda').controller('UserController',
                 uploader.clearQueue()
                 $scope.userProfile.image = response.image;
                 $(".form-group.profile-image img").remove();
-                $(".form-group.profile-image").prepend("<img src='../../img/user/"+$scope.userProfile.image+"-sml.png' />")
+                $(".form-group.profile-image").prepend("<img class='user-image-display' src='../../img/user/"+$scope.userProfile.image+"-sml.png' />")
             });
 
             uploader.bind('progressall', function (event, progress) {
@@ -76,24 +80,31 @@ angular.module('cueanda').controller('UserController',
         }
 
 
-		User.get({
-            userName: $routeParams.userName
-        }, function(ruser) {
-        	//console.log(user);
-            $scope.userProfile = ruser;
-            $scope.userUpdatePostUrl = "http://127.0.0.1:3000/user/"+$scope.userProfile.username;
-            $scope.userUpdatePostUrl = $sce.trustAsResourceUrl($scope.userUpdatePostUrl);
-            console.log($scope.userProfile.follows);
-            var t = _.find($scope.userProfile.follows,function(follow){
-                return follow.follower._id == user._id;
+        $scope.loadUserData =function(){
+            User.get({
+                userName: $routeParams.userName
+            }, function(ruser) {
+                $scope.userProfile = ruser;
+                $scope.userUpdatePostUrl = "http://127.0.0.1:3000/user/"+$scope.userProfile.username;
+                $scope.userUpdatePostUrl = $sce.trustAsResourceUrl($scope.userUpdatePostUrl);
+                $scope.userLargeImagePath = "../../img/user/"+$scope.userProfile.image+"-lrg.png";
+                var t = _.find($scope.userProfile.follows,function(follow){
+                    return follow.follower._id == user._id;
+                });
+                $scope.isFollowing = (t?true:false);
+                loadUserQuestions()
+                setUploader();
             });
-            console.log(user);
-            $scope.isFollowing = (t?true:false);
-            setUploader();
-        });
+        }
 
-        $scope.recDropChange = function(){
-            console.log($scope.activeQuestion.recommends);
+        var loadUserQuestions = function(){
+            Question.query({ userAsked: $scope.userProfile._id },function(response){
+                $scope.askedQuestions = response
+            });
+
+            Question.query({ userVoted: $scope.userProfile._id },function(response){
+                $scope.votedQuestions = response
+            });
         }
 
         $scope.toggleFollow = function(){

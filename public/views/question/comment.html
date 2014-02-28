@@ -14,18 +14,36 @@
 	<div ng-repeat="comment in question.comments" class="{{'comment comment-'+question.votesByUser[comment.user._id][0].answer}}">
 		
 		<!-- Img Block -->
-		<div class='comment-img' ng-class="{'pull-right': question.votesByUser[comment.user._id][0].answer == 1 , 'pull-left': question.votesByUser[comment.user._id][0].answer == 0}">
-			<img src='../../img/user/{{comment.user.image}}-sml.png'>
-		</div>
-
-		<!-- Main Block -->
-		<div class='comment-main' ng-class="{'pull-right': question.votesByUser[comment.user._id][0].answer == 1 , 'pull-left': question.votesByUser[comment.user._id][0].answer == 0}">
-			<div class='title'><span class='name'>{{comment.user.username}}</span>{{comment.created}}</div>
-			<div class='body'>{{comment.body}}</div>
+		<div class='comment-img' ng-show="question.votesByUser[comment.user._id][0].answer == 0">
+			<img class='user-image-display' ng-src='../../img/user/{{comment.user.image}}-sml.png'>
 		</div>
 
 		<!-- Vote Block -->
-		<div class='comment-vote' ng-class="{'pull-right': question.votesByUser[comment.user._id][0].answer == 0 , 'pull-left': question.votesByUser[comment.user._id][0].answer == 1}">
+		<div class='comment-vote' ng-show="question.votesByUser[comment.user._id][0].answer == 1">
+			<div class='btn-group-vertical'>
+				<button class='btn btn-sm vote-butt-up' ng-click="castCommentVote(comment._id,1)">
+					<span class='fa fa-thumbs-o-up'></span>
+				</button>
+				<button class='btn btn-sm vote-score'>{{question.commentScores[comment._id] || 0}}</button>
+				<button class='btn btn-sm vote-butt-down' ng-click="castCommentVote(comment._id,-1)">
+					<span class='fa fa-thumbs-o-down'></span>
+				</button>
+			</div>
+		</div>
+
+		<!-- Main Block -->
+		<div class='comment-main'>
+			<div class='comment-header'><span class='name' style="margin-right:5px; font-weight:bold;">{{comment.user.username}}</span> <span style="font-size:.75em;">{{comment.created | ago}}</span></div>
+			<div class='body'>{{comment.body}}</div>
+		</div>
+
+		<!-- Img Block -->
+		<div class='comment-img' ng-show="question.votesByUser[comment.user._id][0].answer == 1">
+			<img class='user-image-display' ng-src='../../img/user/{{comment.user.image}}-sml.png'>
+		</div>
+
+		<!-- Vote Block -->
+		<div class='comment-vote' ng-show="question.votesByUser[comment.user._id][0].answer == 0">
 			<div class='btn-group-vertical'>
 				<button class='btn btn-sm vote-butt-up' ng-click="castCommentVote(comment._id,1)">
 					<span class='fa fa-thumbs-o-up'></span>

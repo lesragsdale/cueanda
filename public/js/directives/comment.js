@@ -17,7 +17,6 @@ angular.module('cueanda').directive('comment',[ '$resource',
 								);
 
 				scope.castCommentVote = function(comment, option){
-					console.log('got Called'+comment+' '+option);
 					/*** EXIT IF ANSWER IS NOT NEW ***/
 					var oldAnswerExists = false;
 
@@ -40,14 +39,14 @@ angular.module('cueanda').directive('comment',[ '$resource',
 					});
 					aCmtVote.$save(function(response){
 						if(oldAnswerExists){
-							console.log('try to delete old vote. current vote size: '+_.size(scope.question.votes))
+							//console.log('try to delete old vote. current vote size: '+_.size(scope.question.votes))
 							scope.question.votes = _.reject( scope.question.votes, function(vote){
 								return (vote.user == user._id && vote.comment == comment);
 							} );
-							console.log('size after: '+_.size(scope.question.votes))
+							//console.log('size after: '+_.size(scope.question.votes))
 						}
-						console.log('result of vote save:')
-						console.log(response);				
+						//console.log('result of vote save:')
+						//console.log(response);				
 						scope.question.votes = _.union([response],scope.question.votes);	
 
 						//Update comment Scores

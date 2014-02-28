@@ -23,10 +23,10 @@ angular.module('cueanda').config(['$routeProvider',
             templateUrl: 'views/user/edit.html'
         }).
         when('/list', {
-            templateUrl: 'views/question/list.html'
+            templateUrl: 'views/question/stream.html'
         }).
         when('/list/:communityId', {
-            templateUrl: 'views/question/list.html'
+            templateUrl: 'views/question/stream.html'
         }).
         when('/', {
             templateUrl: 'views/index.html'

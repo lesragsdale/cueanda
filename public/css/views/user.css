@@ -4,6 +4,10 @@
 .user-profile .user-img .name{
 	margin:5px 0px;
 }
+.user-profile .user-img .bio{
+	text-align: left;
+	margin:10px 0px;
+}
 
 .user-profile .user-img img.user-follow-item {
 	width:30px;

@@ -49,7 +49,11 @@ exports.createBulk = function(req, res) {
 
     Recommend.create(recommends,function(err){
         if(!err){
-            res.jsonp(recommends);
+            var recs = [];
+            for (var i=1; i<arguments.length; ++i) {
+                recs.push(arguments[i]);
+            }
+            res.jsonp({ recommends :recs});
         }
     }); 
 }

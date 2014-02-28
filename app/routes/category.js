@@ -21,10 +21,6 @@ module.exports = function(app) {
 
     app.get('/category', category.all);
     app.get('/category/:type', category.getCatForType)
-    //app.post('/category', authorization.requiresLogin, category.create);
-    //app.get('/category/:categoryId', category.show);
-    //app.put('/category/:categoryId', authorization.requiresLogin, hasAuthorization, category.update);
-    //app.del('/category/:categoryId', authorization.requiresLogin, hasAuthorization, category.destroy);
 
     // Finish with setting up the articleId param
     app.param('type', type);

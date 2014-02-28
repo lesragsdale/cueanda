@@ -7,11 +7,43 @@
     margin-top:70px;
     width:100%
 }
-
+.title {
+  border-bottom:1px solid #575757;
+  text-align:left;
+  font-size:15px;
+  font-weight: bold;
+  margin-top:15px;
+}
+.plain-text {
+  color:#f0f0f0;
+  text-shadow:1px 1px #575757;
+}
 body {
     background-color:#737373;
     color:#3b3b3b;
 }
+body .viewQuestion .buttons .btn {
+  background-color: #e5e5e5;
+  border: 1px solid #ccc;
+  border-bottom-width: 2px;
+  color:#575757;
+  padding: 0px;
+  width:32px;
+  font-size:18px;
+  margin:0px 5px;
+}
+body .viewQuestion .buttons .btn.twitter {
+  color:#fff;
+  background-color: #00acee;
+  border-color: #008ABE
+}
+
+body .viewQuestion .buttons .btn.facebook {
+  color:#fff;
+  background-color: #3b5999;
+  border-color: #2C4373
+}
+
 
 footer {
     position:fixed;
@@ -32,7 +64,11 @@ footer p {
 .blue-butt:focus,
 .red-butt:focus,
 .orange-butt:focus,
-.green-butt:focus {
+.green-butt:focus,
+.blue-butt:hover,
+.red-butt:hover,
+.orange-butt:hover,
+.green-butt:hover {
   color:#fff;
 }
 
@@ -50,8 +86,6 @@ footer p {
   box-shadow: 0px 1px 1px #6984F8 inset;
   text-shadow: 1px 1px #0B0D43;
   color:#fff;
-
-  margin-left:2%;
 }
 
 .blue-butt:hover {
@@ -137,4 +171,38 @@ footer p {
 
 .form-group .help-block {
   color:#525252;
+}
+body .pagination {
+  margin:10px 0px;
+}
+body .pagination li span {
+  background-color: #E7E6E6;
+  border-color:#565656;
+}
+body .pagination li span:hover {
+  background-color: #fff;
+}
+
+body .pagination>.active>span,
+body .pagination>.active>span:hover,
+body .pagination>.active>span:active
+ {
+  background-color: #565656;
+  border-color: #565656;
+}
+body .pagination>.spacer>span,
+body .pagination>.spacer>span:hover,
+body .pagination>.spacer>span:active
+ {
+  background-color: transparent;
+  border: none;
+  color:#565656;
+}
+body .pagination>.disabled>span,
+body .pagination>.disabled>span:hover,
+body .pagination>.disabled>span:active
+ {
+  background-color: transparent;
+  border: 1px solid #565656;
+  color:#565656;
 }

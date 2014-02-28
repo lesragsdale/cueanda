@@ -1,0 +1,58 @@
+<div>
+	<div class="control-group" style="margin-top:0px;">
+		<div class="controls">
+			<div class="input-group">
+				<input type="text" class="form-control"  ng-model="fieldData.mainInput" placeholder="{{name+'...'}}" />
+				<span class="input-group-btn">
+					<button class="btn btn-default  has-tooltip" ng-click="fieldData.showAttach = !fieldData.showAttach" ng-class="{'active':fieldData.showAttach}" type="button" data-toggle="tooltip" data-placement="right" title="Attach content to this field." >
+						<span class="glyphicon glyphicon-paperclip"></span>
+					</button>
+				</span>
+			</div>
+		</div>
+	</div>
+	
+	<div class="control-group" style="margin-top:-15px" ng-show="fieldData.showAttach">
+		<div class="controls">
+			<div class="input-group">
+				<input ng-show="fieldData.showLink != false" type="text" ng-change="embedValChanged()" class="form-control" ng-model="fieldData.embedInput" placeholder="{{name+' Embed Url...'}}" />
+				<input ng-show="fieldData.showLink == false" type="file" class="file-upload" id="image" name="image" ng-file-select />
+				<span class="input-group-btn">
+					<button class="btn btn-default  has-tooltip" ng-click="fieldData.showLink = false" ng-class="{'active': fieldData.showLink == false}" type="button" data-toggle="tooltip" data-placement="bottom" title="Upload your own photo">
+						<span class="glyphicon glyphicon-upload"></span>
+					</button>
+					<button class="btn btn-default active has-tooltip" ng-click="fieldData.showLink = true" ng-class="{'active': fieldData.showLink != false}" type="button" data-toggle="tooltip" data-placement="bottom" title="Embed external link (ex.Imgur)" >
+						<span class="glyphicon glyphicon-link"></span>
+					</button>
+				</span>
+			</div>
+		</div>
+	</div>
+
+	<div class="alert embed-preview-{{unique}}" ng-class="{'alert-info':isLoading,'alert-success':showPreview}" style="margin-top:-15px;" ng-show=" (isLoading || showPreview) && (fieldData.showLink != false) && fieldData.showAttach">
+		<div ng-show="isLoading == true" class="progress progress-striped active" style="height:8px; margin-bottom:10px;">
+		  <div class="progress-bar" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+		  </div>
+		</div>
+		<div ng-show="isLoading" style="text-align: center;"> Loading... </div>
+		<div ng-show="showPreview" style="display:table; width:100%;">
+			<img ng-src="{{fieldData.embed.thumbnail_url}}" style="border-radius:5px;border:1px solid #3c763d" width="80px" style="display:table-cell" />
+			<div style="display:table-cell; padding-left:15px; vertical-align:top; padding-top:5px">{{fieldData.embed.provider_name + " " + fieldData.embed.type + ": " + fieldData.embed.title}}</div>
+		</div>
+	</div>
+
+	<div class="alert embed-upload-preview-{{unique}}" ng-class="{'alert-info':isLoading,'alert-success':showUploadPreview}" style="margin-top:-15px;" ng-show=" (isLoading || showUploadPreview) && (fieldData.showLink == false) && fieldData.showAttach">
+		<div ng-show="isLoading == true" class="progress progress-striped active" style="height:8px; margin-bottom:10px;">
+		  <div class="progress-bar" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+		  </div>
+		</div>
+		<div ng-show="isLoading" style="text-align: center;"> Loading... </div>
+		<div ng-show="showUploadPreview" style="display:table; width:100%;">
+			<img ng-src="{{imageUploadPath}}" style="border-radius:5px;border:1px solid #3c763d" width="80px" style="display:table-cell" />
+		</div>
+	</div>
+
+
+
+
+</div>

@@ -1,3 +1,49 @@
-#viewQuestion .modal-dialog {
+.viewQuestion .modal-dialog {
 	width:750px;
+}
+
+body .question-modal-top-row .user-pocket {
+	text-align: center;
+	background-color: #f0f0f0;
+	border-right:1px solid #e0e0e0;
+	display: block;
+	-webkit-border-top-left-radius: 5px;
+	-moz-border-radius-topleft: 5px;
+	border-top-left-radius: 5px;
+	-webkit-border-top-right-radius: 0px;
+	-moz-border-radius-topright: 0px;
+	border-top-right-radius: 0px;
+}
+
+.question-modal-top-row .question-title :before {
+	position: absolute;
+	display: inline-block;
+	border-top: 12px solid transparent;
+	border-right: 12px solid #e0e0e0;
+	border-bottom: 12px solid transparent;
+	border-right-color: rgba(0, 0, 0, 0.2);
+	left: -12px;
+	top: 16px;
+	content: '';
+}
+
+body .question-modal-top-row .question-title,
+body .question-modal-top-row .question-title .modal-title {
+	text-align: left;
+}
+
+.question-modal-top-row .question-title:after {
+	position: absolute;
+	display: inline-block;
+	border-top: 12px solid transparent;
+	border-right: 12px solid #fff;
+	border-bottom: 12px solid transparent;
+	left: -12px;
+	top: 15px;
+	content: '';
+}
+
+body .question-modal-top-row .question-title .question-username,
+body .question-modal-top-row .question-title .question-date {
+	display: none;
 }

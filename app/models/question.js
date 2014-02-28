@@ -20,6 +20,9 @@ var QuestionSchema = new Schema({
         default: '',
         trim: true
     },
+    question: {
+        type: Schema.Types.Mixed
+    },
     answers: [],
     category: {
         type: Schema.ObjectId,
@@ -33,16 +36,23 @@ var QuestionSchema = new Schema({
         type: Schema.ObjectId,
         ref: 'User'
     },
+    isPrivate: {
+        type: Boolean,
+        default: false
+    },
+    privateList: [],
     comments:[],
-    votes:[]
+    votes:[],
+    recommendations:[]
 });
 
 /**
  * Validations
  */
+ /*
 QuestionSchema.path('title').validate(function(title) {
     return title.length;
-}, 'Title cannot be blank');
+}, 'Title cannot be blank');*/
 
 /**
  * Statics

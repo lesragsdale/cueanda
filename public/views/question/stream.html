@@ -1,0 +1,95 @@
+<section data-ng-controller="StreamController" data-ng-init="pullQuestions()">
+	<div class="row">
+
+		<div class="col-sm-3">
+			<button class="btn btn-primary orange-butt" style="padding:8px; width:100%" ng-click="newQuestion = {category:'empty', question:{id:'qstn'}, optionA:{id:'opa'}, optionB:{id:'opb'}, private:'false' }" data-toggle="modal" data-target="#questionModal">Add a Question!</button>
+
+      <div class="categories">
+        <div ng-repeat="category in categories" ng-class="{'active':category.active == true}" class="category category-{{category.machine_name}}" ng-click="selectCategory(category)">
+           <div class="cat-icon">
+            <span class="{{catIcons[category.machine_name]}}"></span> 
+           </div>
+           <div class="cat-text" >
+            {{category.name}}
+           </div>
+        </div>
+      </div>
+
+		</div>
+		<div class="col-sm-9 question-list">
+			<div>
+        <select ui-select2 ng-model="questionFilter" class="the-question-filter" style="width:100%;" data-placeholder="Choose a Category..." ng-change="refreshQuestionList()">
+          <option  value="all">All</option>
+          <option  value="followedUsers">People I Follow</option>
+          <option  value="privateRecommended">Private & Recommended</option>
+        </select>
+
+
+        <!-- list directive -->
+        <question-list questions="questions" unique-name="'rq'">></question-list>
+
+
+			</div>
+		</div>
+
+	</div>
+
+<!--- NEW QUESTION MODAL -->
+
+<div class="modal fade" id="questionModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">New Question</h4>
+      </div>
+      <div class="modal-body">
+    		<new-question-form-section field-data="newQuestion.question" name="Question" unique="qstn">
+    		</new-question-form-section>
+
+    		<new-question-form-section field-data="newQuestion.optionA" name="OptionA" unique="opa">
+    		</new-question-form-section>
+
+    		<new-question-form-section field-data="newQuestion.optionB" name="OptionB" unique="opb">
+    		</new-question-form-section> 
+
+        <div class="control-group" style="margin-bottom:0px;">
+    			<div class="controls">
+    				<select ui-select2 ng-model="newQuestion.category" style="width:100%;" data-placeholder="Choose a Category...">
+    					<option value="empty">Select A Category</option>
+    					<option  ng-repeat="category in categories" value="{{category._id}}">{{category.name}}</option>
+    				</select>
+    			</div>
+    		</div> 
+
+      </div>
+
+      <div ng-show="currentUser.follows.length > 0" style="background-color:#f0f0f0; display:table; width:100%; border-top: 1px solid #e0e0e0;">
+        <div style="display:table-cell;width:150px;padding:10px;text-align:center;border-right:1px solid #e0e0e0">
+          <label>
+            <input type="radio" ng-model="newQuestion.private" value="false"> Public
+          </label>
+        </div>
+        <div style="display:table-cell;padding:10px;text-align:center;border-left:1px solid #fff">
+          <label>
+            <input type="radio" ng-model="newQuestion.private" value="true"> Private
+          </label>
+          <div ng-show="newQuestion.private == 'true'" >
+            <select ui-select2 multiple ng-model="newQuestion.privateList"  data-placeholder="Select who can view this private question." style="min-width:150px;">
+              <option  ng-repeat="usr in currentUser.follows" value="{{usr.followee._id}}">{{usr.followee.username+" ("+usr.followee.name+")"}}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer" style="margin-top:0px">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" ng-click="createQuestion()">Save</button>
+      </div>
+
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+</section>

@@ -1,0 +1,13 @@
+{
+  "name": "embedly-jquery",
+  "homepage": "https://github.com/embedly/embedly-jquery",
+  "version": "3.1.1",
+  "_release": "3.1.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "v3.1.1",
+    "commit": "f9339861d1d94beaa02090d524a27a748bcd0c84"
+  },
+  "_source": "git://github.com/embedly/embedly-jquery.git",
+  "_target": "*"
+}

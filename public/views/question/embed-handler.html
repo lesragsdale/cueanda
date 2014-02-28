@@ -1,0 +1,6 @@
+<div ng-show="data.showAttach == true">
+	<img ng-show="data.showLink == false" ng-src="{{uploadPath}}" width="100%" /> 
+	<img ng-show="data.showLink == true && data.embed.type == 'photo'" ng-src="{{data.embed.thumbnail_url}}" width="100%" style="margin-bottom:10px;" />
+	<div ng-show="data.showLink == true && data.embed.type == 'video'" ng-bind-html="safeHtmlEmbed">
+	</div>
+</div>

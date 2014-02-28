@@ -1,7 +1,7 @@
-<section data-ng-controller="UserController" class="user-profile" data-ng-init="">
+<section data-ng-controller="UserController" class="user-profile" data-ng-init="loadUserData()">
 	<div class="row">
 		<div class="col-sm-3 user-img">
-			<img src="../../img/user/{{userProfile.image}}-lrg.png" />
+			<img class='user-image-display' ng-src="{{userLargeImagePath}}" />
 			<div class="name">
 				{{userProfile.username}}
 				<span class="muted">({{userProfile.name}})</span>
@@ -12,25 +12,37 @@
 			</a>
 
 			<!-- Bio -->
-			<div class="bio">This is where some short bio will go. We havent added this field to the db yet tho..so errbody gets the same thing for now....cool? cool.</div>
+			<div class="bio plain-text">This is where some short bio will go. We havent added this field to the db yet tho..so errbody gets the same thing for now....cool? cool.</div>
 			<!-- Followers -->
 			<div class="title">Who They Follow</div>
-			<div>
-				<img class="user-follow-item" ng-repeat="usr in userProfile.follows" src="../../img/user/{{usr.followee.image}}-sml.png" />
+			<div style="text-align:left;">
+				<img class="user-follow-item" ng-repeat="usr in userProfile.follows | filter: {follower._id : userProfile._id }" ng-src="../../img/user/{{usr.followee.image}}-sml.png" />
 			</div>
 			<!-- Following -->
-			<div class="title">Whose Following Them</div>
-			<div>
-				<img class="user-follow-item" ng-repeat="usr in userProfile.follows" src="../../img/user/{{usr.follower.image}}-sml.png" />
+			<div class="title">Who's Following Them</div>
+			<div style="text-align:left;">
+				<img class="user-follow-item" ng-repeat="usr in userProfile.follows| filter: {followee._id : userProfile._id }" ng-src="../../img/user/{{usr.follower.image}}-sml.png" />
 			</div>
 		</div>
 		<div class="col-sm-9">
 			<!-- Recently Asked -->
+			<div class="title">Recently Asked Questions</div>
+			<div style="padding:20px">
+				<question-list questions="askedQuestions" unique-name="'aq'" use-pager="true" ></question-list>
+			</div>
+			
 			<!-- Recently Answered -->
+			<div class="title">Recently Answered Questions</div>
+			<div style="padding:20px">
+				<question-list questions="votedQuestions" unique-name="'vq'" use-pager="true"></question-list>
+			</div>
 			<!-- Mentions -->
-			<!-- Communities -->
+			<div class="title">Mentions</div>
 
 		</div>
 	
 	</div>
+
+
+
 </section>

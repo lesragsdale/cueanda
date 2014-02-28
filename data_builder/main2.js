@@ -1,7 +1,7 @@
 var databaseURI = "localhost:27017/mean-dev";
 var _ = require('lodash');
 var moment = require("moment");
-var collections = ["questions","categories","votes","users","comments","communities","communityTypes"];
+var collections = ["questions","categories","votes","users","pics","follows","recommends","comments","communities","communityTypes"];
 var db = require("mongojs").connect(databaseURI, collections);
 
 var users = [
@@ -333,7 +333,9 @@ var getSomeComments = function(){
 	})
 	return comments
 }
-
+//Drop Pics
+db.pics.remove({},function(err,lastErrorObject){
+});	
 //Drop Communities
 db.communities.remove({},function(err,lastErrorObject){
 });	
@@ -352,6 +354,12 @@ db.questions.remove({},function(err,lastErrorObject){
 //Drop Categories
 db.categories.remove({},function(err,lastErrorObject){
 });
+//Drop Follows
+db.follows.remove({},function(err,lastErrorObject){
+});	
+//Drop Recommends
+db.recommends.remove({},function(err,lastErrorObject){
+});	
 //Drop All Votes
 db.votes.remove({},function(err,lastErrorObject){
 
@@ -372,11 +380,11 @@ db.votes.remove({},function(err,lastErrorObject){
 					//console.log(n);
 
 					var aQue = {
-								title: questions[_.random( _.size(questions)-1 )],
+								question: { mainInput: questions[_.random( _.size(questions)-1 )]},
 								created: moment().valueOf() - _.random(100000),
 								answers:[
-											{title: answers[_.random( _.size(answers)-1 )] },
-											{title: answers[_.random( _.size(answers)-1 )] }
+											{mainInput: answers[_.random( _.size(answers)-1 )] },
+											{mainInput: answers[_.random( _.size(answers)-1 )] }
 										],
 								category: catsByType[1][_.random( _.size(catsByType[1])-1 )]._id,
 								user: mngUsrs[_.random( _.size(mngUsrs)-1 )]._id

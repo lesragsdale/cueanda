@@ -1,0 +1,124 @@
+<div>
+
+        <div ng-repeat="question in questions | pager:{page:currentPage,limit:itemsPerPage,pager:usePager}" class="question-list-item qli-{{question._id}}">
+          <div class="side left">
+            <div class="img-hold">
+              <img ng-show="question.user.image" ng-src="{{'../../img/user/'+question.user.image+'-sml.png'}}">
+            </div>
+            <div class="question-notifiers">
+              <div class="recommended-question" ng-show="isQuestionRecommended(question)">
+                <span class="fa fa-thumbs-up hasTooltip" data-toggle="tooltip" data-placement="bottom" title="This question was recmmended to you by one or more of your friends"></span> 
+              </div>  
+              <div class="private-question" ng-show="question.isPrivate">
+                <span class="glyphicon glyphicon-eye-close hasTooltip" data-toggle="tooltip" data-placement="bottom" title="This question is private"></span> 
+              </div>  
+            </div>     
+          </div>
+          <div class="side right" ng-click="questionModal(question)">
+            <div class="question-user-name">
+              <a href="#!/user/{{question.user.username}}" ng-click="clickUserLink()">{{question.user.username}}</a>
+              <span class="muted">({{question.user.name}})</span>
+
+              <span class="pull-right {{catIcons[question.category.machine_name]}}" ></span>
+            </div>
+            <div class="question-title">{{question.question.mainInput}}</div>
+            <div> <voting-bar votes="question.votes"></voting-bar> </div>
+            <div class="answers">
+              <div class="answer opa side">
+                <div class="percent">{{opaPercent}}%</div>
+                <div class="text">{{question.answers[0].mainInput}}</div>
+              </div>
+              <div class="answer opb side">
+                <div class="percent">{{opbPercent}}%</div>
+                <div class="text">{{question.answers[1].mainInput}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- only show if count > page limit -->
+        <div  ng-show="usePager" style="text-align:center">
+	        <ul class="pagination pagination-sm">
+	        	  <li ng-class="{'disabled':currentPage==0}" ng-click="changePage(-1)"><span>&laquo;</span></li>
+	        	 <!-- <li ng-show="currentPage > 5 && (questions.length/itemsPerPage) > 6" class="spacer"><span>. . .</span></li>
+	        	  	<li ng-repeat="i in getNumber() track by $index" ng-class="{'active':$index==currentPage}" ng-click="setPage($index)" ng-hide="(currentPage - $index > 1 || $index - currentPage > 1) && (questions.length/itemsPerPage) > 6 ">
+	        	  		<span>{{$index+1}}</span>
+	        	  	</li>
+	        	  <li ng-show="" class="spacer" ng-hide="(questions.length/itemsPerPage) - $index <= 5 && (questions.length/itemsPerPage) > 6"><span>. . .</span></li> -->
+
+	        	  <li class="spacer"><span> {{currentPage+1}} / {{questions.length/itemsPerPage | ceil}} </span></li>
+				  <li ng-class="{'disabled': (currentPage + 1) >= (questions.length/itemsPerPage)}" ng-click="changePage(1)"><span>&raquo;</span></li>
+	        </ul>
+        </div>
+
+
+        <div class="modal fade viewQuestion" id="{{'viewQuestion'+uniqueName}}">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		      	<div class="row question-modal-top-row">
+		      		<div class="col-sm-2 col user-pocket">
+		      			<img ng-show="activeQuestion.user.image" ng-src="{{activeQuestion.userImagePath}}" />
+		      			<h6 class="question-username">{{activeQuestion.user.username}}</h6>
+		      			<h6 class="question-date" style="margin-bottom:15px;font-size:.65em;color:#888">{{activeQuestion.created | ago}}</h6>
+		      		</div>
+		      		<div class="col-sm-10 col question-title">
+		      			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		        	<h4 class="modal-title">{{activeQuestion.question.mainInput}}</h4>
+		        	<h6 class="question-username">{{activeQuestion.user.username}}</h6>
+		      		<h6 class="question-date" style="margin-bottom:15px;font-size:.65em;color:#888">{{activeQuestion.created | ago}}</h6>
+		      		<embed-handler data="activeQuestion.question"></embed-handler>
+		      		</div>
+		      	</div>		        
+		      </div>
+		      <div class="modal-body">
+		      	<div class="options row" ng-class="{'has-embeds': activeQuestion.answers[0].showAttach == true || activeQuestion.answers[1].showAttach == true }">
+
+			      	<div ng-repeat="answer in activeQuestion.answers" class="col-sm-6 col">
+
+			      		<embed-handler data="answer"></embed-handler>
+
+			      		<div  ng-click="castVote($index)" class="answer answer-{{$index}} hover" ng-class="{'orange-butt':$index==0,'blue-butt':$index==1,'selected':activeQuestion.currentAnswer.answer == $index}" style="margin:10px 0px">
+			          		<span class="fa fa-check-circle"></span>
+			          		{{answer.mainInput}}
+			          	</div>
+			      	</div>
+
+		      	</div>
+
+		      	<div ng-show="activeQuestion.currentAnswer"> <voting-bar votes="activeQuestion.votes"></voting-bar> </div>
+		      </div>
+		        <div ng-show="activeQuestion.currentAnswer" class="extra-functions">
+		          <div class="buttons">
+		            <button class="btn btn-sm" ng-click="toggleRecommendSection()" ng-show="currentUser.follows.length > 0" data-toggle="tooltip" data-placement="bottom" title="Recommend this question to a friend"> <span class="glyphicon glyphicon-thumbs-up"></span> </button>
+		            <button class="btn btn-sm" ng-click="" ng-show="currentUser.follows.length > 0" data-toggle="tooltip" data-placement="bottom" title="Toggle the filtering of votes to be only from people you follow"> <span class="fa fa-group"></span> </button>
+		            <button class="btn btn-sm" ng-click="" data-toggle="tooltip" data-placement="bottom" title="Flag this question as inappropriate"> <span class="fa fa-flag"></span> </button>
+
+		            <button class="btn btn-sm twitter" ng-click="" data-toggle="tooltip" data-placement="bottom" title="Tweet this question!" > <span class="fa fa-twitter"></span> </button>
+
+		            <button class="btn btn-sm facebook" ng-click="" data-toggle="tooltip" data-placement="bottom" title="Share this question with Facebook!"> <span class="fa fa-facebook"></span> </button>
+		          </div>
+		          <div class="well recommend-well">
+		                <select ui-select2 multiple ng-model="activeQuestion.recommends" ng-click="recDropChange()" style="width:100%;" data-placeholder="Select who you like to recommend this question for...">
+		                  <option  ng-repeat="usr in currentUser.follows" ng-hide="hideRecommendOption(usr.followee._id)" ng-click="recDropChange()" value="{{usr.followee._id}}">{{usr.followee.username+" ("+usr.followee.name+")"}}</option>
+		                </select>
+		                <button class="btn btn-primary btn-xs" style="margin-top:10px;" ng-click="sendRecommendations()" ng-show="activeQuestion.recommends.length > 0">Send Recommendation<span ng-show="activeQuestion.recommends.length > 1">s</span></button>
+		          </div>
+		        </div>
+
+		      <div class="modal-body">
+		      	<div ng-show="activeQuestion.currentAnswer" class="create-comment">
+		      	<textarea class="form-control" ng-model="activeQuestion.newComment" placeholder="Provide a comment..."></textarea>
+		        <button style="padding:10px" class="comment-submit green-butt" ng-click="createComment()" >Submit Comment</button>
+		      	</div>
+
+		      	<div ng-show="activeQuestion.currentAnswer" class="comments">
+		          <comment question="activeQuestion"></comment>
+		      	</div>
+
+		      </div>
+		    </div><!-- /.modal-content -->
+		  </div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
+
+</div>
