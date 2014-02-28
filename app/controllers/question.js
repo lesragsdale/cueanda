@@ -34,6 +34,7 @@ exports.create = function(req, res) {
 
     question.save(function(err) {
         if (err) {
+            console.log(err)
             return res.send('users/signup', {
                 errors: err.errors,
                 question: question

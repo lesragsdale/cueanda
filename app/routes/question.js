@@ -6,9 +6,12 @@ var authorization = require('./middlewares/authorization');
 
 // Article authorization helpers
 var hasAuthorization = function(req, res, next) {
+    console.log('hasAuthorization::enter')
 	if (req.question.user.id !== req.user.id) {
+        console.log('hasAuthorization::user not authorized')
         return res.send(401, 'User is not authorized');
     }
+    console.log('hasAuthorization::exit')
     next();
 };
 
