@@ -45,7 +45,7 @@ walk(models_path);
 require('./config/passport')(passport);
 
 var app = express();
-app.use(express.bodyParser({uploadDir: 'temp_dir'}));
+app.use(express.bodyParser({uploadDir: 'tmp'}));
 // Express settings
 require('./config/express')(app, passport, db);
 
