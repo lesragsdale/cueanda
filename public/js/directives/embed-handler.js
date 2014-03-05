@@ -14,7 +14,7 @@ angular.module('cueanda').directive('embedHandler', ['$sce',
 							scope.safeHtmlEmbed = $sce.trustAsHtml(scope.data.embed.html);
 						}
 						if(scope.data.showLink == false){
-							scope.uploadPath = '../../img/qstn/'+scope.data.imageUpload[0]+'.png';
+							scope.uploadPath = 'https://s3.amazonaws.com/cueanda/qstn/'+scope.data.imageUpload[0]+'.jpg';
 						}
 					}
 					

@@ -15,7 +15,7 @@
 		
 		<!-- Img Block -->
 		<div class='comment-img' ng-show="question.votesByUser[comment.user._id][0].answer == 0">
-			<img class='user-image-display' ng-src='../../img/user/{{comment.user.image}}-sml.png'>
+			<img class='user-image-display' ng-src='{{comment.user.image}}-sml.jpg'>
 		</div>
 
 		<!-- Vote Block -->
@@ -39,7 +39,7 @@
 
 		<!-- Img Block -->
 		<div class='comment-img' ng-show="question.votesByUser[comment.user._id][0].answer == 1">
-			<img class='user-image-display' ng-src='../../img/user/{{comment.user.image}}-sml.png'>
+			<img class='user-image-display' ng-src='{{comment.user.image}}-sml.jpg'>
 		</div>
 
 		<!-- Vote Block -->

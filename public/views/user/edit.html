@@ -1,4 +1,4 @@
-<section data-ng-controller="UserController" data-ng-init="">
+<section data-ng-controller="UserController" data-ng-init="loadUserData()">
 	<form class="form-horizontal col-md-6" role="form" enctype="multipart/form-data" action="{{userUpdatePostUrl}}" method="POST">
 		<div class="form-group">
 			<label for="image">Display Name</label>
@@ -6,7 +6,7 @@
 			<p class="help-block">This will be displayed next to your username to tell visitors and friends your real name (or another name you would like to go by <span class="fa fa-smile-o"></span> ) </p>
 		</div>
 		<div class="form-group profile-image">
-			<img class='user-image-display' ng-src="../../img/user/{{userProfile.image}}-sml.png" />
+			<img class='user-image-display' ng-src="{{userProfile.image}}-sml.jpg" />
 			<label for="image">Profile Image</label>
 			<input type="file" id="image" name="image" ng-file-select />
 			<p class="help-block">Select an image to use as your profile image.</p>

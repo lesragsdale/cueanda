@@ -57,7 +57,7 @@ angular.module('cueanda').directive('newQuestionFormSection',[ '$resource', '$ti
 	                }else{
 	                	scope.fieldData.imageUpload = [response._id];
 	                }
-	                scope.imageUploadPath = './../img/qstn/'+scope.fieldData.imageUpload[0]+'.png';
+	                scope.imageUploadPath = 'https://s3.amazonaws.com/cueanda/qstn/'+scope.fieldData.imageUpload[0]+'.jpg';
 	                
 	                scope.isLoading = false;
 	            	scope.showUploadPreview = true;

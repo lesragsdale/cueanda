@@ -223,7 +223,7 @@ angular.module('cueanda').directive('questionList',['$resource', '$timeout',
 						scope.activeQuestion.currentAnswer = _.find(question.votes,function(vote){
 							return vote.user == user._id && _.isUndefined(vote.comment);
 						});
-						scope.activeQuestion.userImagePath = '../../img/user/'+scope.activeQuestion.user.image+'-sml.png';
+						scope.activeQuestion.userImagePath = scope.activeQuestion.user.image+'-sml.jpg';
 
 						$(".recommend-well").removeClass("open");
 						var commentVotes = _.filter(scope.activeQuestion.votes,function(vote){ return !_.isUndefined(vote.comment); });

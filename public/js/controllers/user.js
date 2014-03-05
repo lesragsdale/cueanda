@@ -66,7 +66,7 @@ angular.module('cueanda').controller('UserController',
                 uploader.clearQueue()
                 $scope.userProfile.image = response.image;
                 $(".form-group.profile-image img").remove();
-                $(".form-group.profile-image").prepend("<img class='user-image-display' src='../../img/user/"+$scope.userProfile.image+"-sml.png' />")
+                $(".form-group.profile-image").prepend("<img class='user-image-display' src='"+$scope.userProfile.image+"-sml.jpg' />")
             });
 
             uploader.bind('progressall', function (event, progress) {
@@ -84,10 +84,11 @@ angular.module('cueanda').controller('UserController',
             User.get({
                 userName: $routeParams.userName
             }, function(ruser) {
+                console.log(ruser);
                 $scope.userProfile = ruser;
                 $scope.userUpdatePostUrl = "http://127.0.0.1:3000/user/"+$scope.userProfile.username;
                 $scope.userUpdatePostUrl = $sce.trustAsResourceUrl($scope.userUpdatePostUrl);
-                $scope.userLargeImagePath = "../../img/user/"+$scope.userProfile.image+"-lrg.png";
+                $scope.userLargeImagePath = $scope.userProfile.image+"-lrg.jpg";
                 var t = _.find($scope.userProfile.follows,function(follow){
                     return follow.follower._id == user._id;
                 });

@@ -16,12 +16,12 @@
 			<!-- Followers -->
 			<div class="title">Who They Follow</div>
 			<div style="text-align:left;">
-				<img class="user-follow-item" ng-repeat="usr in userProfile.follows | filter: {follower._id : userProfile._id }" ng-src="../../img/user/{{usr.followee.image}}-sml.png" />
+				<img class="user-follow-item" ng-repeat="usr in userProfile.follows | filter: {follower._id : userProfile._id }" ng-src="{{usr.followee.image}}-sml.jpg" />
 			</div>
 			<!-- Following -->
 			<div class="title">Who's Following Them</div>
 			<div style="text-align:left;">
-				<img class="user-follow-item" ng-repeat="usr in userProfile.follows| filter: {followee._id : userProfile._id }" ng-src="../../img/user/{{usr.follower.image}}-sml.png" />
+				<img class="user-follow-item" ng-repeat="usr in userProfile.follows| filter: {followee._id : userProfile._id }" ng-src="{{usr.follower.image}}-sml.jpg" />
 			</div>
 		</div>
 		<div class="col-sm-9">

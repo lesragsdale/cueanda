@@ -4,11 +4,16 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
-    Pic = mongoose.model('Pic'),
+    uuid = require('node-uuid'),
+    AWS = require('aws-sdk'),
     _ = require('lodash'),
     fs = require('fs'),
     Q = require('q'),
     gm = require('gm');
+
+
+AWS.config.update({ accessKeyId: process.env.AWS_ACCESS_KEY_ID , secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY });
+var s3 = new AWS.S3();
 
 
 /**
@@ -28,30 +33,47 @@ exports.pic = function(req, res, next, id) {
  */
 exports.create = function(req, res) {
 
-    var pic = new Pic({width:null,height:null});
     var maxWidth = 600;
     console.log(req.files);
     //check if theres an image
     if(req.files.file.originalFilename != ''){
         var imgPath = req.files.file.path;
 
-        //create Object in Mongo
-        pic.save(function(err, pic) {
-            if (!err) {
-                //resize (if needed) and save
-                resizeImg(imgPath).then(function(gmOb){
-                    gmOb.autoOrient().write(
-                            'public/img/qstn/'+pic._id+'.png', 
-                            function (err, param) {
-                              if(err){ console.log(err); }
-                              else {
-                                    res.jsonp(pic)
-                                }
-                            }
-                    );
-                })
-            }
-        });
+        //resize (if needed) and save
+        resizeImg(imgPath).then(function(gmOb){
+            gmOb.autoOrient()
+            .stream(function(err, stdout, stderr) {
+
+                var pId = uuid.v1();
+
+                var buf = new Buffer(0);
+                stdout.on('data', function(d) { buf = Buffer.concat([buf, d]); });
+                stdout.on('end', function() {
+
+                  var data = {
+                    Bucket: "cueanda",
+                    Key: "qstn/"+pId+".jpg",
+                    Body: buf,
+                    ContentType: 'image/jpeg'
+                  };
+
+                  s3.client.putObject(data, function(err, resp) {
+                    if(err){console.log(err)}
+                    res.jsonp({_id:pId});
+                  });
+
+                });
+            });
+            /*.write(
+                'public/img/qstn/'+pic._id+'.png', 
+                function (err, param) {
+                  if(err){ console.log(err); }
+                  else {
+                        res.jsonp(pic)
+                    }
+                }
+            );*/
+        })
     }
 
 };

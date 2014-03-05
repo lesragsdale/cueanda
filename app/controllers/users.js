@@ -6,11 +6,15 @@
 var mongoose = require('mongoose'),
     User = mongoose.model('User'),
     Follow = mongoose.model('Follow'),
+    AWS = require('aws-sdk'),
     fs = require('fs'),
     _ = require('lodash'),
     gm = require('gm');
 
 
+
+AWS.config.update({ accessKeyId: process.env.AWS_ACCESS_KEY_ID , secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY });
+var s3 = new AWS.S3();
 
 /**
  * Auth callback
@@ -93,7 +97,7 @@ exports.uploadUsrImg = function(req, res, next){
     }
 }
 var updateUserDoc = function(user,rnd, res){
-    User.findByIdAndUpdate(user._id, {image:user.username+rnd}, function(err, user){
+    User.findByIdAndUpdate(user._id, {image:'https://s3.amazonaws.com/cueanda/usr/'+user.username+rnd}, function(err, user){
         if(!err){
             console.log('just updated the user..')           
             res.jsonp(_.omit(user,['_v','hashed_password','provider','salt']));
@@ -123,19 +127,58 @@ var saveImg = function(widthLarger, path, user, res){
     var rHeight = (widthLarger?[50,200]:[null,null]);
     var rnd = _.random(100);
 
-    gm(path).resize(rWidth[0],rHeight[0]).crop(50,50,0,0)
-    .write('public/img/user/'+user.username+rnd+'-sml.png', function (err) {
+    /*gm(path).resize(rWidth[0],rHeight[0]).crop(50,50,0,0)
+    .write('public/img/user/'+user.username+rnd+'-sml.jpg', function (err) {
       if (!err) {
             console.log('done');
         }
+    });*/
+
+    gm(path).resize(rWidth[0],rHeight[0]).crop(50,50,0,0)
+    .stream(function(err, stdout, stderr) {
+
+        var buf = new Buffer(0);
+        stdout.on('data', function(d) { buf = Buffer.concat([buf, d]); });
+        stdout.on('end', function() {
+
+          var data = {
+            Bucket: "cueanda",
+            Key: "usr/"+user.username+rnd+"-sml.jpg",
+            Body: buf,
+            ContentType: 'image/jpeg'
+          };
+
+          s3.client.putObject(data, function(err, resp) {
+            if(err){console.log(err)}
+            console.log("Amazon done");
+          });
+
+        });
     });
 
+
+    //updateUserDoc(user,rnd, res);
     gm(path).resize(rWidth[1],rHeight[1]).crop(200,200,0,0)
-    .write('public/img/user/'+user.username+rnd+'-lrg.png', function (err) {
-        if (!err) {
-            console.log('done');
+    .stream(function(err, stdout, stderr) {
+
+        var buf = new Buffer(0);
+        stdout.on('data', function(d) { buf = Buffer.concat([buf, d]); });
+        stdout.on('end', function() {
+
+          var data = {
+            Bucket: "cueanda",
+            Key: "usr/"+user.username+rnd+"-lrg.jpg",
+            Body: buf,
+            ContentType: 'image/jpeg'
+          };
+
+          s3.client.putObject(data, function(err, resp) {
+            if(err){console.log(err)}
             updateUserDoc(user,rnd, res);
-        }
+            console.log("Amazon done");
+          });
+
+        });
     });
 }
 

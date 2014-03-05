@@ -3,7 +3,7 @@
         <div ng-repeat="question in questions | pager:{page:currentPage,limit:itemsPerPage,pager:usePager}" class="question-list-item qli-{{question._id}}">
           <div class="side left">
             <div class="img-hold">
-              <img ng-show="question.user.image" ng-src="{{'../../img/user/'+question.user.image+'-sml.png'}}">
+              <img ng-show="question.user.image" ng-src="{{question.user.image+'-sml.jpg'}}">
             </div>
             <div class="question-notifiers">
               <div class="recommended-question" ng-show="isQuestionRecommended(question)">
