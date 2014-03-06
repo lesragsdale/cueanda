@@ -9,7 +9,8 @@ var mongoose = require('mongoose'),
     _ = require('lodash'),
     fs = require('fs'),
     Q = require('q'),
-    gm = require('gm');
+    gm = require('gm'),
+    imageMagick = gm.subClass({ imageMagick: true });
 
 
 AWS.config.update({ accessKeyId: process.env.AWS_ACCESS_KEY_ID , secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY });
@@ -80,15 +81,21 @@ exports.create = function(req, res) {
 
 var resizeImg = function(img){
     var deferred = Q.defer();
-    gm(img).size(function(err,size){
+    
+    imageMagick
+
+    //gm(img).size(function(err,size){
+    imageMagick(img).size(function(err,size){
         if(err){ console.log(err); }
         else{
             if(size.width > 600){
                 //return gm(img).resize(600);
-                deferred.resolve(gm(img).resize(600));
+                //deferred.resolve(gm(img).resize(600));
+                deferred.resolve(imageMagick(img).resize(600));
             }else{
                 //return gm(img);
-                deferred.resolve(gm(img));
+                //deferred.resolve(gm(img));
+                deferred.resolve(imageMagick(img));
             }
         }
     });
