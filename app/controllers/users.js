@@ -9,7 +9,8 @@ var mongoose = require('mongoose'),
     AWS = require('aws-sdk'),
     fs = require('fs'),
     _ = require('lodash'),
-    gm = require('gm');
+    gm = require('gm'),
+    imageMagick = gm.subClass({ imageMagick: true });
 
 
 
@@ -70,7 +71,8 @@ exports.update = function(req, res, next) {
         var imgPath = req.files.image.path;
         console.log(imgPath);
 
-        gm(imgPath).size(function(err,size){
+        //gm(imgPath).size(function(err,size){
+        imageMagick(imgPath).size(function(err,size){
             if(!err)
                 var val = (size.width > size.height? true : false );
                 saveImg(val,imgPath,req.user);
@@ -88,7 +90,8 @@ exports.uploadUsrImg = function(req, res, next){
         var imgPath = req.files.file.path;
         console.log(imgPath);
 
-        gm(imgPath).size(function(err,size){
+        //gm(imgPath).size(function(err,size){
+        imageMagick(imgPath).size(function(err,size){
             if(!err)
                 var val = (size.width > size.height? true : false );
                 saveImg(val,imgPath,req.user,res);
@@ -134,7 +137,8 @@ var saveImg = function(widthLarger, path, user, res){
         }
     });*/
 
-    gm(path).resize(rWidth[0],rHeight[0]).crop(50,50,0,0)
+    //gm(path).resize(rWidth[0],rHeight[0]).crop(50,50,0,0)
+    imageMagick(path).resize(rWidth[0],rHeight[0]).crop(50,50,0,0)
     .stream(function(err, stdout, stderr) {
 
         var buf = new Buffer(0);
@@ -158,7 +162,8 @@ var saveImg = function(widthLarger, path, user, res){
 
 
     //updateUserDoc(user,rnd, res);
-    gm(path).resize(rWidth[1],rHeight[1]).crop(200,200,0,0)
+    //gm(path).resize(rWidth[1],rHeight[1]).crop(200,200,0,0)
+    imageMagick(path).resize(rWidth[1],rHeight[1]).crop(200,200,0,0)
     .stream(function(err, stdout, stderr) {
 
         var buf = new Buffer(0);
