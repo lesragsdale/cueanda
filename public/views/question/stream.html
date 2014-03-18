@@ -20,11 +20,18 @@
 		</div>
 		<div class="col-sm-9 question-list">
 			<div>
-        <select ui-select2 ng-model="questionFilter" class="the-question-filter" style="width:100%;" data-placeholder="Choose a Category..." ng-change="refreshQuestionList()">
+        <select ui-select2 ng-model="questionFilter" class="the-question-filter" style="width:100%;" data-placeholder="Choose a Filter..." ng-change="refreshQuestionList()" ng-show="currentUser">
           <option  value="all">All</option>
           <option  value="followedUsers">People I Follow</option>
           <option  value="privateRecommended">Private & Recommended</option>
         </select>
+
+        <!-- <select ui-select2 ng-model="questionFilter" class="question-cats-drop" style="width:100%;" data-placeholder="Select Categories" ng-change="refreshQuestionList()" ng-show="currentUser">
+          <option  value="all">All</option>
+          <option ng-repeat="category in categories" value="{{category._id}}">
+            {{category.name}}            
+          </option>
+        </select> -->
 
 
         <!-- list directive -->
