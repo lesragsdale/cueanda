@@ -36,7 +36,10 @@
 		</div>
 		<div ng-show="isLoading" style="text-align: center;"> Loading... </div>
 		<div ng-show="showPreview" style="display:table; width:100%;">
-			<img ng-src="{{fieldData.embed.thumbnail_url}}" style="border-radius:5px;border:1px solid #3c763d" width="80px" style="display:table-cell" />
+			<!-- <img ng-src="{{fieldData.embed.thumbnail_url}}" style="border-radius:5px;border:1px solid #3c763d" width="80px" style="display:table-cell" /> -->
+
+			<img ng-show="fieldData.showLink == true && fieldData.embed.type == 'photo' && fieldData.embed.thumbnail_url" ng-src="{{fieldData.embed.thumbnail_url}}" width="80px" style="display:table-cell" />
+			<img ng-show="fieldData.showLink == true && fieldData.embed.type == 'photo' && !fieldData.embed.thumbnail_url" ng-src="{{fieldData.embed.url}}" width="80px" style="display:table-cell" />
 			<div style="display:table-cell; padding-left:15px; vertical-align:top; padding-top:5px">{{fieldData.embed.provider_name + " " + fieldData.embed.type + ": " + fieldData.embed.title}}</div>
 		</div>
 	</div>

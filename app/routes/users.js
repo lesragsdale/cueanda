@@ -10,6 +10,7 @@ module.exports = function(app, passport) {
     app.get('/signin', users.signin);
     app.get('/signup', users.signup);
     app.get('/signout', users.signout);
+    app.get('/userip', users.userip);
     app.get('/users/me', users.me);
     app.get('/user/:userId', users.show);
     app.post('/user/:userId',connect.bodyParser(),users.update)

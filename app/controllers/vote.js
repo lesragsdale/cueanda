@@ -27,11 +27,23 @@ exports.create = function(req, res) {
 
     var voteObject = {
         question : req.question,
-        user : req.user._id,
         answer : req.answerOption
     };
 
-    var criteria = {question:req.question,user:req.user._id};
+    var criteria = {
+        question:req.question
+    }
+
+    if(req.user){
+        voteObject.user = req.user._id;
+        criteria.user = req.user._id;
+    }
+    else{
+        var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress || req.connection.socket.remoteAddress;
+        voteObject.anon  = ip
+        criteria.anon = ip
+    }
+
     var options = { upsert: true}
 
     Vote.findOneAndUpdate( criteria, voteObject, options,function(err, vote){

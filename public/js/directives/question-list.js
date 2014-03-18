@@ -43,7 +43,6 @@ angular.module('cueanda').directive('questionList',['$resource', '$timeout',
 
 				scope.currentPage = 0;
 				scope.itemsPerPage = 3;
-
 				scope.activeQuestion = {};
 				scope.disablePopup = false;
 				scope.currentUser = user;
@@ -66,20 +65,20 @@ angular.module('cueanda').directive('questionList',['$resource', '$timeout',
 				}
 
 				scope.catIcons = {
-					"business_finance": "glyphicon glyphicon-briefcase",
-					"entertainment": "glyphicon glyphicon-headphones",
+					"business_finance": "fa fa-money",
+					"entertainment": "fa fa-ticket",
 					"food_drink": "glyphicon glyphicon-cutlery",
-					"health_fitness": "glyphicon glyphicon-leaf",
-					"just_fun": "glyphicon glyphicon-thumbs-up",
-					"law_justice":"glyphicon glyphicon-fire",
-					"misc":"glyphicon glyphicon-asterisk",
-					"music":"glyphicon glyphicon-music",
-					"politics":"glyphicon glyphicon-inbox",
+					"health_fitness": "fa fa-medkit",
+					"just_fun": "fa fa-smile-o",
+					"law_justice":"fa fa-gavel",
+					"misc":"fa fa-cogs",
+					"music":"fa fa-music",
+					"politics":"fa fa-dashboard",
 					"religion_spirituality":"glyphicon glyphicon-bell",
 					"sex_relationships":"glyphicon glyphicon-heart",
-					"sports":"glyphicon glyphicon-bullhorn",
-					"technology":"glyphicon glyphicon-phone",
-					"travel":"fa fa-rocket",
+					"sports":"fa fa-trophy",
+					"technology":"fa fa-rocket",
+					"travel":"fa fa-map-marker",
 					"academica":"glyphicon glyphicon-book",
 					"athletics":"glyphicon glyphicon-road",
 					"clubs_organizations":"glyphicon glyphicon-map-marker",
@@ -143,7 +142,7 @@ angular.module('cueanda').directive('questionList',['$resource', '$timeout',
 						scope.activeQuestion.currentAnswer = response;
 						if(oldAnswerExists){
 							scope.activeQuestion.votes = _.reject( scope.activeQuestion.votes, function(vote){
-								return (vote.user == user._id && vote.question == scope.activeQuestion._id);
+								return (compareUserAnswer(vote) && vote.question == scope.activeQuestion._id);
 							} );
 						}				
 						scope.activeQuestion.votes = _.union([response],scope.activeQuestion.votes);
@@ -213,6 +212,16 @@ angular.module('cueanda').directive('questionList',['$resource', '$timeout',
 					return (v?true:false);
 				}
 
+				var compareUserAnswer = function(vote){
+					var ret = false;
+					if(user){
+						ret = vote.user == user._id;
+					}else{
+						ret = vote.anon == unAuthUserIp;
+					}
+					return ret;
+				}
+
 				scope.questionModal = function(question){
 					if(!scope.disablePopup){
 						scope.activeQuestion = {};
@@ -221,7 +230,7 @@ angular.module('cueanda').directive('questionList',['$resource', '$timeout',
 						var questionVotes = _.filter(scope.activeQuestion.votes,function(vote){ return _.isUndefined(vote.comment); });
 						scope.activeQuestion.votesByUser =  _.groupBy(questionVotes,'user');
 						scope.activeQuestion.currentAnswer = _.find(question.votes,function(vote){
-							return vote.user == user._id && _.isUndefined(vote.comment);
+							return compareUserAnswer(vote) && _.isUndefined(vote.comment);
 						});
 						scope.activeQuestion.userImagePath = scope.activeQuestion.user.image+'-sml.jpg';
 

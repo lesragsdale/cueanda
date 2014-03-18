@@ -66,19 +66,19 @@ exports.update = function(req, res, next) {
     //console.log(req.files);
     //console.log(req);
     //res.jsonp({title:"oh shit it worked"});
-    
-    if(req.files.image.originalFilename != ''){
-        var imgPath = req.files.image.path;
-        console.log(imgPath);
 
-        //gm(imgPath).size(function(err,size){
-        imageMagick(imgPath).size(function(err,size){
-            if(!err)
-                var val = (size.width > size.height? true : false );
-                saveImg(val,imgPath,req.user);
-
-        });
+    var user = {
+        bio: req.body.bio,
+        name: req.body.name
     }
+
+    User.findByIdAndUpdate(req.user._id, user, function(err, user){
+        if(!err){
+            console.log('just updated the user..')           
+            res.jsonp(_.omit(user,['_v','hashed_password','provider','salt']));
+        }
+    });
+    
     //var imgPath = req.files.image.
     //if(req.files)
     res.redirect('/#!/user/'+req.user.username);
@@ -191,6 +191,8 @@ var saveImg = function(widthLarger, path, user, res){
  * Create user
  */
 exports.create = function(req, res, next) {
+    
+    req.body.image = "https://s3.amazonaws.com/cueanda/usr/default";
     var user = new User(req.body);
     var message = null;
 
@@ -213,7 +215,7 @@ exports.create = function(req, res, next) {
         }
         req.logIn(user, function(err) {
             if (err) return next(err);
-            return res.redirect('/');
+            return res.redirect('#!/user/'+user.username+'/edit');
         });
     });
 };
@@ -228,6 +230,15 @@ exports.me = function(req, res) {
 exports.show = function(req, res) {
     res.jsonp(req.profile);
 };
+
+exports.userip = function(req, res) {
+    var ip = req.headers['x-forwarded-for'] || 
+     req.connection.remoteAddress || 
+     req.socket.remoteAddress ||
+     req.connection.socket.remoteAddress;
+
+     res.jsonp({ip:ip});
+}
 
 /**
  * Find user by id

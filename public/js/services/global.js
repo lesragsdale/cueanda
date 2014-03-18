@@ -19,7 +19,15 @@ angular.module('cueanda.system').factory('Global', ['$resource',
 	        u.$get(function(response){
 	        	_this._data.user.follows = response.follows;
 	        })
-	    }
+	    }else{
+            var Usr = $resource('userip',
+                                { }, 
+                                { update: { method: 'POST' } });
+            Usr.get(function(response){
+                console.log(response)
+                window.unAuthUserIp = response.ip;
+            })
+        }
 
         return _this._data;
     }

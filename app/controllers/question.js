@@ -100,6 +100,9 @@ exports.show = function(req, res) {
 */
 
 var privacyExp = function(req){
+
+    var userId = getUserFromReq(req);
+
     var b =  {$or: 
                 [   
                     {isPrivate: {$exists:false}},
@@ -107,13 +110,13 @@ var privacyExp = function(req){
                     {$and:
                         [
                             {isPrivate: true},
-                            {privateList: req.user._id}
+                            {privateList: userId}
                         ]
                     },
                     {$and:
                         [
                             {isPrivate: true},
-                            {user: req.user._id}
+                            {user: userId}
                         ]
                     }
                 ]
@@ -205,7 +208,8 @@ var appendComments = function(req, res, questions){
 }
 
 var appendRecommendations = function(req, res, questions){
-    Recommend.find({$or:[ { recommender: req.user._id}, { recommendee: req.user._id} ]})
+    var userId = getUserFromReq(req);
+    Recommend.find({$or:[ { recommender: userId}, { recommendee: userId} ]})
         .populate('recommender', 'name username image')
             .populate('recommendee', 'name username image').exec(function(err4, recommends){
                 var rPerQuestion = _.groupBy(recommends,'question');
@@ -219,8 +223,9 @@ var appendRecommendations = function(req, res, questions){
 var getArrayOfUsersFollowed = function(pass){
     var deferred = Q.defer();
 
+    var userId = getUserFromReq(pass.req);
     if(pass.req.query.followedUsers){
-        var criteria = { follower: pass.req.user._id }
+        var criteria = { follower: userId }
         Follow.find(criteria).exec(function(err,follows){
             var val =  _.map(follows,function(follow){
                     return follow.followee;
@@ -237,8 +242,9 @@ var getArrayOfUsersFollowed = function(pass){
 var getRecommendedQuestions = function(pass){
     var deferred = Q.defer();
 
+    var userId = getUserFromReq(pass.req);
     if(pass.req.query.privateRecommended){
-        var criteria = { recommendee: pass.req.user._id }
+        var criteria = { recommendee: userId}
         Recommend.find(criteria).exec(function(err,recommends){
             var val =  _.map(recommends,function(recommend){
                     return recommend.question;
@@ -256,8 +262,9 @@ var getRecommendedQuestions = function(pass){
 var getListOfQuestionsUserVoted = function(pass){
     var deferred = Q.defer();
 
+    var userId = getUserFromReq(pass.req);
     if(pass.req.query.userVoted){
-        var criteria = { $and: [ {user: pass.req.user._id}, {comment: {$exists : false}  } ] }
+        var criteria = { $and: [ {user: userId}, {comment: {$exists : false}  } ] }
         Vote.find(criteria).exec(function(err,votes){
             var val =  _.map(votes,function(vote){
                     return vote.question;
@@ -288,4 +295,8 @@ var getVotedQuestionList = function(req, res, userId){
             });
 
     });
+}
+
+var getUserFromReq = function(req){
+    return (_.isUndefined(req.user)? undefined : req.user._id)     
 }

@@ -19,6 +19,11 @@ var VoteSchema = new Schema({
         type: Schema.ObjectId,
         ref: 'User'
     },
+    anon: {
+        type: String,
+        default: '',
+        trim: true
+    },
     question: {
         type: Schema.ObjectId,
         ref: 'Question'

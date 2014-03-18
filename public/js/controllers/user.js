@@ -89,9 +89,12 @@ angular.module('cueanda').controller('UserController',
                 $scope.userUpdatePostUrl = "http://127.0.0.1:3000/user/"+$scope.userProfile.username;
                 $scope.userUpdatePostUrl = $sce.trustAsResourceUrl($scope.userUpdatePostUrl);
                 $scope.userLargeImagePath = $scope.userProfile.image+"-lrg.jpg";
-                var t = _.find($scope.userProfile.follows,function(follow){
-                    return follow.follower._id == user._id;
-                });
+                var t = undefined;
+                if(user){
+                    t = _.find($scope.userProfile.follows,function(follow){
+                        return follow.follower._id == user._id;
+                    });
+                }
                 $scope.isFollowing = (t?true:false);
                 loadUserQuestions()
                 setUploader();
@@ -132,10 +135,10 @@ angular.module('cueanda').controller('UserController',
         }
 
         $scope.updateUser  = function(){
-        	/*$scope.userProfile.$update(function(response){
+        	$scope.userProfile.$update(function(response){
         		console.log('repsonse from user update:');
-        		console.log(repsonse);
-        	})*/
+        		console.log(response);
+        	})
         }
 
 
