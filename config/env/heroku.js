@@ -2,9 +2,9 @@
 //db: "mongodb://localhost/mean-dev",
 //no port attribute
 module.exports = {
-    db: "mongodb://localhost/mean-dev",
+    db: "mongodb://cueanda:cueAnda2014@troup.mongohq.com:10014/app22580832",
     app: {
-        name: "MEAN - A Modern Stack - Development"
+        name: "Cueanda on Heroku"
     },
     facebook: {
         clientID: "APP_ID",
