@@ -1,6 +1,6 @@
 <div>
 
-        <div ng-repeat="question in questions | pager:{page:currentPage,limit:itemsPerPage,pager:usePager}" class="question-list-item qli-{{question._id}}">
+        <div ng-repeat="question in questions | orderBy:'created':true | pager:{page:currentPage,limit:itemsPerPage,pager:usePager}" class="question-list-item qli-{{question._id}}">
           <div class="side left">
             <div class="img-hold">
               <img ng-show="question.user.image" ng-src="{{question.user.image+'-sml.jpg'}}">
@@ -92,7 +92,8 @@
 		          <div class="buttons">
 		            <button class="btn btn-sm" ng-click="toggleRecommendSection()" ng-show="currentUser.follows.length > 0" data-toggle="tooltip" data-placement="bottom" title="Recommend this question to a friend"> <span class="glyphicon glyphicon-thumbs-up"></span> </button>
 		            <button class="btn btn-sm" ng-click="" ng-show="currentUser.follows.length > 0" data-toggle="tooltip" data-placement="bottom" title="Toggle the filtering of votes to be only from people you follow"> <span class="fa fa-group"></span> </button>
-		            <button class="btn btn-sm" ng-click="" data-toggle="tooltip" data-placement="bottom" title="Flag this question as inappropriate"> <span class="fa fa-flag"></span> </button>
+		            
+		            <button class="btn btn-sm" ng-show="currentUser" ng-click="toggleModal('flagQuestion')" data-toggle="tooltip" data-placement="bottom" title="Flag this question as inappropriate"> <span class="fa fa-flag"></span> </button>
 
 		            <button class="btn btn-sm twitter" ng-click="" data-toggle="tooltip" data-placement="bottom" title="Tweet this question!" > <span class="fa fa-twitter"></span> </button>
 
@@ -116,6 +117,29 @@
 		          <comment question="activeQuestion"></comment>
 		      	</div>
 
+		      </div>
+		    </div><!-- /.modal-content -->
+		  </div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
+
+
+        <div class="modal fade flagQuestion" id="{{'flagQuestion'+uniqueName}}">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		      	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		      	<h4> Are you sure you want to flag this question as Inappropriate? </h4>		        
+		      </div>
+		      <div class="modal-body">
+		      	<select ui-select2 ng-model="reasonForFlagging" style="width:100%;" >
+                  <option value="language">Excessive Language</option>
+                  <option value="offensive">Offensive</option>
+                  <option value="graphic">Graphic Content (images, video, etc..)</option>
+                </select>
+		      </div>
+		      <div class="modal-footer">
+		      	<button class="blue-butt pull-left" style="padding:8px 16px; border-radius:5px;" ng-click="toggleModal('flagQuestion')" >Cancel</button> 
+		        <button class="red-butt pull-right" style="padding:8px 16px; border-radius:5px;" ng-click="submitFlagging()" >Yes</button>     	
 		      </div>
 		    </div><!-- /.modal-content -->
 		  </div><!-- /.modal-dialog -->

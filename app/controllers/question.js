@@ -32,7 +32,7 @@ exports.create = function(req, res) {
     var question = new Question(req.body);
     question.user = req.user;
 
-    question.save(function(err) {
+    question.save(function(err, qstn) {
         if (err) {
             console.log(err)
             return res.send('users/signup', {
@@ -40,7 +40,12 @@ exports.create = function(req, res) {
                 question: question
             });
         } else {
-            res.jsonp(question);
+            Question.find({"_id":qstn._id}).sort('-created').populate('user', 'name username image').populate('category').exec(function(err, questions) {
+                if (err) { console.log(err); }
+                else{
+                    exports.appendVotes(req,res,questions);
+                }
+            });
         }
     });
 };
@@ -181,13 +186,13 @@ exports.all = function(req, res){
         Question.find(criteria).sort('-created').populate('user', 'name username image').populate('category').exec(function(err, questions) {
             if (err) { console.log(err); }
             else{
-                appendVotes(req,res,questions);
+                exports.appendVotes(req,res,questions);
             }
         });
     })
 }
 
-var appendVotes = function(req, res, questions){
+exports.appendVotes = function(req, res, questions){
     Vote.find().exec(function(err2, votes) {
         var vPerQuestion = _.groupBy(votes,'question')
         var questionsOut = _.map(questions,function(question){
@@ -216,6 +221,7 @@ var appendRecommendations = function(req, res, questions){
                 var questionsOut = _.map(questions,function(question){
                     return _.assign(question,{ recommendations:rPerQuestion[question._id] });
                 });
+                
                 res.jsonp(questionsOut);
     });
 }

@@ -43,6 +43,7 @@ var QuestionSchema = new Schema({
     privateList: [],
     comments:[],
     votes:[],
+    flags:[],
     recommendations:[]
 });
 

@@ -13,7 +13,7 @@ angular.module('cueanda').directive('questionList',['$resource', '$timeout',
 			replace: true,
 			templateUrl: 'views/question/question-list.html',
 			link: function(scope, element, attrs) {
-				
+
 				$timeout(function(){
 	            	$(".hasTooltip").tooltip();
 	            },500)
@@ -25,6 +25,11 @@ angular.module('cueanda').directive('questionList',['$resource', '$timeout',
 
 				var Vote = $resource(	'vote/:questionId/:answerOption',
 											{ questionId: '@question',answerOption: '@answer' }, 
+											{ update: { method: 'PUT' } }
+										);
+
+				var Flag = $resource(	'flag/:questionId',
+											{ questionId: '@question' }, 
 											{ update: { method: 'PUT' } }
 										);
 
@@ -47,6 +52,8 @@ angular.module('cueanda').directive('questionList',['$resource', '$timeout',
 				scope.disablePopup = false;
 				scope.currentUser = user;
 
+				scope.reasonForFlagging = 'language';
+
 				scope.getNumber = function() {
 					//Math.ceil(scope.questions/scope.itemsPerPage)
 					//console.log(Math.ceil(scope.questions.length/scope.itemsPerPage));
@@ -62,6 +69,10 @@ angular.module('cueanda').directive('questionList',['$resource', '$timeout',
 
 				scope.setPage = function(number){
 					scope.currentPage = number;                 
+				}
+
+				scope.toggleModal = function(id){
+					$('#'+id+scope.uniqueName).modal('toggle');
 				}
 
 				scope.catIcons = {
@@ -120,6 +131,19 @@ angular.module('cueanda').directive('questionList',['$resource', '$timeout',
 
 			    scope.clickUserLink = function(){
 			    	scope.disablePopup = true;
+			    }
+
+			    scope.submitFlagging = function(){
+			    	var aFlag = new Flag({
+			    		type: scope.reasonForFlagging,
+			    		question: scope.activeQuestion._id,
+			    	});
+
+			    	aFlag.$save(function(response){
+			    		console.log(response);
+			    		alertify.log("Flag Submitted!", 'standard', 4000);
+			    		$('#flagQuestion'+scope.uniqueName).modal('hide');
+			    	})
 			    }
 
 				scope.castVote = function(option){

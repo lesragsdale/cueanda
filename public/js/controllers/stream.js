@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('cueanda').controller('StreamController',
-	['$scope','$resource', '$routeParams', '$timeout',
-	function($scope, $resource, $routeParams, $timeout) {
+	['$scope','$resource', '$routeParams', '$timeout', '$http',
+	function($scope, $resource, $routeParams, $timeout, $http) {
 		$scope.questionVariable = "Poo man it works!";
 		$scope.questionFilter = 'all';
 		$scope.categoryFilter = [];
@@ -10,8 +10,8 @@ angular.module('cueanda').controller('StreamController',
 		$scope.currentUser = user;
 
 		var Question = $resource(	'questions/:communityId',
-									{ communityId: '@community' }, 
-									{ update: { method: 'PUT' } }
+									{ 'communityId': '@community' }, 
+									{ update: { method: 'PUT' }}
 								);
 
 		var Category = $resource(	'category/:type',
@@ -128,10 +128,23 @@ angular.module('cueanda').controller('StreamController',
 
 			if($routeParams.communityId){ question.community = $routeParams.communityId;	}
 
-			var resQ = new Question(question);
+			//var resQ = new Question(question);
 
-			resQ.$save(function(response){
+			$http.post('questions/',question).success(function(response){
 				$("#questionModal").modal('hide');
+
+				var rndResponses = [
+					"Cool Question Bro!",
+					"Nice, you made a question...good job!",
+					"Is that the best question you've got? ... alright, we'll take it",
+					"Hah, nice question",
+					"Good luck finding someone to answer that one..",
+					"Your question has been submitted"
+				];
+
+				$scope.questions.push(response[0]);
+
+				alertify.log(rndResponses[_.random(_.size(rndResponses)-1)], 'standard', 4000);
 			});
 
 		};
