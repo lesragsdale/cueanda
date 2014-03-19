@@ -26,8 +26,8 @@
           <option  value="privateRecommended">Private & Recommended</option>
         </select>
 
-        <!-- <select ui-select2 ng-model="questionFilter" class="question-cats-drop" style="width:100%;" data-placeholder="Select Categories" ng-change="refreshQuestionList()" ng-show="currentUser">
-          <option  value="all">All</option>
+      <!--  <select ui-select2 multiple ng-model="categoryFilter" class="question-cats-drop" style="width:100%; margin-top:10px;" ng-click="mobileCategory=true" data-placeholder="Select Categories" ng-change="refreshQuestionList(true)">
+          <option  value="all">All Categories</option>
           <option ng-repeat="category in categories" value="{{category._id}}">
             {{category.name}}            
           </option>

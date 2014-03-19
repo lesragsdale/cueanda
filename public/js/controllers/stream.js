@@ -5,6 +5,8 @@ angular.module('cueanda').controller('StreamController',
 	function($scope, $resource, $routeParams, $timeout) {
 		$scope.questionVariable = "Poo man it works!";
 		$scope.questionFilter = 'all';
+		$scope.categoryFilter = ['all'];
+		$scope.mobileCategory = false;
 		$scope.currentUser = user;
 
 		var Question = $resource(	'questions/:communityId',
@@ -59,15 +61,31 @@ angular.module('cueanda').controller('StreamController',
 			$scope.refreshQuestionList();
 		}
 
-		$scope.refreshQuestionList = function(){
-			console.log('updateList!');
+		$scope.refreshQuestionList = function(fromMobile){
 
-			var cats = _.filter($scope.categories,function(cat){
-				return cat.active == true;
-			});
-			cats = _.map(cats,function(cat){
-				return cat._id;
-			});
+			
+			var cats = [];
+
+			if(fromMobile){
+				if($scope.categoryFilter.indexOf('all')){
+					cats = _.map($scope.categories,function(cat){
+						return cat._id;
+					})
+				}else{
+					cats = $scope.categoryFilter;
+				}
+
+			}else{
+				cats = _.filter($scope.categories,function(cat){
+					return cat.active == true;
+				});
+				cats = _.map(cats,function(cat){
+					return cat._id;
+				});
+			}
+
+
+			console.log(cats);
 
 
 			var qst = {}

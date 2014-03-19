@@ -4,9 +4,14 @@
 }
 
 .content {
-    margin-top:70px;
+    margin-top:20px;
     width:100%
 }
+
+.categories {
+  display:none;
+}
+
 .title {
   border-bottom:1px solid #575757;
   text-align:left;

@@ -47,3 +47,7 @@ body .question-modal-top-row .question-title .question-username,
 body .question-modal-top-row .question-title .question-date {
 	display: none;
 }
+
+.categories {
+	display:block;
+}
