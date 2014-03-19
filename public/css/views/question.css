@@ -50,7 +50,7 @@ body .select2-search input {
 }
 
 .question-list .select2-container {
-	margin-bottom:20px;
+	margin-bottom:15px;
 }
 
 
@@ -254,10 +254,6 @@ body .select2-search input {
 	border-top-right-radius: 0px;
 	border-bottom-right-radius: 5px;
 	border-bottom-left-radius: 5px;
-}
-
-.categories {
-	margin-top:10px;
 }
 
 .categories .category {

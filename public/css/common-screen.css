@@ -51,3 +51,7 @@ body .question-modal-top-row .question-title .question-date {
 .categories {
 	display:block;
 }
+
+.question-cats-drop {
+	display: none;
+}

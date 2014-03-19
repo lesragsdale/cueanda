@@ -5,7 +5,7 @@ angular.module('cueanda').controller('StreamController',
 	function($scope, $resource, $routeParams, $timeout) {
 		$scope.questionVariable = "Poo man it works!";
 		$scope.questionFilter = 'all';
-		$scope.categoryFilter = ['all'];
+		$scope.categoryFilter = [];
 		$scope.mobileCategory = false;
 		$scope.currentUser = user;
 
@@ -66,15 +66,8 @@ angular.module('cueanda').controller('StreamController',
 			
 			var cats = [];
 
-			if(fromMobile){
-				if($scope.categoryFilter.indexOf('all')){
-					cats = _.map($scope.categories,function(cat){
-						return cat._id;
-					})
-				}else{
-					cats = $scope.categoryFilter;
-				}
-
+			if(fromMobile){			
+				cats = $scope.categoryFilter;
 			}else{
 				cats = _.filter($scope.categories,function(cat){
 					return cat.active == true;
@@ -83,10 +76,6 @@ angular.module('cueanda').controller('StreamController',
 					return cat._id;
 				});
 			}
-
-
-			console.log(cats);
-
 
 			var qst = {}
 			if($scope.questionFilter != 'all'){ qst[$scope.questionFilter] = true; }

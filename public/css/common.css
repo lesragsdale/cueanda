@@ -3,6 +3,17 @@
     margin-left:0
 }
 
+.navbar {
+  border-radius: 0px;
+  margin-bottom: 0px;
+  border:none;
+  background-color: #333;
+}
+
+.add-login-button {
+  margin-bottom: 15px;
+}
+
 .content {
     margin-top:20px;
     width:100%
