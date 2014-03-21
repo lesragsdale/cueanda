@@ -64,7 +64,7 @@
             <li>
                 <a href="#!/user/{{global.user.username}}">Profile</a>
             </li>
-            <li>
+            <li ng-show="{{global.user.isAdmin}}">
                 <a href="#!/flagged">Flagged Questions</a>
             </li>
             <li>

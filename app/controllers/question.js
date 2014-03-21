@@ -7,6 +7,7 @@ var mongoose = require('mongoose'),
     Question = mongoose.model('Question'),
     Comment = mongoose.model('Comment'),
     Follow = mongoose.model('Follow'),
+    Flag = mongoose.model('Flag'),
     Vote = mongoose.model('Vote'),
     Recommend = mongoose.model('Recommend'),
     Q = require('q'),
@@ -72,16 +73,41 @@ exports.update = function(req, res) {
 exports.destroy = function(req, res) {
     var question = req.question;
 
-    question.remove(function(err) {
-        if (err) {
-            return res.send('users/signup', {
-                errors: err.errors,
-                question: question
-            });
-        } else {
-            res.jsonp(question);
-        }
-    });
+    if(req.user.isAdmin){
+        Comment.remove({question: question},function(err){
+            if(err){
+                console.log(err);
+            }
+        });
+
+        Flag.remove({question: question},function(err){
+            if(err){
+                console.log(err);
+            }
+        });
+
+        Recommend.remove({question: question},function(err){
+            if(err){
+                console.log(err);
+            }
+        });
+
+        Vote.remove({question: question},function(err){
+            if(err){
+                console.log(err);
+            }
+        });
+
+        Question.remove({_id: question},function(err){
+            if(err){
+                console.log(err);
+            }else{
+                res.jsonp(question);
+            }
+        });
+    }else{
+        res.jsonp({error:"You arent authorized"});
+    }
 };
 
 /**
@@ -221,7 +247,7 @@ var appendRecommendations = function(req, res, questions){
                 var questionsOut = _.map(questions,function(question){
                     return _.assign(question,{ recommendations:rPerQuestion[question._id] });
                 });
-                
+
                 res.jsonp(questionsOut);
     });
 }

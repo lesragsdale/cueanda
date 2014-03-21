@@ -1,6 +1,6 @@
 <div>
 
-        <div ng-repeat="question in questions | orderBy:'created':true | pager:{page:currentPage,limit:itemsPerPage,pager:usePager}" class="question-list-item qli-{{question._id}}">
+        <div ng-repeat="question in questions | orderBy:sortQsBy:true | pager:{page:currentPage,limit:itemsPerPage,pager:usePager}" class="question-list-item qli-{{question._id}}">
           <div class="side left">
             <div class="img-hold">
               <img ng-show="question.user.image" ng-src="{{question.user.image+'-sml.jpg'}}">
@@ -33,6 +33,10 @@
                 <div class="text">{{question.answers[1].mainInput}}</div>
               </div>
             </div>
+          </div>
+          <div class="side delete-question" ng-show="flagged">
+          	<button class="red-butt" style="padding:5px 10px; border-radius:5px;" ng-click="prepareToDelete(question._id)"><span class="fa fa-times"></span></button>
+          	<span class="badge" style="margin-top:10px;">{{question.flags.length}}</span>
           </div>
         </div>
 
@@ -117,6 +121,21 @@
 		          <comment question="activeQuestion"></comment>
 		      	</div>
 
+		      </div>
+		    </div><!-- /.modal-content -->
+		  </div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
+
+		<div class="modal fade deleteQuestion" id="{{'deleteQuestion'+uniqueName}}">
+		  <div class="modal-dialog modal-sm">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		      	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		      	<h4> Are you sure you want to delete this Question? </h4>		        
+		      </div>
+		      <div class="modal-footer" style="margin-top:0px;border-top:none">
+		      	<button class="blue-butt pull-left" style="padding:8px 16px; border-radius:5px;" ng-click="toggleModal('deleteQuestion')" >Cancel</button> 
+		        <button class="red-butt pull-right" style="padding:8px 16px; border-radius:5px;" ng-click="deleteQuestion()" >Yes</button>     	
 		      </div>
 		    </div><!-- /.modal-content -->
 		  </div><!-- /.modal-dialog -->

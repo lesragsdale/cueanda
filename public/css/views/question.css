@@ -96,6 +96,11 @@ body .select2-search input {
 	width:80px;
 }
 
+.question-list-item .side.delete-question {
+	width:45px;
+	text-align: center;
+}
+
 .question-list-item .side.right {
 	background-color: #E7E6E6;
 	border-radius: 10px;

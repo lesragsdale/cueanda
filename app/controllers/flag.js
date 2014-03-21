@@ -38,27 +38,34 @@ exports.create = function(req, res) {
 };
 
 exports.list = function(req, res){
-    Flag.find().exec(function(err, flags){
-        if(err){
-            console.log(err);
-        }
-        else{
 
-            var flagsByQuestion = _.groupBy(flags,'question');
+    if(_.isUndefined(req.user)){ res.jsonp({error:"you are not authorized"}); }
+    else if(_.isUndefined(req.user.isAdmin)){ res.jsonp({error:"you are not authorized"}); }
+    else{
+        Flag.find().exec(function(err, flags){
+            if(err){
+                console.log(err);
+            }
+            else{
 
-            var criteria = {"_id":{$in: _.map(flags,'question') }}
+                var flagsByQuestion = _.groupBy(flags,'question');
 
-            Question.find(criteria).sort('-created').populate('user', 'name username image').populate('category').exec(function(err, questions) {
-                if (err) { console.log(err); }
-                else{
-                    questions = _.map(questions,function(q){
-                        return _.assign(q,{flags:flagsByQuestion[q._id]});
-                    })
-                    question.appendVotes(req,res,questions);
-                }
-            });
+                var criteria = {"_id":{$in: _.map(flags,'question') }}
 
-        
-        }
-    })
+                Question.find(criteria).populate('user', 'name username image').populate('category').exec(function(err, questions) {
+                    if (err) { console.log(err); }
+                    else{
+                        questions = _.map(questions,function(q){
+                            return _.assign(q,{flags:flagsByQuestion[q._id]});
+                        });
+
+                        question.appendVotes(req,res,questions);
+                    }
+                });
+
+            
+            }
+        });
+    }
+
 }

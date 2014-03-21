@@ -4,7 +4,7 @@
 		<div class="col-sm-3">
 			<button ng-show="currentUser" class="btn btn-primary orange-butt add-login-button" style="padding:8px; width:100%" ng-click="newQuestion = {category:'empty', question:{id:'qstn'}, optionA:{id:'opa'}, optionB:{id:'opb'}, private:'false' }" data-toggle="modal" data-target="#questionModal">Add a Question!</button>
 
-      <button ng-hide="currentUser" class="btn btn-primary green-butt add-login-button" style="padding:8px; width:100%" ng-click="goSignUp()" >Sign Up</button>
+      <a href="/signin"><button ng-hide="currentUser" class="btn btn-primary green-butt add-login-button" style="padding:8px; width:100%" ng-click="goSignUp()" >Sign Up</button></a>
 
       <div class="categories">
         <div ng-repeat="category in categories" ng-class="{'active':category.active == true}" class="category category-{{category.machine_name}}" ng-click="selectCategory(category)">
@@ -34,7 +34,7 @@
 
 
         <!-- list directive -->
-        <question-list questions="questions" unique-name="'rq'">></question-list>
+        <question-list questions="questions" unique-name="'rq'"></question-list>
 
 
 			</div>

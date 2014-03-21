@@ -7,7 +7,8 @@ angular.module('cueanda').directive('questionList',['$resource', '$timeout',
 				questions: "=",
 				uniqueName: "=",
 				query:"=",
-				usePager:"="
+				usePager:"=",
+				flagged:"="
 			},
 			restrict: 'E',
 			replace: true,
@@ -18,8 +19,8 @@ angular.module('cueanda').directive('questionList',['$resource', '$timeout',
 	            	$(".hasTooltip").tooltip();
 	            },500)
 
-				var Question = $resource(	'questions/:communityId',
-											{ communityId: '@community' }, 
+				var Question = $resource(	'questions/:id',
+											{ id: '@id' }, 
 											{ update: { method: 'PUT' } }
 										);
 
@@ -51,6 +52,7 @@ angular.module('cueanda').directive('questionList',['$resource', '$timeout',
 				scope.activeQuestion = {};
 				scope.disablePopup = false;
 				scope.currentUser = user;
+				scope.sortQsBy = (scope.flagged?'flagCount':'created');
 
 				scope.reasonForFlagging = 'language';
 
@@ -202,6 +204,29 @@ angular.module('cueanda').directive('questionList',['$resource', '$timeout',
 						scope.activeQuestion.newComment = "";
 						scope.activeQuestion.comments = _.union([response],scope.activeQuestion.comments);
 					});
+				}
+
+				scope.deleteQuestion = function(){
+					var qToDelete = new Question({id:scope.questionToDelete})
+
+					qToDelete.$delete(function(reponse){
+						scope.toggleModal('deleteQuestion');
+
+						$('.qli-'+scope.questionToDelete).fadeOut(500,function(){
+							alertify.log("Question Deleted", 'standard', 4000);
+							$scope.questions = _.reject(question,function(){
+								return question._id == scope.questionToDelete;
+							})
+						});
+						
+
+						
+					})
+				}
+
+				scope.prepareToDelete = function(questionId){
+					scope.questionToDelete = questionId;
+					scope.toggleModal('deleteQuestion');
 				}
 
 				scope.sendRecommendations = function(){
