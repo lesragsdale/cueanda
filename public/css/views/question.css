@@ -163,6 +163,17 @@ body .select2-search input {
 	margin:0px;
 }
 
+.question-list-item {
+	-webkit-transition: height .5s, opacity .5s;
+	transition: height .5s, opacity .5s;
+	height: auto;
+	opacity: 1;
+}
+.question-list-item.hide-me {
+	height: 0px;
+	opacity: 0;
+}
+
 
 .question-list-item .right:before {
 	position: absolute;

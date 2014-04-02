@@ -5,13 +5,13 @@
 	      Comments
 	    </div> 
 		<div class='btn-group pull-right'>
-			<button class='btn btn-sm vote-butt-up' ng-click="castCommentVote(comment._id,1)">
+			<button class='btn btn-sm vote-butt-up btn-info' ng-class="{'active': sortByPop == false}" ng-click="changeSort(false)">
 				<span class='fa fa-clock-o'></span>
 			</button>
-			<button class='btn btn-sm'><span class='glyphicon glyphicon-stats'></span></button>
+			<button class='btn btn-sm btn-info' ng-class="{'active': sortByPop == true}" ng-click="changeSort(true)"><span class='glyphicon glyphicon-stats'></span></button>
 		</div>
 	</div>
-	<div ng-repeat="comment in question.comments" class="{{'comment comment-'+question.votesByUser[comment.user._id][0].answer}}">
+	<div ng-repeat="comment in question.comments | orderBy:sortBy:true " class="{{'comment comment-'+question.votesByUser[comment.user._id][0].answer}}">
 		
 		<!-- Img Block -->
 		<div class='comment-img' ng-show="question.votesByUser[comment.user._id][0].answer == 0">
@@ -24,7 +24,7 @@
 				<button class='btn btn-sm vote-butt-up' ng-click="castCommentVote(comment._id,1)">
 					<span class='fa fa-thumbs-o-up'></span>
 				</button>
-				<button class='btn btn-sm vote-score'>{{question.commentScores[comment._id] || 0}}</button>
+				<button class='btn btn-sm vote-score'>{{comment.score}}</button>
 				<button class='btn btn-sm vote-butt-down' ng-click="castCommentVote(comment._id,-1)">
 					<span class='fa fa-thumbs-o-down'></span>
 				</button>
@@ -48,7 +48,7 @@
 				<button class='btn btn-sm vote-butt-up' ng-click="castCommentVote(comment._id,1)">
 					<span class='fa fa-thumbs-o-up'></span>
 				</button>
-				<button class='btn btn-sm vote-score'>{{question.commentScores[comment._id] || 0}}</button>
+				<button class='btn btn-sm vote-score'>{{comment.score}}</button>
 				<button class='btn btn-sm vote-butt-down' ng-click="castCommentVote(comment._id,-1)">
 					<span class='fa fa-thumbs-o-down'></span>
 				</button>

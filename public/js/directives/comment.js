@@ -16,6 +16,15 @@ angular.module('cueanda').directive('comment',[ '$resource',
 									{ update: { method: 'PUT' } }
 								);
 
+				scope.sortByPop = true;
+				scope.sortBy = function(comment){
+					return (scope.sortByPop?comment.score:comment.created);
+				};
+
+				scope.changeSort = function(val){
+					scope.sortByPop = val;
+				}
+
 				scope.castCommentVote = function(comment, option){
 					/*** EXIT IF ANSWER IS NOT NEW ***/
 					var oldAnswerExists = false;
@@ -52,11 +61,17 @@ angular.module('cueanda').directive('comment',[ '$resource',
 						//Update comment Scores
 						var commentVotes = _.filter(scope.question.votes,function(vote){ return !_.isUndefined(vote.comment); });
 						var commentVoteGrouped = _.groupBy(commentVotes,'comment');
-						_.each(commentVoteGrouped, function(votes, key){
-							scope.question.commentScores[key] = _.reduce(votes,function(memo, vote){
-								return memo + vote.answer;
-							},0);
-						})
+
+						scope.question.comments = _.map(scope.question.comments,function(comment){
+							if( _.isUndefined(commentVoteGrouped[comment._id]) ){
+								comment.score = 0;
+							}else{	
+								comment.score = _.reduce(commentVoteGrouped[comment._id],function(memo, vote){
+									return memo + vote.answer;
+								},0);
+							}
+							return comment;							
+						});
 
 
 					});

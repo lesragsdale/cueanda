@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('cueanda').directive('questionList',['$resource', '$timeout',
-	function($resource, $timeout) {
+angular.module('cueanda').directive('questionList',['$resource', '$timeout', '$window',
+	function($resource, $timeout, $window) {
 		return {
 			scope:{
 				questions: "=",
@@ -17,7 +17,10 @@ angular.module('cueanda').directive('questionList',['$resource', '$timeout',
 
 				$timeout(function(){
 	            	$(".hasTooltip").tooltip();
-	            },500)
+	            },500);
+
+	            console.log("This is my test output");
+	            console.log(encodeURIComponent("This is my test output"));
 
 				var Question = $resource(	'questions/:id',
 											{ id: '@id' }, 
@@ -249,6 +252,13 @@ angular.module('cueanda').directive('questionList',['$resource', '$timeout',
 					})
 				}
 
+				scope.openWindow = function(a,b,c){
+					//http://stackoverflow.com/questions/12547088/how-do-i-customize-facebooks-sharer-php
+					a = a.replace("[questionTitle]", encodeURIComponent(scope.activeQuestion.question.mainInput) )
+
+					$window.open(a, b, c);
+				}
+
 				scope.toggleRecommendSection = function(){
 					$(".recommend-well").toggleClass("open");
 				}
@@ -286,11 +296,22 @@ angular.module('cueanda').directive('questionList',['$resource', '$timeout',
 						$(".recommend-well").removeClass("open");
 						var commentVotes = _.filter(scope.activeQuestion.votes,function(vote){ return !_.isUndefined(vote.comment); });
 						var commentVoteGrouped = _.groupBy(commentVotes,'comment');
-						scope.activeQuestion.commentScores = {};
+						/*scope.activeQuestion.commentScores = {};
 						_.each(commentVoteGrouped, function(votes, key){
 							scope.activeQuestion.commentScores[key] = _.reduce(votes,function(memo, vote){
 								return memo + vote.answer;
 							},0);
+						});*/
+
+						scope.activeQuestion.comments = _.map(scope.activeQuestion.comments,function(comment){
+							if( _.isUndefined(commentVoteGrouped[comment._id]) ){
+								comment.score = 0;
+							}else{	
+								comment.score = _.reduce(commentVoteGrouped[comment._id],function(memo, vote){
+									return memo + vote.answer;
+								},0);
+							}
+							return comment;							
 						});
 
 						$("#viewQuestion"+scope.uniqueName).modal("show");

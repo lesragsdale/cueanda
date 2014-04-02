@@ -56,7 +56,6 @@ angular.module('cueanda').controller('StreamController',
 				};
 
 		$scope.selectCategory = function(cat){
-			console.log(cat);
 			cat.active = !(cat.active);
 			$scope.refreshQuestionList();
 		}
@@ -85,7 +84,6 @@ angular.module('cueanda').controller('StreamController',
 			//var Q = new Question(qst);
 
 			Question.query(qst,function(questions){
-				console.log(questions);
 				$scope.questions = questions;
 			})
 
@@ -142,7 +140,10 @@ angular.module('cueanda').controller('StreamController',
 					"Your question has been submitted"
 				];
 
-				$scope.questions.push(response[0]);
+				$scope.questions.push( _.assign(response[0],{isNew:true}) );
+				$timeout(function(){
+					$('.question-list-item').removeClass('hide-me');
+				}, 500);
 
 				alertify.log(rndResponses[_.random(_.size(rndResponses)-1)], 'standard', 4000);
 			});

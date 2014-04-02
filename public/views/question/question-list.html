@@ -1,6 +1,6 @@
 <div>
 
-        <div ng-repeat="question in questions | orderBy:sortQsBy:true | pager:{page:currentPage,limit:itemsPerPage,pager:usePager}" class="question-list-item qli-{{question._id}}">
+        <div ng-repeat="question in questions | orderBy:sortQsBy:true | pager:{page:currentPage,limit:itemsPerPage,pager:usePager}" class="question-list-item qli-{{question._id}}" ng-class="{'hide-me': question.isNew}">
           <div class="side left">
             <div class="img-hold">
               <img ng-show="question.user.image" ng-src="{{question.user.image+'-sml.jpg'}}">
@@ -99,9 +99,19 @@
 		            
 		            <button class="btn btn-sm" ng-show="currentUser" ng-click="toggleModal('flagQuestion')" data-toggle="tooltip" data-placement="bottom" title="Flag this question as inappropriate"> <span class="fa fa-flag"></span> </button>
 
-		            <button class="btn btn-sm twitter" ng-click="" data-toggle="tooltip" data-placement="bottom" title="Tweet this question!" > <span class="fa fa-twitter"></span> </button>
+		            <!-- <a 		            
+		            	href="javascript:void(0)"
+		            	onclick="window.open('https://twitter.com/share?url=http://cueanda.com/v/0&via=AskCueanda&text=Test%20Vote%3A','sharer','toolbar=0,status=0,width=580,height=325');"
+		            > -->
+		            	<button class="btn btn-sm twitter" ng-click="openWindow('https://twitter.com/share?url=http://cueanda.com/v/0&via=AskCueanda&text=[questionTitle]','sharer','toolbar=0,status=0,width=580,height=325')" data-toggle="tooltip" data-placement="bottom" title="Tweet this question!" > <span class="fa fa-twitter"></span> </button>
+		            <!-- </a> -->
 
-		            <button class="btn btn-sm facebook" ng-click="" data-toggle="tooltip" data-placement="bottom" title="Share this question with Facebook!"> <span class="fa fa-facebook"></span> </button>
+		            <!-- <a 		            
+		            	href="javascript:void(0)"
+		            	onclick="window.open('http://www.facebook.com/sharer.php?s=100&p[title]=Test&p[summary]=Test%20OR%20Test&p[url]=http://cueanda.com/v/0&p[images][0]=https://www.foobar.com/thumb.gif','sharer','toolbar=0,status=0,width=580,height=325');"
+		            > -->
+		            	<button class="btn btn-sm facebook" ng-click="openWindow('http://www.facebook.com/sharer.php?s=100&p[title]=TestmoreTOGOHERE&p[summary]=[questionTitle]&p[url]=http://cueanda.com/v/0&p[images][0]=https://www.foobar.com/thumb.gif','sharer','toolbar=0,status=0,width=580,height=325')" data-toggle="tooltip" data-placement="bottom" title="Share this question with Facebook!"> <span class="fa fa-facebook"></span> </button>
+		            <!-- </a> -->
 		          </div>
 		          <div class="well recommend-well">
 		                <select ui-select2 multiple ng-model="activeQuestion.recommends" ng-click="recDropChange()" style="width:100%;" data-placeholder="Select who you like to recommend this question for...">
