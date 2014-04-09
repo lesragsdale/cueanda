@@ -95,29 +95,23 @@
 		        <div ng-show="activeQuestion.currentAnswer" class="extra-functions">
 		          <div class="buttons">
 		            <button class="btn btn-sm" ng-click="toggleRecommendSection()" ng-show="currentUser.follows.length > 0" data-toggle="tooltip" data-placement="bottom" title="Recommend this question to a friend"> <span class="glyphicon glyphicon-thumbs-up"></span> </button>
-		            <button class="btn btn-sm" ng-click="" ng-show="currentUser.follows.length > 0" data-toggle="tooltip" data-placement="bottom" title="Toggle the filtering of votes to be only from people you follow"> <span class="fa fa-group"></span> </button>
+
+		            <button class="btn btn-sm" ng-show="currentUser.follows.length > 0 && !activeQuestion.allVotes" data-toggle="tooltip" ng-click="filterVotes(true)" data-placement="bottom" title="Toggle the filtering of votes to be only from people you follow"> <span class="fa fa-group"></span> </button>
+
+		            <button class="btn btn-sm" ng-show="currentUser.follows.length > 0 && activeQuestion.allVotes" data-toggle="tooltip" ng-click="filterVotes(false)" data-placement="bottom" title="Toggle the filtering of votes to be from all users"> <span class="fa fa-globe"></span> </button>
 		            
-		            <button class="btn btn-sm" ng-show="currentUser" ng-click="toggleModal('flagQuestion')" data-toggle="tooltip" data-placement="bottom" title="Flag this question as inappropriate"> <span class="fa fa-flag"></span> </button>
+		            <button class="btn btn-sm" ng-show="currentUser" ng-click="toggleModal('flagQuestion')" ng-class="{'disabled': alreadyFlagged() }" data-toggle="tooltip" data-placement="bottom" title="Flag this question as inappropriate"> <span class="fa fa-flag"></span> </button>
 
-		            <!-- <a 		            
-		            	href="javascript:void(0)"
-		            	onclick="window.open('https://twitter.com/share?url=http://cueanda.com/v/0&via=AskCueanda&text=Test%20Vote%3A','sharer','toolbar=0,status=0,width=580,height=325');"
-		            > -->
-		            	<button class="btn btn-sm twitter" ng-click="openWindow('https://twitter.com/share?url=http://cueanda.com/v/0&via=AskCueanda&text=[questionTitle]','sharer','toolbar=0,status=0,width=580,height=325')" data-toggle="tooltip" data-placement="bottom" title="Tweet this question!" > <span class="fa fa-twitter"></span> </button>
-		            <!-- </a> -->
+		            <button class="btn btn-sm twitter" ng-click="openWindow('https://twitter.com/share?url=http://cueanda.com/v/0&via=AskCueanda&text=[questionTitle]','sharer','toolbar=0,status=0,width=580,height=325')" ng-hide="activeQuestion.isPrivate" data-toggle="tooltip" data-placement="bottom" title="Tweet this question!" > <span class="fa fa-twitter"></span> </button>
 
-		            <!-- <a 		            
-		            	href="javascript:void(0)"
-		            	onclick="window.open('http://www.facebook.com/sharer.php?s=100&p[title]=Test&p[summary]=Test%20OR%20Test&p[url]=http://cueanda.com/v/0&p[images][0]=https://www.foobar.com/thumb.gif','sharer','toolbar=0,status=0,width=580,height=325');"
-		            > -->
-		            	<button class="btn btn-sm facebook" ng-click="openWindow('http://www.facebook.com/sharer.php?s=100&p[title]=TestmoreTOGOHERE&p[summary]=[questionTitle]&p[url]=http://cueanda.com/v/0&p[images][0]=https://www.foobar.com/thumb.gif','sharer','toolbar=0,status=0,width=580,height=325')" data-toggle="tooltip" data-placement="bottom" title="Share this question with Facebook!"> <span class="fa fa-facebook"></span> </button>
-		            <!-- </a> -->
+		            <button class="btn btn-sm facebook" ng-click="openWindow('http://www.facebook.com/sharer.php?s=100&p[title]=TestmoreTOGOHERE&p[summary]=[questionTitle]&p[url]=http://cueanda.com/v/0&p[images][0]=https://www.foobar.com/thumb.gif','sharer','toolbar=0,status=0,width=580,height=325')" ng-hide="activeQuestion.isPrivate" data-toggle="tooltip" data-placement="bottom" title="Share this question with Facebook!"> <span class="fa fa-facebook"></span> </button>
+
 		          </div>
 		          <div class="well recommend-well">
 		                <select ui-select2 multiple ng-model="activeQuestion.recommends" ng-click="recDropChange()" style="width:100%;" data-placeholder="Select who you like to recommend this question for...">
 		                  <option  ng-repeat="usr in currentUser.follows" ng-hide="hideRecommendOption(usr.followee._id)" ng-click="recDropChange()" value="{{usr.followee._id}}">{{usr.followee.username+" ("+usr.followee.name+")"}}</option>
 		                </select>
-		                <button class="btn btn-primary btn-xs" style="margin-top:10px;" ng-click="sendRecommendations()" ng-show="activeQuestion.recommends.length > 0">Send Recommendation<span ng-show="activeQuestion.recommends.length > 1">s</span></button>
+		                <button class="btn btn-primary btn-xs" ng-click="sendRecommendations()" ng-show="activeQuestion.recommends.length > 0">Send Recommendation<span ng-show="activeQuestion.recommends.length > 1">s</span></button>
 		          </div>
 		        </div>
 

@@ -26,7 +26,7 @@
           <option  value="privateRecommended">Private & Recommended</option>
         </select>
 
-      <select ui-select2 multiple ng-model="categoryFilter" class="question-cats-drop" style="width:100%;" ng-click="mobileCategory=true" data-placeholder="Select Categories" ng-change="refreshQuestionList(true)">
+      <select ui-select2 multiple ng-model="categoryFilter" class="question-cats-drop" style="width:100%;" data-placeholder="Select Categories" ng-change="refreshQuestionList(true)">
           <option ng-repeat="category in categories" value="{{category._id}}">
             {{category.name}}            
           </option>
@@ -36,6 +36,13 @@
         <!-- list directive -->
         <question-list questions="questions" unique-name="'rq'"></question-list>
 
+        <div class="end-of-content" ng-show="currentSelectEmpty">
+          End of Content
+        </div>
+
+        <div id="end-of-questions" ng-class="{'cloaked': !addingPage}" style="text-align:center; font-size:2.5em; margin-left:80px;">
+          <i class="fa fa-spinner fa-spin"></i>
+        </div>
 
 			</div>
 		</div>
@@ -63,7 +70,7 @@
 
         <div class="control-group" style="margin-bottom:0px;">
     			<div class="controls">
-    				<select ui-select2 ng-model="newQuestion.category" style="width:100%;" data-placeholder="Choose a Category...">
+    				<select ui-select2 class="category-select" ng-model="newQuestion.category" style="width:100%;" data-placeholder="Choose a Category...">
     					<option value="empty">Select A Category</option>
     					<option  ng-repeat="category in categories" value="{{category._id}}">{{category.name}}</option>
     				</select>
@@ -83,8 +90,10 @@
             <input type="radio" ng-model="newQuestion.private" value="true"> Private
           </label>
           <div ng-show="newQuestion.private == 'true'" >
-            <select ui-select2 multiple ng-model="newQuestion.privateList"  data-placeholder="Select who can view this private question." style="min-width:150px;">
-              <option  ng-repeat="usr in currentUser.follows" value="{{usr.followee._id}}">{{usr.followee.username+" ("+usr.followee.name+")"}}</option>
+            <select ui-select2 multiple ng-model="newQuestion.privateList"  data-placeholder="Select who can view this private question." style="width:100%;">
+              <option  ng-repeat="flw in currentUser.follows" ng-hide="flw.followee._id === currentUser._id" value="{{flw.followee._id}}">
+                {{flw.followee.username+" ("+flw.followee.name+")"}}
+              </option>
             </select>
           </div>
         </div>

@@ -4,6 +4,7 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
+    moment = require('moment'),
     Schema = mongoose.Schema;
 
 
@@ -17,8 +18,8 @@ var CommentSchema = new Schema({
         trim: true
     },
     created: {
-        type: Date,
-        default: Date.now
+        type: Number,
+        default: moment().valueOf()
     },
     user: {
         type: Schema.ObjectId,

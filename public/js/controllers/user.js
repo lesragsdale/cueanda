@@ -112,7 +112,6 @@ angular.module('cueanda').controller('UserController',
         }
 
         $scope.toggleFollow = function(){
-            console.log('got here');
             var flw = new Follow({followee:$scope.userProfile._id})
 
             if($scope.isFollowing){
@@ -120,8 +119,12 @@ angular.module('cueanda').controller('UserController',
                     console.log('deleted follow!');
                     user.follows = _.reject(user.follows,function(f){
                         return f.followee._id == $scope.userProfile._id;
-                    })
+                    });
+                    $scope.userProfile.follows = _.reject($scope.userProfile.follows,function(f){
+                        return f.follower._id == user._id;
+                    });
                     $scope.isFollowing = false;
+                    alertify.log("Un-Followed "+$scope.userProfile.username+"", 'standard', 4000);
                 })
             }else{
                 flw.$save(function(response){
@@ -129,7 +132,8 @@ angular.module('cueanda').controller('UserController',
                     console.log(response);
                     $scope.userProfile.follows.push(response);
                     user.follows.push(response);
-                     $scope.isFollowing = true;
+                    $scope.isFollowing = true;
+                    alertify.log("Following "+$scope.userProfile.username+"!", 'standard', 4000);
                 })
             }
         }

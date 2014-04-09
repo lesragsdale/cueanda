@@ -4,6 +4,7 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
+    moment = require('moment'),
     Schema = mongoose.Schema;
 
 
@@ -12,8 +13,8 @@ var mongoose = require('mongoose'),
  */
 var QuestionSchema = new Schema({
     created: {
-        type: Date,
-        default: Date.now
+        type: Number,
+        default: moment().valueOf()
     },
     title: {
         type: String,

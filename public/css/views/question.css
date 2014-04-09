@@ -56,14 +56,15 @@ body .select2-search input {
 
 /*   Question Modal Select */
 
-#questionModal .select2-container a {
+
+#questionModal .select2-container.category-select a {
 	height: 34px;
 	padding:3px 0px 0px 11px;
 }
-#questionModal .select2-container .select2-choice .select2-arrow {
+#questionModal .select2-container.category-select .select2-choice .select2-arrow {
 	width:23px;
 }
-#questionModal .select2-container .select2-choice .select2-arrow b {
+#questionModal .select2-container.category-select .select2-choice .select2-arrow b {
 	background-position: 3px 5px;
 }
 
@@ -426,8 +427,8 @@ body .select2-search input {
 	margin: 0px;
 	padding-left: 20px;
 	padding-right: 20px;
-	-webkit-transition: min-height .5s, max-height .5s, padding-top .5s, padding-bottom .5s;
-	transition: min-height .5s, max-height .5s, padding-top .5s, padding-bottom .5s;
+	-webkit-transition: min-height .3s, max-height .3s, padding-top .3s, padding-bottom .3s;
+	transition: min-height .3s, max-height .3s, padding-top .3s, padding-bottom .3s;
 	min-height: 0px;
 	padding-top:0px;
 	padding-bottom: 0px;

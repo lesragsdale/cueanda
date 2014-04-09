@@ -6,8 +6,22 @@ angular.module('cueanda').controller('StreamController',
 		$scope.questionVariable = "Poo man it works!";
 		$scope.questionFilter = 'all';
 		$scope.categoryFilter = [];
-		$scope.mobileCategory = false;
 		$scope.currentUser = user;
+		$scope.initialLoadComplete = false;
+
+
+		$scope.addingPage = false;
+		$scope.currentPage = 0;
+		$scope.loadTime = moment().valueOf();
+		$( window ).scroll(function() {
+		  var eoq = document.getElementById("end-of-questions");
+		  if( eoq.getBoundingClientRect().bottom - window.innerHeight < 5 ){
+		  	if(!$scope.addingPage && !$scope.currentSelectEmpty){
+		  		$scope.addingPage = true;
+		  		$scope.refreshQuestionList();
+		  	}		  	
+		  }
+		});
 
 		var Question = $resource(	'questions/:communityId',
 									{ 'communityId': '@community' }, 
@@ -62,10 +76,18 @@ angular.module('cueanda').controller('StreamController',
 
 		$scope.refreshQuestionList = function(fromMobile){
 
+			//new filter criteria so lets start on page one and set to not empty
+			if(!$scope.addingPage){ $scope.currentSelectEmpty = false;  $scope.currentPage = 0; }
+			
+			//Dont refresh list due to the loading of cats which fires the ng-change
+			if(!$scope.initialLoadComplete){ return; }
 			
 			var cats = [];
+			if(!_.isUndefined(fromMobile)){
+				$scope.fromMobile = fromMobile;
+			}
 
-			if(fromMobile){			
+			if($scope.fromMobile){			
 				cats = $scope.categoryFilter;
 			}else{
 				cats = _.filter($scope.categories,function(cat){
@@ -79,19 +101,26 @@ angular.module('cueanda').controller('StreamController',
 			var qst = {}
 			if($scope.questionFilter != 'all'){ qst[$scope.questionFilter] = true; }
 			if(!_.isEmpty(cats)){ qst.categories = cats; }
+			if($scope.addingPage){ qst.page = $scope.currentPage+1; qst.loadTime = $scope.loadTime; }
 			if($routeParams.communityId){ qst.community = $routeParams.communityId; }
 
 			//var Q = new Question(qst);
 
 			Question.query(qst,function(questions){
-				$scope.questions = questions;
+				if($scope.addingPage){
+					$scope.addingPage = false;
+					$scope.currentPage++;
+					if(_.isEmpty(questions)){ $scope.currentSelectEmpty = true; }
+					$scope.questions = _.union($scope.questions,questions);
+				}else{
+					$scope.questions = questions;
+				}				
 			})
 
 
 		}
 
 	    $scope.pullQuestions = function() {
-
 	    	if($routeParams.communityId){
 	    		Community.get({communityName: $routeParams.communityId},function(community){
 	    			loadQuestions({communityId: community._id},{type: community.type});
@@ -109,6 +138,10 @@ angular.module('cueanda').controller('StreamController',
 
 	        Category.query( cCriteria ,function(categories) {
 	            $scope.categories = categories;
+	            $timeout(function(){
+	            	$scope.initialLoadComplete  = true;
+	            },400);
+	            
 	        });
 	    }
 

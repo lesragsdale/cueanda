@@ -188,6 +188,15 @@ footer p {
 .form-group .help-block {
   color:#525252;
 }
+
+.end-of-content {
+  padding:10px;
+  text-align: center;
+  border-radius: 5px;
+  border:thin solid #565656;
+  margin-left:80px;
+}
+
 body .pagination {
   margin:10px 0px;
 }
@@ -221,4 +230,8 @@ body .pagination>.disabled>span:active
   background-color: transparent;
   border: 1px solid #565656;
   color:#565656;
+}
+
+body .cloaked {
+  visibility: hidden;
 }

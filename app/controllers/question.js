@@ -190,6 +190,9 @@ var buildCriteria = function(req){
                             if(req.community){ criteria.push({community: req.community}); }
                             else{ criteria.push({community : {$exists : false} }) }
 
+                            //Get afer a certain created Date
+                            if(req.query.timeLoaded){ criteria.push({created:{$lt: req.query.timeLoaded }}) }    
+
                             //Keep these last to override other if needed   
                             if(req.query.userAsked){ criteria = [{user : req.query.userAsked }]; }    
                             if(req.query.userVoted){ criteria = [{ _id : { $in: pass.votedQuestions } }]; }
@@ -209,7 +212,10 @@ var buildCriteria = function(req){
 
 exports.all = function(req, res){
     buildCriteria(req).then(function(criteria){
-        Question.find(criteria).sort('-created').populate('user', 'name username image').populate('category').exec(function(err, questions) {
+        console.log(req);
+        var pageLength = 20;
+        var skip = (req.query.page? pageLength*req.query.page :0)
+        Question.find(criteria, null, {skip:skip,limit:pageLength}).sort('-created').populate('user', 'name username image').populate('category').exec(function(err, questions) {
             if (err) { console.log(err); }
             else{
                 exports.appendVotes(req,res,questions);
@@ -229,10 +235,20 @@ exports.appendVotes = function(req, res, questions){
 }
 
 var appendComments = function(req, res, questions){
-    Comment.find().populate('user', 'name username image').exec(function(err3, comments) {
+    Comment.find({'question':{$in: _.pluck(questions,'_id') }}).populate('user', 'name username image').exec(function(err3, comments) {
         var cPerQuestion = _.groupBy(comments,'question')
         var questionsOut = _.map(questions,function(question){
             return _.assign(question,{ comments:cPerQuestion[question._id] });
+        });
+        appendFlags(req,res,questionsOut);
+    });
+}
+
+var appendFlags = function(req, res, questions){
+    Flag.find({'question':{$in: _.pluck(questions,'_id') }}).exec(function(err3, flags) {
+        var vPerQuestion = _.groupBy(flags,'question')
+        var questionsOut = _.map(questions,function(question){
+            return _.assign(question,{ flags:vPerQuestion[question._id] });
         });
         appendRecommendations(req,res,questionsOut);
     });
@@ -240,7 +256,16 @@ var appendComments = function(req, res, questions){
 
 var appendRecommendations = function(req, res, questions){
     var userId = getUserFromReq(req);
-    Recommend.find({$or:[ { recommender: userId}, { recommendee: userId} ]})
+    Recommend.find([
+                    {
+                        $or:
+                            [ 
+                                { recommender: userId}, 
+                                { recommendee: userId}
+                            ]
+                    },
+                    {'question':{$in: _.pluck(questions,'_id') }}
+                  ])
         .populate('recommender', 'name username image')
             .populate('recommendee', 'name username image').exec(function(err4, recommends){
                 var rPerQuestion = _.groupBy(recommends,'question');
