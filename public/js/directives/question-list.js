@@ -52,7 +52,7 @@ angular.module('cueanda').directive('questionList',['$resource', '$timeout', '$w
 				scope.activeQuestion = {};
 				scope.disablePopup = false;
 				scope.currentUser = user;
-				scope.sortQsBy = (scope.flagged?'flagCount':'created');
+				scope.sortQsBy = (scope.flagged?'-flagCount':'-created');
 
 				scope.reasonForFlagging = 'language';
 

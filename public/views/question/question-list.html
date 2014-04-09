@@ -1,6 +1,6 @@
 <div>
 
-        <div ng-repeat="question in questions | orderBy:sortQsBy:true | pager:{page:currentPage,limit:itemsPerPage,pager:usePager}" class="question-list-item qli-{{question._id}}" ng-class="{'hide-me': question.isNew}">
+        <div ng-repeat="question in questions | orderBy:sortQsBy | pager:{page:currentPage,limit:itemsPerPage,pager:usePager}" class="question-list-item qli-{{question._id}}" ng-class="{'hide-me': question.isNew}">
           <div class="side left">
             <div class="img-hold">
               <img ng-show="question.user.image" ng-src="{{question.user.image+'-sml.jpg'}}">

@@ -19,7 +19,7 @@ var CommentSchema = new Schema({
     },
     created: {
         type: Number,
-        default: moment().valueOf()
+        default: function(){ return moment().valueOf(); }
     },
     user: {
         type: Schema.ObjectId,
