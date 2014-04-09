@@ -41,7 +41,7 @@ var QuestionSchema = new Schema({
         type: Boolean,
         default: false
     },
-    privateList: [],
+    privateList: [String],
     comments:[],
     votes:[],
     flags:[],

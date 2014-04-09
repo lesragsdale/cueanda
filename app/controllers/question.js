@@ -141,7 +141,7 @@ var privacyExp = function(req){
                     {$and:
                         [
                             {isPrivate: true},
-                            {privateList: userId}
+                            {privateList: userId.toString()}
                         ]
                     },
                     {$and:
@@ -152,7 +152,7 @@ var privacyExp = function(req){
                     }
                 ]
             };
-    
+
     return b;
 }
 
@@ -200,7 +200,6 @@ var buildCriteria = function(req){
                             criteria.push(privacyExp(req))
                             criteria = {$and: criteria}
 
-                            console.dir(criteria);
                             deferred.resolve(criteria);
 
                         });
@@ -212,7 +211,6 @@ var buildCriteria = function(req){
 
 exports.all = function(req, res){
     buildCriteria(req).then(function(criteria){
-        console.log(req);
         var pageLength = 20;
         var skip = (req.query.page? pageLength*req.query.page :0)
         Question.find(criteria, null, {skip:skip,limit:pageLength}).sort('-created').populate('user', 'name username image').populate('category').exec(function(err, questions) {
