@@ -321,8 +321,7 @@ var getRecommendedQuestions = function(pass){
 
 var getListOfQuestionsUserVoted = function(pass){
     var deferred = Q.defer();
-
-    var userId = getUserFromReq(pass.req);
+    var userId = (pass.req.query.userVoted ? pass.req.query.userVoted: getUserFromReq(pass.req) );
     if(pass.req.query.userVoted){
         var criteria = { $and: [ {user: userId}, {comment: {$exists : false}  } ] }
         Vote.find(criteria).exec(function(err,votes){
