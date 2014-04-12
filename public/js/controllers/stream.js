@@ -207,6 +207,8 @@ angular.module('cueanda').controller('StreamController',
 
 			$http.post('questions/',question).success(function(response){
 				$("#questionModal").modal('hide');
+				$scope.newQuestionError = undefined;
+				$scope.newQuestion = undefined;
 				$scope.questionsCreatedByUser.push(response[0]._id);
 				var rndResponses = [
 					"Cool Question Bro!",
