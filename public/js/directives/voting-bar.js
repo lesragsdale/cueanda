@@ -27,6 +27,16 @@ angular.module('cueanda').directive('votingBar',
 
 					htmlOutput += "</div>";
 
+					//Percentages
+					if(_.isUndefined(counts[0])){ counts[0] = 0; }
+					if(_.isUndefined(counts[1])){ counts[1] = 0; }
+
+					htmlOutput += "<div style='text-align:center' class='vote-numbers'> <span class='badge'>"+vCount+" vote"+(vCount > 1?'s':'')+"</span>";
+					_.each(counts,function(val,key){
+						htmlOutput += "<span class='badge "+(key==0?'pull-left':'pull-right')+" '>"+((val/vCount)*100).toFixed(0)+"%</span>";
+					});
+					htmlOutput += "</div>";
+
 					$(element).html(htmlOutput);
 				}
 

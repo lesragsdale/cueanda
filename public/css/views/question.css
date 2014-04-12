@@ -485,3 +485,14 @@ body .select2-search input {
 .pagination li span {
 	cursor: pointer;
 }
+
+.vote-numbers .badge {
+	background-color: #e5e5e5;
+	color:#575757;
+	border:1px solid #ccc;
+	border-bottom-width: 2px;
+	text-align: center;
+	min-width: 50px;
+	line-height:1.5;
+	font-size:10px;
+}

@@ -31,13 +31,11 @@
             </div>
             <div class="question-title">{{question.question.mainInput}}</div>
             <div> <voting-bar votes="question.votes"></voting-bar> </div>
-            <div class="answers">
+            <div class="answers" style="padding:3px;">
               <div class="answer opa side">
-                <div class="percent">{{opaPercent}}%</div>
                 <div class="text">{{question.answers[0].mainInput}}</div>
               </div>
               <div class="answer opb side">
-                <div class="percent">{{opbPercent}}%</div>
                 <div class="text">{{question.answers[1].mainInput}}</div>
               </div>
             </div>
