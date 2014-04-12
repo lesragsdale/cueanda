@@ -71,43 +71,54 @@ exports.update = function(req, res) {
  * Delete an question
  */
 exports.destroy = function(req, res) {
-    var question = req.question;
+    //var question = req.question;
 
-    if(req.user.isAdmin){
-        Comment.remove({question: question},function(err){
-            if(err){
-                console.log(err);
-            }
-        });
+    // For some reason req.question does not have the question object stored in it. I dont know why
+    // so lets pull it on our own
 
-        Flag.remove({question: question},function(err){
-            if(err){
-                console.log(err);
-            }
-        });
 
-        Recommend.remove({question: question},function(err){
-            if(err){
-                console.log(err);
-            }
-        });
+    Question.load(req.question, function(err, question) {
 
-        Vote.remove({question: question},function(err){
-            if(err){
-                console.log(err);
-            }
-        });
+        if(req.user.isAdmin || (req.user._id.toString() === question.user._id.toString()) ){
+            Comment.remove({question: question},function(err){
+                if(err){
+                    console.log(err);
+                }
+            });
 
-        Question.remove({_id: question},function(err){
-            if(err){
-                console.log(err);
-            }else{
-                res.jsonp(question);
-            }
-        });
-    }else{
-        res.jsonp({error:"You arent authorized"});
-    }
+            Flag.remove({question: question},function(err){
+                if(err){
+                    console.log(err);
+                }
+            });
+
+            Recommend.remove({question: question},function(err){
+                if(err){
+                    console.log(err);
+                }
+            });
+
+            Vote.remove({question: question},function(err){
+                if(err){
+                    console.log(err);
+                }
+            });
+
+            Question.remove({_id: question},function(err){
+                if(err){
+                    console.log(err);
+                }else{
+                    res.jsonp(question);
+                }
+            });
+        }else{
+            return res.send(401, 'User is not authorized');
+        }
+
+
+    });
+
+
 };
 
 /**

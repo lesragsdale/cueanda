@@ -38,7 +38,7 @@ module.exports = function(app) {
     app.post('/questions', authorization.requiresLogin, questions.create);
     app.get('/questions/:questionId', questions.show);
     app.put('/questions/:questionId', authorization.requiresLogin, hasAuthorization, questions.update);
-    app.del('/questions/:questionId', isAdmin, questions.destroy);
+    app.del('/questions/:questionId', questions.destroy);
 
     // Finish with setting up the questionId param
     app.param('questionId', questions.question);

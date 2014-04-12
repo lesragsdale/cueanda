@@ -11,7 +11,7 @@
 			<button class='btn btn-sm btn-info' ng-class="{'active': sortByPop == true}" ng-click="changeSort(true)"><span class='glyphicon glyphicon-stats'></span></button>
 		</div>
 	</div>
-	<div ng-repeat="comment in question.comments | orderBy:sortBy:true " class="{{'comment comment-'+question.votesByUser[comment.user._id][0].answer}}">
+	<div ng-repeat="comment in question.comments | orderBy:sortBy:true " class="{{'comment comment-'+comment._id+' comment-'+question.votesByUser[comment.user._id][0].answer}}">
 		
 		<!-- Img Block -->
 		<div class='comment-img' ng-show="question.votesByUser[comment.user._id][0].answer == 0">
@@ -40,6 +40,7 @@
 				<span style="font-size:.75em;">{{comment.created | ago}}</span>
 			</div>
 			<div class='body'>{{comment.body}}</div>
+			<div ng-show="comment.user._id == currentUser._id" style="padding-top:5px;"><button class="pull-right btn red-butt btn-xs" ng-click="prepareToDeleteComment(comment._id)"><span class="fa fa-times"></span> Delete</button></div>
 		</div>
 
 		<!-- Img Block -->

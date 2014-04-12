@@ -4,17 +4,25 @@ angular.module('cueanda').directive('comment',[ '$resource', '$timeout',
 	function($resource, $timeout) {
 		return {
 			scope: {
-				question: "="
+				question: "=",
+				uniqueName: "=",
+				commentToDelete: "="
 			},
 			restrict: 'E',
 			replace: true,
 			templateUrl: 'views/question/comment.html',
 			link: function(scope, element, attrs) {
+				scope.currentUser = user;
 
 				var Vote = $resource('vote/:questionId/:commentId/:answerOption',
 									{ questionId: '@question', commentId: '@comment', answerOption: '@answer' }, 
 									{ update: { method: 'PUT' } }
 								);
+
+				var Comment = $resource(	'comment/:commentId',
+											{ commentId: '@comment'}, 
+											{ update: { method: 'PUT' } }
+										);
 
 				scope.sortByPop = true;
 				scope.sortBy = function(comment){
@@ -32,10 +40,20 @@ angular.module('cueanda').directive('comment',[ '$resource', '$timeout',
 			    	},500);
 			    }
 
+			    scope.toggleModal = function(id){
+			    	console.log('#'+id+scope.uniqueName);
+					$('#'+id+scope.uniqueName).modal('toggle');
+				}
+
+			    scope.prepareToDeleteComment = function(commentId){
+					scope.commentToDelete = commentId;
+					scope.toggleModal('deleteComment');
+				}				
+
 				scope.castCommentVote = function(comment, option){
 					/*** EXIT IF ANSWER IS NOT NEW ***/
 					var oldAnswerExists = false;
-
+		
 					var currentAnswerToComment = _.find(scope.question.votes,function(vote){
 						return vote.comment == comment && vote.user == user._id;
 					})

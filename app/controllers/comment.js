@@ -75,18 +75,20 @@ exports.update = function(req, res) {
  * Delete an comment
  */
 exports.destroy = function(req, res) {
-    var comment = req.comment;
 
-    comment.remove(function(err) {
-        if (err) {
-            return res.send('users/signup', {
-                errors: err.errors,
-                comment: comment
+    Comment.load(req.comment, function(err, comment) {
+         if(req.user.isAdmin || comment.user.toString() == req.user._id.toString()){
+            Comment.remove({_id:comment._id},function(err) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    res.jsonp(comment);
+                }
             });
-        } else {
-            res.jsonp(comment);
+        }else{
+            return res.send(401, 'User is not authorized');
         }
-    });
+    });   
 };
 
 /**

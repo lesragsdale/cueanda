@@ -20,7 +20,9 @@ module.exports = function(app) {
     };
 
     app.post('/comment/:questionId',comment.create)
+    app.del('/comment/:commentId',comment.destroy)
     // Finish with setting up the questionId param
+    app.param('commentId', comment.comment);
     app.param('questionId', question);
 
 };

@@ -163,7 +163,10 @@ body .select2-search input {
 	background-image: -webkit-linear-gradient(top, #375bf6 0%, #1b21a7 100%);
 	margin:0px;
 }
-
+.vote-bar.is-empty {
+	border:1px solid #ccc;
+	border-bottom-width: 2px;
+}
 .question-list-item {
 	-webkit-transition: height .5s, opacity .5s;
 	transition: height .5s, opacity .5s;

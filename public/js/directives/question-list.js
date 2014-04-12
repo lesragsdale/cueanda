@@ -38,6 +38,10 @@ angular.module('cueanda').directive('questionList',['$resource', '$timeout', '$w
 											{ questionId: '@question'}, 
 											{ update: { method: 'PUT' } }
 										);
+				var CommentDel = $resource(	'comment/:commentId',
+											{ commentId: '@comment'}, 
+											{ update: { method: 'PUT' } }
+										);
 
 				var Recommend = $resource(	'recommend/:questionId',
 											{ questionId: '@question'}, 
@@ -270,11 +274,28 @@ angular.module('cueanda').directive('questionList',['$resource', '$timeout', '$w
 					});
 				}
 
+				scope.deleteComment = function(){
+					var cToDelete = new CommentDel({comment:scope.commentToDelete})
+					console.log('getting called')
+					cToDelete.$delete(function(reponse){
+						scope.toggleModal('deleteComment');
+						//$('.modal').modal('hide');
+
+						$('.comment-'+scope.commentToDelete).fadeOut(500,function(){
+							alertify.log("Comment Deleted", 'standard', 4000);
+							$scope.activeQuestion.comments = _.reject($scope.activeQuestion.comments,function(comment){
+								return comment._id == scope.commentToDelete;
+							})
+						});						
+					})
+				}
+
 				scope.deleteQuestion = function(){
 					var qToDelete = new Question({id:scope.questionToDelete})
 
 					qToDelete.$delete(function(reponse){
-						scope.toggleModal('deleteQuestion');
+						//scope.toggleModal('deleteQuestion');
+						$('.modal').modal('hide');
 
 						$('.qli-'+scope.questionToDelete).fadeOut(500,function(){
 							alertify.log("Question Deleted", 'standard', 4000);

@@ -1,4 +1,4 @@
-<div ng-show="data.showAttach == true">
+<div ng-show="data.showAttach == true" style="margin-top:8px">
 	<img ng-show="data.showLink == false" ng-src="{{uploadPath}}" width="100%" /> 
 	<img ng-show="data.showLink == true && data.embed.type == 'photo' && data.embed.thumbnail_url" ng-src="{{data.embed.thumbnail_url}}" width="100%" style="margin-bottom:10px;" />
 	<img ng-show="data.showLink == true && data.embed.type == 'photo' && !data.embed.thumbnail_url" ng-src="{{data.embed.url}}" width="100%" style="margin-bottom:10px;" />
