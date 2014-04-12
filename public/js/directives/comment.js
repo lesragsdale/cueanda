@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('cueanda').directive('comment',[ '$resource',
-	function($resource) {
+angular.module('cueanda').directive('comment',[ '$resource', '$timeout',
+	function($resource, $timeout) {
 		return {
 			scope: {
 				question: "="
@@ -24,6 +24,13 @@ angular.module('cueanda').directive('comment',[ '$resource',
 				scope.changeSort = function(val){
 					scope.sortByPop = val;
 				}
+
+				scope.goToUser = function(username){
+			    	$('.modal').modal('hide');
+			    	$timeout(function(){
+			    		window.location = "#!/user/"+username;
+			    	},500);
+			    }
 
 				scope.castCommentVote = function(comment, option){
 					/*** EXIT IF ANSWER IS NOT NEW ***/

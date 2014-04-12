@@ -3,14 +3,22 @@
         <div ng-repeat="question in questions | orderBy:sortQsBy | pager:{page:currentPage,limit:itemsPerPage,pager:usePager}" class="question-list-item qli-{{question._id}}" ng-class="{'hide-me': question.isNew}">
           <div class="side left">
             <div class="img-hold">
-              <img ng-show="question.user.image" ng-src="{{question.user.image+'-sml.jpg'}}">
+              <a href="#!/user/{{question.user.username}}">
+              	<img ng-show="question.user.image" ng-src="{{question.user.image+'-sml.jpg'}}">
+              </a>
             </div>
             <div class="question-notifiers">
-              <div class="recommended-question" ng-show="isQuestionRecommended(question)">
+              <div class="question-info-icon" ng-show="isQuestionRecommended(question)">
                 <span class="fa fa-thumbs-up hasTooltip" data-toggle="tooltip" data-placement="bottom" title="This question was recmmended to you by one or more of your friends"></span> 
               </div>  
-              <div class="private-question" ng-show="question.isPrivate">
+              <div class="question-info-icon" ng-show="question.isPrivate">
                 <span class="glyphicon glyphicon-eye-close hasTooltip" data-toggle="tooltip" data-placement="bottom" title="This question is private"></span> 
+              </div>
+              <div class="question-info-icon" ng-show="questionHasEmbed(question,'picture')">
+                <span class="fa fa-picture-o hasTooltip" data-toggle="tooltip" data-placement="bottom" title="This question has a picture attached"></span> 
+              </div>
+              <div class="question-info-icon" ng-show="questionHasEmbed(question,'video')">
+                <span class="fa fa-video-camera hasTooltip" data-toggle="tooltip" data-placement="bottom" title="This question has a video attached"></span> 
               </div>  
             </div>     
           </div>
@@ -19,7 +27,7 @@
               <a href="#!/user/{{question.user.username}}" ng-click="clickUserLink()">{{question.user.username}}</a>
               <span class="muted">({{question.user.name}})</span>
 
-              <span class="pull-right {{catIcons[question.category.machine_name]}}" ></span>
+              <span style="font-size:1.5em;" class="pull-right {{catIcons[question.category.machine_name]}}" ></span>
             </div>
             <div class="question-title">{{question.question.mainInput}}</div>
             <div> <voting-bar votes="question.votes"></voting-bar> </div>
@@ -62,8 +70,10 @@
 		      <div class="modal-header">
 		      	<div class="row question-modal-top-row">
 		      		<div class="col-sm-2 col user-pocket">
-		      			<img ng-show="activeQuestion.user.image" ng-src="{{activeQuestion.userImagePath}}" />
-		      			<h6 class="question-username">{{activeQuestion.user.username}}</h6>
+		      			<a href="" ng-click="goToUser(activeQuestion.user.username)">
+		      				<img ng-show="activeQuestion.user.image" ng-src="{{activeQuestion.userImagePath}}" />
+		      				<h6 class="question-username">{{activeQuestion.user.username}}</h6>
+		      			</a>
 		      			<h6 class="question-date" style="margin-bottom:15px;font-size:.65em;color:#888">{{activeQuestion.created | ago}}</h6>
 		      		</div>
 		      		<div class="col-sm-10 col question-title">

@@ -141,7 +141,7 @@ var privacyExp = function(req){
                     {$and:
                         [
                             {isPrivate: true},
-                            {privateList: userId.toString()}
+                            {privateList: userId}
                         ]
                     },
                     {$and:
@@ -191,7 +191,12 @@ var buildCriteria = function(req){
                             else{ criteria.push({community : {$exists : false} }) }
 
                             //Get afer a certain created Date
-                            if(req.query.timeLoaded){ criteria.push({created:{$lt: req.query.timeLoaded }}) }    
+                            if(req.query.timeLoaded){
+                                var cQuery;
+                                if(req.query.afterTimeLoaded){ cQuery = {'$gt': parseInt(req.query.timeLoaded) } }
+                                else{ cQuery = {'$lt': parseInt(req.query.timeLoaded) } }
+                                criteria.push({created:cQuery});
+                            }   
 
                             //Keep these last to override other if needed   
                             if(req.query.userAsked){ criteria = [{user : req.query.userAsked }]; }    
@@ -353,5 +358,5 @@ var getVotedQuestionList = function(req, res, userId){
 }
 
 var getUserFromReq = function(req){
-    return (_.isUndefined(req.user)? undefined : req.user._id)     
+    return (_.isUndefined(req.user)? undefined : req.user._id.toString());     
 }

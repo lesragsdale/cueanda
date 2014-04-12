@@ -32,11 +32,14 @@
           </option>
         </select>
 
+      <div ng-show="newQuestionsSinceLoad.length > 0" class="question-stream-alert" style="cursor:pointer; margin-bottom:15px;" ng-click="loadInNewQuestions()">
+        <div>{{newQuestionsSinceLoad.length}} new question<span ng-show="newQuestionsSinceLoad.length > 1">s</span> available</div>
+      </div>
 
         <!-- list directive -->
         <question-list questions="questions" unique-name="'rq'"></question-list>
 
-        <div class="end-of-content" ng-show="currentSelectEmpty">
+        <div class="question-stream-alert" ng-show="currentSelectEmpty">
           End of Content
         </div>
 
@@ -59,6 +62,9 @@
         <h4 class="modal-title">New Question</h4>
       </div>
       <div class="modal-body">
+
+        <div class="alert alert-danger" ng-show="newQuestionError">{{newQuestionError}}</div>
+
     		<new-question-form-section field-data="newQuestion.question" name="Question" unique="qstn">
     		</new-question-form-section>
 

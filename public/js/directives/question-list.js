@@ -118,6 +118,25 @@ angular.module('cueanda').directive('questionList',['$resource', '$timeout', '$w
 			    	return (val?true:false);
 			    }
 
+			    scope.questionHasEmbed = function(question,type){
+			    	var val = false;
+		    		if(checkOptionForEmbed(question.question,type)){
+		    			return true;
+		    		}
+			    	_.each(question.answers,function(answer){
+			    		if(checkOptionForEmbed(answer,type)){
+			    			val = true;
+			    		}
+			    	});
+			    	return val;
+			    }
+
+			    var checkOptionForEmbed = function(option, type){
+			    	if(_.isUndefined(option.embed)){  return false;	}
+			    	var val = (type == 'video'?true:false);
+			    	return (option.embed.type == 'video'?val:!val);
+			    }			    
+
 			    scope.whoRecommended = function(question){
 			    	var out = "Recommended by ";
 
@@ -133,6 +152,13 @@ angular.module('cueanda').directive('questionList',['$resource', '$timeout', '$w
 
 			    scope.clickUserLink = function(){
 			    	scope.disablePopup = true;
+			    }
+
+			    scope.goToUser = function(username){
+			    	$('.modal').modal('hide');
+			    	$timeout(function(){
+			    		window.location = "#!/user/"+username;
+			    	},500);
 			    }
 
 			    scope.submitFlagging = function(){

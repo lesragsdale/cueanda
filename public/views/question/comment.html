@@ -15,7 +15,9 @@
 		
 		<!-- Img Block -->
 		<div class='comment-img' ng-show="question.votesByUser[comment.user._id][0].answer == 0">
-			<img class='user-image-display' ng-src='{{comment.user.image}}-sml.jpg'>
+			<a href="" ng-click="goToUser(comment.user.username)">
+				<img class='user-image-display' ng-src='{{comment.user.image}}-sml.jpg'>
+			</a>
 		</div>
 
 		<!-- Vote Block -->
@@ -33,13 +35,18 @@
 
 		<!-- Main Block -->
 		<div class='comment-main'>
-			<div class='comment-header'><span class='name' style="margin-right:5px; font-weight:bold;">{{comment.user.username}}</span> <span style="font-size:.75em;">{{comment.created | ago}}</span></div>
+			<div class='comment-header'>
+				<a href="" ng-click="goToUser(comment.user.username)"><span class='name' style="margin-right:5px; font-weight:bold;">{{comment.user.username}}</span></a>
+				<span style="font-size:.75em;">{{comment.created | ago}}</span>
+			</div>
 			<div class='body'>{{comment.body}}</div>
 		</div>
 
 		<!-- Img Block -->
 		<div class='comment-img' ng-show="question.votesByUser[comment.user._id][0].answer == 1">
-			<img class='user-image-display' ng-src='{{comment.user.image}}-sml.jpg'>
+			<a href="" ng-click="goToUser(comment.user.username)">
+				<img class='user-image-display' ng-src='{{comment.user.image}}-sml.jpg'>
+			</a>
 		</div>
 
 		<!-- Vote Block -->

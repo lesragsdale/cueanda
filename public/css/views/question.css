@@ -447,8 +447,7 @@ body .select2-search input {
 .question-notifiers {
 	margin-top:10px;
 }
-.recommended-question,
-.private-question {
+.question-info-icon {
 	color:#565656;
 	font-size:25px;
 	text-align:center;

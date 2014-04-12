@@ -13,6 +13,8 @@ angular.module('cueanda').controller('StreamController',
 		$scope.addingPage = false;
 		$scope.currentPage = 0;
 		$scope.loadTime = moment().valueOf();
+		$scope.lastTimeYouLoadedNewQuestions = $scope.loadTime;
+		$scope.questionsCreatedByUser = [];
 		$( window ).scroll(function() {
 		  var eoq = document.getElementById("end-of-questions");
 		  if( eoq.getBoundingClientRect().bottom - window.innerHeight < 5 ){
@@ -22,6 +24,22 @@ angular.module('cueanda').controller('StreamController',
 		  	}		  	
 		  }
 		});
+
+		var startListening = function(){
+			var chkQst = {}
+			if($scope.qst){ chkQst = _.clone($scope.qst,true); }
+			_.assign(chkQst,{timeLoaded:$scope.lastTimeYouLoadedNewQuestions, afterTimeLoaded:true});
+			chkQst = _.omit(chkQst,'page');
+			Question.query(chkQst,function(questions){
+				var questionsNotMadeByUser = _.filter(questions,function(qst){ return _.indexOf($scope.questionsCreatedByUser,qst._id) === -1; });
+				questionsNotMadeByUser = _.map(questionsNotMadeByUser,function(qst){
+					return _.assign(qst,{isNew:true});
+				});
+				$scope.newQuestionsSinceLoad = questionsNotMadeByUser;
+			});
+
+			$scope.newQuestionsTimeout = window.setTimeout(startListening, 10000);
+		};		
 
 		var Question = $resource(	'questions/:communityId',
 									{ 'communityId': '@community' }, 
@@ -69,6 +87,17 @@ angular.module('cueanda').controller('StreamController',
 					"start_sit":"glyphicon glyphicon-random"
 				};
 
+		startListening();
+
+		$scope.loadInNewQuestions = function(){
+			$scope.questions = _.union($scope.questions,$scope.newQuestionsSinceLoad);
+			$timeout(function(){
+				$('.question-list-item').removeClass('hide-me');
+			}, 500);
+			$scope.lastTimeYouLoadedNewQuestions = moment().valueOf();
+			$scope.newQuestionsSinceLoad = [];
+		}
+
 		$scope.selectCategory = function(cat){
 			cat.active = !(cat.active);
 			$scope.refreshQuestionList();
@@ -98,15 +127,16 @@ angular.module('cueanda').controller('StreamController',
 				});
 			}
 
-			var qst = {}
-			if($scope.questionFilter != 'all'){ qst[$scope.questionFilter] = true; }
-			if(!_.isEmpty(cats)){ qst.categories = cats; }
-			if($scope.addingPage){ qst.page = $scope.currentPage+1; qst.loadTime = $scope.loadTime; }
-			if($routeParams.communityId){ qst.community = $routeParams.communityId; }
+			$scope.qst = {}
+			if($scope.questionFilter != 'all'){ $scope.qst[$scope.questionFilter] = true; }
+			if(!_.isEmpty(cats)){ $scope.qst.categories = cats; }
+			if($scope.addingPage){ $scope.qst.page = $scope.currentPage+1; $scope.qst.timeLoaded = $scope.loadTime; }
+			else{ $scope.lastTimeYouLoadedNewQuestions = moment().valueOf();  $scope.newQuestionsSinceLoad = [] }
+			if($routeParams.communityId){ $scope.qst.community = $routeParams.communityId; }
 
 			//var Q = new Question(qst);
 
-			Question.query(qst,function(questions){
+			Question.query($scope.qst,function(questions){
 				if($scope.addingPage){
 					$scope.addingPage = false;
 					$scope.currentPage++;
@@ -145,6 +175,16 @@ angular.module('cueanda').controller('StreamController',
 	        });
 	    }
 
+	    var validateNewQuestion = function(question){
+	    	var err = undefined;
+	    	if(question.category == "empty") { err =  "you must select a category"; }
+	    	if(_.isUndefined(question.question.mainInput)) { err =   "you must provide a question"; }
+	    	_.each(question.answers,function(answer){
+	    		if(_.isUndefined(answer.mainInput)) { err =   "you must provide two possible answers"; }
+	    	});
+	    	return err;
+	    }
+
 		$scope.createQuestion = function() {
 			var question = {
 				question: $scope.newQuestion.question,
@@ -157,13 +197,17 @@ angular.module('cueanda').controller('StreamController',
 				privateList: $scope.newQuestion.privateList
 			};
 
+			var validation = validateNewQuestion(question);
+
+			if( validation ) {  $scope.newQuestionError = validation; return;  }
+
 			if($routeParams.communityId){ question.community = $routeParams.communityId;	}
 
 			//var resQ = new Question(question);
 
 			$http.post('questions/',question).success(function(response){
 				$("#questionModal").modal('hide');
-
+				$scope.questionsCreatedByUser.push(response[0]._id);
 				var rndResponses = [
 					"Cool Question Bro!",
 					"Nice, you made a question...good job!",
