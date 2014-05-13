@@ -51,6 +51,13 @@ angular.module('cueanda').directive('questionList',['$resource', '$timeout', '$w
 											}
 										);
 
+				$("#commentBox").mention({
+				    sensitive: true,
+				    users: _.map(_.filter(user.follows,function(follow){
+				    	return follow.follower._id === user._id;
+				    }), function(f){ return f.followee;})
+				});
+
 				scope.currentPage = 0;
 				scope.itemsPerPage = 3;
 				scope.activeQuestion = {};

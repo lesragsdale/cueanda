@@ -1,13 +1,13 @@
 'use strict';
 
-angular.module('cueanda').directive('comment',[ '$resource', '$timeout',
-	function($resource, $timeout) {
+angular.module('cueanda').directive('comment',[ '$resource', '$timeout', '$filter', '$sce', '$location',
+	function($resource, $timeout, $filter, $sce, $location) {
 		return {
-			scope: {
+			/*scope: {
 				question: "=",
 				uniqueName: "=",
 				commentToDelete: "="
-			},
+			},*/
 			restrict: 'E',
 			replace: true,
 			templateUrl: 'views/question/comment.html',
@@ -23,6 +23,30 @@ angular.module('cueanda').directive('comment',[ '$resource', '$timeout',
 											{ commentId: '@comment'}, 
 											{ update: { method: 'PUT' } }
 										);
+
+				scope.$watch(attrs.question, function(value) {
+					scope.question = scope.$eval(attrs.question);
+					if(scope.question){
+						scope.question.comments = _.map(scope.question.comments,function(comment){
+							var safeHtml = $sce.trustAsHtml($filter('mentionLinks')(comment.body));
+							return _.assign(comment,{ body: safeHtml });
+						});
+						$timeout(function(){
+							$(".mention-link").on('click',function(event){
+								$('.modal').modal('hide');
+								$timeout(function(){
+									window.location = "#!/user/"+$(this).attr("id");
+								},500);								
+								//$location.path('user/'+$(this).attr("id"));
+							});
+						},100);
+						
+					}
+				});
+
+				scope.hideAllModals = function(){
+					$('.modal').modal('hide');
+				}				
 
 				scope.sortByPop = true;
 				scope.sortBy = function(comment){

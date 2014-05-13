@@ -8,6 +8,7 @@ angular.module('cueanda').controller('StreamController',
 		$scope.categoryFilter = [];
 		$scope.currentUser = user;
 		$scope.initialLoadComplete = false;
+		$scope.noCategories = true;
 
 
 		$scope.addingPage = false;
@@ -103,6 +104,14 @@ angular.module('cueanda').controller('StreamController',
 			$scope.refreshQuestionList();
 		}
 
+		$scope.clearCategories = function(){
+			$scope.categories = _.map($scope.categories,function(cat){
+				return _.assign(cat,{active:false});
+			});
+			$scope.categoryFilter = [];
+			$scope.refreshQuestionList();	
+		};
+
 		$scope.refreshQuestionList = function(fromMobile){
 
 			//new filter criteria so lets start on page one and set to not empty
@@ -126,6 +135,8 @@ angular.module('cueanda').controller('StreamController',
 					return cat._id;
 				});
 			}
+
+			$scope.noCategories = (_.isEmpty(cats)?true:false);
 
 			$scope.qst = {}
 			if($scope.questionFilter != 'all'){ $scope.qst[$scope.questionFilter] = true; }

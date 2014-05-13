@@ -129,7 +129,7 @@
 
 		      <div class="modal-body">
 		      	<div ng-show="activeQuestion.currentAnswer && currentUser" class="create-comment">
-		      	<textarea class="form-control" ng-model="activeQuestion.newComment" placeholder="Provide a comment..."></textarea>
+		      	<textarea id="commentBox" class="form-control" ng-model="activeQuestion.newComment" placeholder="Provide a comment..."></textarea>
 		        <button style="padding:10px" class="comment-submit green-butt" ng-click="createComment()" >Submit Comment</button>
 		      	</div>
 

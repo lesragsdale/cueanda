@@ -19,6 +19,14 @@ angular.module('cueanda').controller('UserController',
 
         $scope.currentUser = user;
 
+        $scope.$watch($routeParams.query,function(value){
+            //console.log($routeParams);
+            if($routeParams.clearModal){
+                $(".modal").modal("hide");
+            }
+            $('.modal').modal('hide');
+        });
+
         var setUploader = function(){
             
             var uploader = $scope.uploader = $fileUploader.create({

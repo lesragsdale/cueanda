@@ -39,7 +39,7 @@
 				<a href="" ng-click="goToUser(comment.user.username)"><span class='name' style="margin-right:5px; font-weight:bold;">{{comment.user.username}}</span></a>
 				<span style="font-size:.75em;">{{comment.created | ago}}</span>
 			</div>
-			<div class='body'>{{comment.body}}</div>
+			<div class='body' ng-bind-html="comment.body"></div>
 			<div ng-show="comment.user._id == currentUser._id" style="padding-top:5px;"><button class="pull-right btn red-butt btn-xs" ng-click="prepareToDeleteComment(comment._id)"><span class="fa fa-times"></span> Delete</button></div>
 		</div>
 
