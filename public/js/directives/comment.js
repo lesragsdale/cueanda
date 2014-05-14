@@ -35,6 +35,7 @@ angular.module('cueanda').directive('comment',[ '$resource', '$timeout', '$filte
 							$(".mention-link").on('click',function(event){
 								$('.modal').modal('hide');
 								var elmId = $(this).attr("id");
+								scope.disablePopup = true;
 								$timeout(function(){
 									window.location = "#!/user/"+elmId;
 								},500);								

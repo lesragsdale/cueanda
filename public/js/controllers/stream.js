@@ -34,6 +34,10 @@ angular.module('cueanda').controller('StreamController',
 			return q;
 		}
 
+		var setMentionLinkClickAction = function(){
+			$scope.$broadcast('enableMentionLinkFunc');
+		}
+
 		var startListening = function(){
 			var chkQst = {}
 			if($scope.qst){ chkQst = _.clone($scope.qst,true); }
@@ -247,6 +251,7 @@ angular.module('cueanda').controller('StreamController',
 				$scope.questions.push( _.assign(response[0],{isNew:true}) );
 				$timeout(function(){
 					$('.question-list-item').removeClass('hide-me');
+					setMentionLinkClickAction();
 				}, 500);
 
 				alertify.log(rndResponses[_.random(_.size(rndResponses)-1)], 'standard', 4000);

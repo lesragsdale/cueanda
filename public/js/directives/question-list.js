@@ -20,16 +20,7 @@ angular.module('cueanda').directive('questionList',['$resource', '$timeout', '$w
 	            },500);
 
 	           	scope.$watch(attrs.questions, function(value) {
-	           		$timeout(function(){
-						$(".mention-link").on('click',function(event){
-							$('.modal').modal('hide');
-							var elmId = $(this).attr("id");
-							scope.disablePopup = true;
-							$timeout(function(){
-								window.location = "#!/user/"+elmId;
-							},500);								
-						});
-		            },10);
+	           		setMentionLinkClickAction();
 				});
 
 
@@ -79,6 +70,24 @@ angular.module('cueanda').directive('questionList',['$resource', '$timeout', '$w
 					    users: mentionUsers
 					});					
 				}
+
+				var setMentionLinkClickAction = function(){
+					$timeout(function(){
+						console.log("MENTIONLINKFUNCCALL!");
+						$(".mention-link").on('click',function(event){
+							$('.modal').modal('hide');
+							var elmId = $(this).attr("id");
+							scope.disablePopup = true;
+							$timeout(function(){
+								window.location = "#!/user/"+elmId;
+							},500);								
+						});
+		            },100);
+				}
+
+				scope.$on('enableMentionLinkFunc',function(evt){
+					setMentionLinkClickAction();
+				});
 
 				scope.currentPage = 0;
 				scope.itemsPerPage = 3;
@@ -306,15 +315,7 @@ angular.module('cueanda').directive('questionList',['$resource', '$timeout', '$w
 						alertify.log("Comment Saved", 'standard', 4000);
 						scope.activeQuestion.comments = _.union([response],scope.activeQuestion.comments);
 
-						$timeout(function(){
-							$(".comment-"+response._id+" .mention-link").on('click',function(event){
-								$('.modal').modal('hide');
-								var elmId = $(this).attr("id");
-								$timeout(function(){
-									window.location = "#!/user/"+elmId;
-								},500);								
-							});
-						},100);
+						setMentionLinkClickAction();
 
 					});
 				}

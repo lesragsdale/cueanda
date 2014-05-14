@@ -2,7 +2,7 @@
 
 angular.module('cueanda').controller('UserController',
 	['$scope','$resource', '$routeParams', '$sce', '$fileUploader', '$filter',
-	function($scope,$resource,$routeParams, $sce, $fileUploader, $filter) {
+	function($scope,$resource,$routeParams, $sce, $fileUploader, $filter, $q) {
 
 		var User = $resource('user/:userName',
 									{ userName: '@username' }, 
@@ -118,19 +118,25 @@ angular.module('cueanda').controller('UserController',
         }
 
         var loadUserQuestions = function(){
-            Question.query({ userAsked: $scope.userProfile._id },function(response){
+            var aqp = Question.query({ userAsked: $scope.userProfile._id },function(response){
                 response = _.map(response,function(qst){ return makeHtmlContentSafe(qst); });
                 $scope.askedQuestions = response
-            });
+            }).$promise;
 
-            Question.query({ userVoted: $scope.userProfile._id },function(response){
+            var vqp = Question.query({ userVoted: $scope.userProfile._id },function(response){
                 response = _.map(response,function(qst){ return makeHtmlContentSafe(qst); });
                 $scope.votedQuestions = response
-            });
+            }).$promise;
 
-            Question.query({ userMentioned: $scope.userProfile._id },function(response){
+            var mqp = Question.query({ userMentioned: $scope.userProfile._id },function(response){
                 response = _.map(response,function(qst){ return makeHtmlContentSafe(qst); });
                 $scope.mentionedQuestions = response
+            }).$promise;
+
+            $q.all([aqp,vqp,mqp]).then(function(){
+                $timeout(function(){
+                    $scope.$broadcast('enableMentionLinkFunc');
+                },100);
             });
         }
 
