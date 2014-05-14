@@ -1,8 +1,8 @@
 <div>
-	<div class="control-group" style="margin-top:0px;">
+	<!-- <div class="control-group" style="margin-top:0px;">
 		<div class="controls">
 			<div class="input-group">
-				<input type="text" class="form-control"  ng-model="fieldData.mainInput" placeholder="{{name+'...'}}" />
+				<input id="{{unique}}-input-field" type="text" class="form-control"  ng-model="fieldData.mainInput" placeholder="{{name+'...'}}" />
 				<span class="input-group-btn">
 					<button class="btn btn-default  has-tooltip" ng-click="fieldData.showAttach = !fieldData.showAttach" ng-class="{'active':fieldData.showAttach}" type="button" data-toggle="tooltip" data-placement="right" title="Attach content to this field." >
 						<span class="glyphicon glyphicon-paperclip"></span>
@@ -10,9 +10,19 @@
 				</span>
 			</div>
 		</div>
+	</div> -->
+	<div class="control-group" style="display:table;width:100%;margin-top:0px">
+		<div style="display:table-cell">
+			<textarea data-ng-model="fieldData.mainInput" id="{{unique}}-input-field" placeholder="{{name+'...'}}" class="form-control"></textarea>
+		</div>
+		 <div style="display:table-cell;width:55px;text-align:right;vertical-align:bottom;">
+		 	<button class="btn btn-default  has-tooltip" ng-click="fieldData.showAttach = !fieldData.showAttach" ng-class="{'active':fieldData.showAttach}" type="button" data-toggle="tooltip" data-placement="right" title="Attach content to this field." >
+				<span class="glyphicon glyphicon-paperclip"></span>
+			</button>
+		</div>
 	</div>
 	
-	<div class="control-group" style="margin-top:-15px" ng-show="fieldData.showAttach">
+	<div class="control-group" style="margin-top:-15px;" ng-show="fieldData.showAttach">
 		<div class="controls">
 			<div class="input-group">
 				<input ng-show="fieldData.showLink != false" type="text" ng-change="embedValChanged()" class="form-control" ng-model="fieldData.embedInput" placeholder="{{name+' Embed Url...'}}" />

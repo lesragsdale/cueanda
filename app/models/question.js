@@ -45,6 +45,7 @@ var QuestionSchema = new Schema({
     comments:[],
     votes:[],
     flags:[],
+    mentions:[],
     recommendations:[]
 });
 

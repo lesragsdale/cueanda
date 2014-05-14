@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('cueanda').controller('StreamController',
-	['$scope','$resource', '$routeParams', '$timeout', '$http',
-	function($scope, $resource, $routeParams, $timeout, $http) {
+	['$scope','$resource', '$routeParams', '$timeout', '$http','$filter', '$sce',
+	function($scope, $resource, $routeParams, $timeout, $http, $filter, $sce) {
 		$scope.questionVariable = "Poo man it works!";
 		$scope.questionFilter = 'all';
 		$scope.categoryFilter = [];
@@ -26,6 +26,14 @@ angular.module('cueanda').controller('StreamController',
 		  }
 		});
 
+		var makeHtmlContentSafe = function(q){
+			q.question.mainInput = $sce.trustAsHtml($filter('mentionLinks')(q.question.mainInput));
+			q.answers = _.map(q.answers,function(answer){
+				return _.assign(answer, {mainInput:  $sce.trustAsHtml($filter('mentionLinks')(answer.mainInput))  });
+			});
+			return q;
+		}
+
 		var startListening = function(){
 			var chkQst = {}
 			if($scope.qst){ chkQst = _.clone($scope.qst,true); }
@@ -34,6 +42,7 @@ angular.module('cueanda').controller('StreamController',
 			Question.query(chkQst,function(questions){
 				var questionsNotMadeByUser = _.filter(questions,function(qst){ return _.indexOf($scope.questionsCreatedByUser,qst._id) === -1; });
 				questionsNotMadeByUser = _.map(questionsNotMadeByUser,function(qst){
+					qst = makeHtmlContentSafe(qst);
 					return _.assign(qst,{isNew:true});
 				});
 				$scope.newQuestionsSinceLoad = questionsNotMadeByUser;
@@ -148,6 +157,9 @@ angular.module('cueanda').controller('StreamController',
 			//var Q = new Question(qst);
 
 			Question.query($scope.qst,function(questions){
+
+				questions = _.map(questions,function(qst){ return makeHtmlContentSafe(qst);	});
+
 				if($scope.addingPage){
 					$scope.addingPage = false;
 					$scope.currentPage++;
@@ -174,6 +186,7 @@ angular.module('cueanda').controller('StreamController',
 	    var loadQuestions = function(qCriteria, cCriteria){
 
 	    	Question.query( qCriteria ,function(questions) {
+	    		questions = _.map(questions,function(qst){ return makeHtmlContentSafe(qst);	});
 	            $scope.questions = questions;
 	        });
 
@@ -220,6 +233,7 @@ angular.module('cueanda').controller('StreamController',
 				$("#questionModal").modal('hide');
 				$scope.newQuestionError = undefined;
 				$scope.newQuestion = undefined;
+				response[0] = makeHtmlContentSafe(response[0]);
 				$scope.questionsCreatedByUser.push(response[0]._id);
 				var rndResponses = [
 					"Cool Question Bro!",

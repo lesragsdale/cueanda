@@ -7,6 +7,7 @@ var mongoose = require('mongoose'),
     Question = mongoose.model('Question'),
     Comment = mongoose.model('Comment'),
     Follow = mongoose.model('Follow'),
+    User = mongoose.model('User'),
     Flag = mongoose.model('Flag'),
     Vote = mongoose.model('Vote'),
     Recommend = mongoose.model('Recommend'),
@@ -32,22 +33,27 @@ exports.question = function(req, res, next, id) {
 exports.create = function(req, res) {
     var question = new Question(req.body);
     question.user = req.user;
+    
+    getAllMentions(question).then(function(mentions){
+        console.log(mentions);
+        question.mentions = mentions;
+        question.save(function(err, qstn) {
+            if (err) {
+                console.log(err)
+                return res.send('users/signup', {
+                    errors: err.errors,
+                    question: question
+                });
+            } else {
+                Question.find({"_id":qstn._id}).sort('-created').populate('user', 'name username image').populate('category').exec(function(err, questions) {
+                    if (err) { console.log(err); }
+                    else{
+                        exports.appendVotes(req,res,questions);
+                    }
+                });
+            }
+        });
 
-    question.save(function(err, qstn) {
-        if (err) {
-            console.log(err)
-            return res.send('users/signup', {
-                errors: err.errors,
-                question: question
-            });
-        } else {
-            Question.find({"_id":qstn._id}).sort('-created').populate('user', 'name username image').populate('category').exec(function(err, questions) {
-                if (err) { console.log(err); }
-                else{
-                    exports.appendVotes(req,res,questions);
-                }
-            });
-        }
     });
 };
 
@@ -212,6 +218,7 @@ var buildCriteria = function(req){
                             //Keep these last to override other if needed   
                             if(req.query.userAsked){ criteria = [{user : req.query.userAsked }]; }    
                             if(req.query.userVoted){ criteria = [{ _id : { $in: pass.votedQuestions } }]; }
+                            if(req.query.userMentioned){ criteria = [{ mentions : req.query.userMentioned }]; }
 
                             criteria.push(privacyExp(req))
                             criteria = {$and: criteria}
@@ -366,6 +373,75 @@ var getVotedQuestionList = function(req, res, userId){
 
     });
 }
+
+var getAllMentions = function(q){
+    var deferred = Q.defer();
+
+    var fields = [q.question.mainInput];
+    _.each(q.answers,function(action){
+        fields.push(action.mainInput);
+    });
+
+    var mentions = [];
+    _.each(fields,function(field){
+        mentions = _.union(mentions, getListOfMentions(field) );
+    });
+
+    mentions = _.uniq(mentions);
+
+    User.find({username:{$in:mentions}}).exec(function(err, users){
+        var val = _.pluck(users,'_id')
+        val = _.map(val,function(v){ return v.toString(); });
+        deferred.resolve(val);
+    });
+
+    return deferred.promise;
+};
+
+var getListOfMentions = function(input) {
+
+    var calcEnd = function(text, start){
+
+        var cmpFnc = function (a, b) {
+          if (a < b){ return -1; }
+          if (a > b){  return 1; }
+          return 0;
+        };
+
+        var at = (text.substring(start+1).indexOf('@') !== -1 ? text.substring(start+1).indexOf('@')+1 : false);
+        var lookFor = [' ','?','.','!',','];
+        lookFor = _.map(lookFor,function(charac){
+            var dex = text.substring(start).indexOf(charac);
+            return (dex === -1?false:dex);
+        });
+        lookFor = _.compact(_.union([at],lookFor));
+        if(_.isEmpty(lookFor)){ return text.length; }
+        else{
+                lookFor.sort(cmpFnc);
+                var dex = lookFor[0];
+        }
+
+        return dex+start;
+    };
+
+    var currentSpot = 0;
+    var output = [];
+    while( input.substring(currentSpot).indexOf('@') > -1){
+        var pInput = input.substring(currentSpot);
+        //console.log(pInput);
+        var start = pInput.indexOf('@');
+        //console.log(start);
+        var end = calcEnd(pInput,start)
+        //console.log(end);
+        output.push(pInput.substring(start+1,end));
+        //console.log(output);
+        currentSpot += end;
+        //console.log(currentSpot);
+    }
+    console.log(input);
+    console.log(output);
+    return output;
+};
 
 var getUserFromReq = function(req){
     return (_.isUndefined(req.user)? undefined : req.user._id.toString());     

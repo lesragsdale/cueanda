@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('cueanda').controller('UserController',
-	['$scope','$resource', '$routeParams', '$sce', '$fileUploader',
-	function($scope,$resource,$routeParams, $sce, $fileUploader) {
+	['$scope','$resource', '$routeParams', '$sce', '$fileUploader', '$filter',
+	function($scope,$resource,$routeParams, $sce, $fileUploader, $filter) {
 
 		var User = $resource('user/:userName',
 									{ userName: '@username' }, 
@@ -26,6 +26,14 @@ angular.module('cueanda').controller('UserController',
             }
             $('.modal').modal('hide');
         });
+
+        var makeHtmlContentSafe = function(q){
+            q.question.mainInput = $sce.trustAsHtml($filter('mentionLinks')(q.question.mainInput));
+            q.answers = _.map(q.answers,function(answer){
+                return _.assign(answer, {mainInput:  $sce.trustAsHtml($filter('mentionLinks')(answer.mainInput))  });
+            });
+            return q;
+        }
 
         var setUploader = function(){
             
@@ -111,11 +119,18 @@ angular.module('cueanda').controller('UserController',
 
         var loadUserQuestions = function(){
             Question.query({ userAsked: $scope.userProfile._id },function(response){
+                response = _.map(response,function(qst){ return makeHtmlContentSafe(qst); });
                 $scope.askedQuestions = response
             });
 
             Question.query({ userVoted: $scope.userProfile._id },function(response){
+                response = _.map(response,function(qst){ return makeHtmlContentSafe(qst); });
                 $scope.votedQuestions = response
+            });
+
+            Question.query({ userMentioned: $scope.userProfile._id },function(response){
+                response = _.map(response,function(qst){ return makeHtmlContentSafe(qst); });
+                $scope.mentionedQuestions = response
             });
         }
 

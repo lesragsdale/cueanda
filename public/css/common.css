@@ -235,3 +235,25 @@ body .pagination>.disabled>span:active
 body .cloaked {
   visibility: hidden;
 }
+
+.typeahead img {
+  width: 30px;
+  height: 30px;
+  margin-right:5px;
+}
+
+.mention-link-no-modal, .mention-link {
+  color:#428bca;
+  cursor: pointer;
+}
+.mention-link-no-modal:hover, .mention-link:hover {
+  text-decoration: underline;
+  }
+
+.options .answer .mention-link-no-modal, .options .answer .mention-link {
+  color:#fff;
+  cursor: default;
+}
+.options .answer .mention-link-no-modal:hover, .options .answer .mention-link:hover {
+  text-decoration: none;
+  }

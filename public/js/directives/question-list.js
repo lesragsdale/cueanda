@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('cueanda').directive('questionList',['$resource', '$timeout', '$window',
-	function($resource, $timeout, $window) {
+angular.module('cueanda').directive('questionList',['$resource', '$timeout', '$window', '$filter', '$sce',
+	function($resource, $timeout, $window, $filter, $sce) {
 		return {
 			scope:{
 				questions: "=",
@@ -18,6 +18,20 @@ angular.module('cueanda').directive('questionList',['$resource', '$timeout', '$w
 				$timeout(function(){
 	            	$(".hasTooltip").tooltip();
 	            },500);
+
+	           	scope.$watch(attrs.questions, function(value) {
+	           		$timeout(function(){
+						$(".mention-link").on('click',function(event){
+							$('.modal').modal('hide');
+							var elmId = $(this).attr("id");
+							scope.disablePopup = true;
+							$timeout(function(){
+								window.location = "#!/user/"+elmId;
+							},500);								
+						});
+		            },10);
+				});
+
 
 				var Question = $resource(	'questions/:id',
 											{ id: '@id' }, 
@@ -51,12 +65,20 @@ angular.module('cueanda').directive('questionList',['$resource', '$timeout', '$w
 											}
 										);
 
-				$("#commentBox").mention({
-				    sensitive: true,
-				    users: _.map(_.filter(user.follows,function(follow){
-				    	return follow.follower._id === user._id;
-				    }), function(f){ return f.followee;})
-				});
+				if(user){
+					//get users that user follows
+					var mentionUsers = _.filter(user.follows,function(follow){ return follow.follower._id === user._id; });
+					//turn the image field into an actual image url
+					//remove username from name if it exists because it messes up mention.js
+					mentionUsers = _.map( mentionUsers, function(f){ 
+						f.followee.fakeName = f.followee.name.toLowerCase().replace(f.followee.username.toLowerCase(),'');
+						return  f.followee.image.substr(-4) === '.jpg'? f.followee : _.assign(f.followee,  {image:f.followee.image+'-sml.jpg'}   );
+					});
+					$("#commentBox").mention({
+					    queryBy: ['fakeName','username'],
+					    users: mentionUsers
+					});					
+				}
 
 				scope.currentPage = 0;
 				scope.itemsPerPage = 3;
@@ -190,6 +212,7 @@ angular.module('cueanda').directive('questionList',['$resource', '$timeout', '$w
 			    };
 
 			    scope.alreadyFlagged = function(){
+			    	if(!user){return;}
 			    	var flaggers = _.pluck(scope.activeQuestion.flags,'flagger');
 			    	return _.indexOf(flaggers,user._id) >= 0;
 			    };
@@ -276,8 +299,23 @@ angular.module('cueanda').directive('questionList',['$resource', '$timeout', '$w
 
 					comm.$save(function(response){
 						scope.activeQuestion.newComment = "";
+
+						var safeHtml = $sce.trustAsHtml($filter('mentionLinks')(response.body));
+						response = _.assign(response,{body:safeHtml});
+
 						alertify.log("Comment Saved", 'standard', 4000);
 						scope.activeQuestion.comments = _.union([response],scope.activeQuestion.comments);
+
+						$timeout(function(){
+							$(".comment-"+response._id+" .mention-link").on('click',function(event){
+								$('.modal').modal('hide');
+								var elmId = $(this).attr("id");
+								$timeout(function(){
+									window.location = "#!/user/"+elmId;
+								},500);								
+							});
+						},100);
+
 					});
 				}
 

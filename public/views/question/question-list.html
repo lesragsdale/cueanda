@@ -29,14 +29,14 @@
 
               <span style="font-size:1.5em;" class="pull-right {{catIcons[question.category.machine_name]}}" ></span>
             </div>
-            <div class="question-title">{{question.question.mainInput}}</div>
+            <div class="question-title" ng-bind-html="question.question.mainInput"></div>
             <div> <voting-bar votes="question.votes"></voting-bar> </div>
             <div class="answers" style="padding:5px;">
               <div class="answer opa side">
-                <div class="text">{{question.answers[0].mainInput}}</div>
+                <div class="text" ng-bind-html="question.answers[0].mainInput"></div>
               </div>
               <div class="answer opb side">
-                <div class="text">{{question.answers[1].mainInput}}</div>
+                <div class="text" ng-bind-html="question.answers[1].mainInput"></div>
               </div>
             </div>
           </div>
@@ -78,7 +78,7 @@
 		      		</div>
 		      		<div class="col-sm-10 col question-title">
 		      			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-		        	<h4 class="modal-title">{{activeQuestion.question.mainInput}}</h4>
+		        	<h4 class="modal-title" ng-bind-html="activeQuestion.question.mainInput"></h4>
 		        	<a href="" ng-click="goToUser(activeQuestion.user.username)">
 		        		<h6 class="question-username">{{activeQuestion.user.username}}</h6>
 		        	</a>
@@ -96,7 +96,7 @@
 
 			      		<div  ng-click="castVote($index)" class="answer answer-{{$index}} hover" ng-class="{'orange-butt':$index==0,'blue-butt':$index==1,'selected':activeQuestion.currentAnswer.answer == $index}" style="margin:10px 0px">
 			          		<span class="fa fa-check-circle"></span>
-			          		{{answer.mainInput}}
+			          		<span  ng-bind-html="answer.mainInput"></span>
 			          	</div>
 			      	</div>
 

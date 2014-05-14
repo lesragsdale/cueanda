@@ -17,6 +17,25 @@ angular.module('cueanda').directive('newQuestionFormSection',[ '$resource', '$ti
 				scope.showPreview = false;
 				scope.showUploadPreview = false;
 
+
+				/********** MENTION.JS *************/
+				$timeout(function(){
+					//get users that user follows
+					var mentionUsers = _.filter(user.follows,function(follow){ return follow.follower._id === user._id; });
+					//turn the image field into an actual image url
+					//remove username from name if it exists because it messes up mention.js
+					mentionUsers = _.map( mentionUsers, function(f){ 
+						f.followee.fakeName = f.followee.name.toLowerCase().replace(f.followee.username.toLowerCase(),'');
+						return  f.followee.image.substr(-4) === '.jpg'? f.followee : _.assign(f.followee,  {image:f.followee.image+'-sml.jpg'}   );
+					});
+					$("#"+scope.unique+'-input-field').mention({
+					    queryBy: ['fakeName','username'],
+					    users: mentionUsers
+					});	
+				});
+				/********** MENTION.JS *************/
+
+
 				$("button.has-tooltip").tooltip({
 				     'delay': { show: 1000, hide: 0 }
 				});
