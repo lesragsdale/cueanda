@@ -2,7 +2,21 @@
     padding-left:20px;
     margin-left:0
 }
-
+.index-banner {
+  background: url('../img/bg1.jpg') center center no-repeat;
+  background-size:cover;
+  padding:40px 10px;
+}
+.banner-box {
+  border-radius: 5px;
+  border:1px solid #000;
+  border-bottom-width:3px;
+  background-color: rgba(0,0,0,0.5);
+  padding:30px;
+  font-size:1.4em;
+  color:#fff;
+  text-shadow:1px 1px #000;
+}
 .navbar {
   border-radius: 0px;
   margin-bottom: 0px;
