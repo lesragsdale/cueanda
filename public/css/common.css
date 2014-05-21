@@ -3,17 +3,18 @@
     margin-left:0
 }
 .index-banner {
-  background: url('../img/bg1.jpg') center center no-repeat;
+  background: url('../img/bg2.jpg') center center no-repeat;
   background-size:cover;
   padding:40px 10px;
 }
 .banner-box {
   border-radius: 5px;
-  border:1px solid #000;
-  border-bottom-width:3px;
-  background-color: rgba(0,0,0,0.5);
+  /*border:1px solid #000;
+  border-bottom-width:3px;*/
+  background-color: rgba(0,0,0,0.3);
   padding:30px;
   font-size:1.4em;
+  text-align: justify;
   color:#fff;
   text-shadow:1px 1px #000;
 }
@@ -23,7 +24,11 @@
   border:none;
   background-color: #333;
 }
-
+.navbar-inverse .navbar-brand {
+    font-weight: bold;
+    color:#fff;
+    text-shadow:1px 2px #000;
+}
 .add-login-button {
   margin-bottom: 15px;
 }
@@ -32,7 +37,16 @@
     margin-top:20px;
     width:100%
 }
+.dark-input {
+  border:thin solid #333;
+  background-color:#525252;
+  color:#e0e0e0;
+  text-shadow:1px 1px #333;
+  -webkit-box-shadow: inset 1px 0px 3px #2E2E2E;
+  -moz-box-shadow: inset 1px 0px 3px #2E2E2E;
+  box-shadow: inset 1px 0px 3px #2E2E2E;
 
+}
 .categories {
   display:none;
 }
@@ -74,6 +88,9 @@ body .viewQuestion .buttons .btn.facebook {
   border-color: #2C4373
 }
 
+body a {
+  color:#fff;
+}
 
 footer {
     position:fixed;
@@ -200,7 +217,7 @@ footer p {
 }
 
 .form-group .help-block {
-  color:#525252;
+  color:#404040;
 }
 
 .question-stream-alert {

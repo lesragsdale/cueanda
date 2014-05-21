@@ -2,12 +2,12 @@
 	<form class="form-horizontal col-md-6" role="form" enctype="multipart/form-data" action="{{userUpdatePostUrl}}" method="POST">
 		<div class="form-group">
 			<label for="image">Display Name</label>
-			<input type="text" class="form-control" data-ng-model="userProfile.name" id="title" name="title" placeholder="Enter a display name..." required />
+			<input type="text" class="form-control dark-input" data-ng-model="userProfile.name" id="title" name="title" placeholder="Enter a display name..." required />
 			<p class="help-block">This will be displayed next to your username to tell visitors and friends your real name (or another name you would like to go by <span class="fa fa-smile-o"></span> ) </p>
 		</div>
 		<div class="form-group">
 			<label for="image">Bio</label>
-			<textarea class="form-control" data-ng-model="userProfile.bio" id="bio" name="bio" placeholder="Tell us about yourself..." >
+			<textarea class="form-control dark-input" data-ng-model="userProfile.bio" id="bio" name="bio" placeholder="Tell us about yourself..." >
 			</textarea>
 			<p class="help-block">This will be displayed in your profile to tell visitors and friends who you are</p>
 		</div>
@@ -31,7 +31,7 @@
 
 		
 		<div class="form-group">
-			<button type="submit" name="submit" class="btn btn-default" ng-click="updateUser()">Submit</button>
+			<button type="submit" name="submit" class="btn green-butt" ng-click="updateUser()">Submit</button>
 		</div>
 	</form>
 </section>

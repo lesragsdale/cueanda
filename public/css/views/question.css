@@ -2,7 +2,9 @@
 	margin-bottom: 20px;
 	position:relative;
 }
-
+.question-list-item a {
+	color:#428bca;	
+}
 .question-list-item,
 .question-list-item .answers {
 	display:table;
