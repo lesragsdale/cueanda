@@ -81,7 +81,7 @@ exports.update = function(req, res, next) {
     
     //var imgPath = req.files.image.
     //if(req.files)
-    res.redirect('/#!/user/'+req.user.username);
+    //res.redirect('/#!/user/'+req.user.username);
 };
 
 exports.uploadUsrImg = function(req, res, next){

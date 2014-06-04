@@ -35,7 +35,7 @@ angular.module('cueanda').controller('UserController',
             return q;
         }
 
-        var setUploader = function(){
+        $scope.setUploader = function(){
             
             var uploader = $scope.uploader = $fileUploader.create({
                 scope: $scope,
@@ -113,7 +113,7 @@ angular.module('cueanda').controller('UserController',
                 }
                 $scope.isFollowing = (t?true:false);
                 loadUserQuestions()
-                setUploader();
+                $scope.setUploader();
             });
         }
 
@@ -167,8 +167,30 @@ angular.module('cueanda').controller('UserController',
             }
         }
 
+        $scope.comparePass = function(){
+            if( $scope.manage.newPass === "" && $scope.manage.newPassConfirm === "" ){
+                $scope.managePassAlert = undefined;
+                return;
+            }
+
+            $("#manage-pass-alert").removeClass('alert-success');
+            $("#manage-pass-alert").removeClass('alert-danger');
+            if($scope.manage.newPass === $scope.manage.newPassConfirm){
+                $scope.managePassAlert = 'Match!';
+                $("#manage-pass-alert").addClass('alert-success');
+            }else{
+                $scope.managePassAlert = 'Passwords must match!';
+                $("#manage-pass-alert").addClass('alert-danger');
+            }
+            if( $scope.manage.newPass.length < 8 ){
+                $scope.managePassAlert = 'Passwords must be at least 8 characters';
+                $("#manage-pass-alert").addClass('alert-danger');
+            }
+        }
+
         $scope.updateUser  = function(){
-        	$scope.userProfile.$update(function(response){
+        	console.log($scope.userProfile);
+            $scope.userProfile.$update(function(response){
         		console.log('repsonse from user update:');
         		console.log(response);
         	})

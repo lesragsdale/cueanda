@@ -66,6 +66,10 @@ body {
     background-color:#737373;
     color:#3b3b3b;
 }
+body .viewQuestion a
+{
+  color:#428bca;
+}
 body .viewQuestion .buttons .btn {
   background-color: #e5e5e5;
   border: 1px solid #ccc;
@@ -288,3 +292,24 @@ body .cloaked {
 .options .answer .mention-link-no-modal:hover, .options .answer .mention-link:hover {
   text-decoration: none;
   }
+
+  /* NAV-TABS */
+.nav-tabs {
+  border-bottom:1px solid #525252;
+}
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus {
+  background-color: #525252;
+  color:#fff;
+  text-shadow:1px 1px #000;
+  border-color:#525252;
+}
+.nav>li>a {
+  color:#404040;
+}
+.nav>li>a:hover, .nav>li>a:focus {
+  background-color:#737373;
+  border-color:#737373;
+  color:#fff;
+  border-bottom-color:#525252;
+}
+
