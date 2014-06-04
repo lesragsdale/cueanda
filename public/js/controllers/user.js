@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('cueanda').controller('UserController',
-	['$scope','$resource', '$routeParams', '$sce', '$fileUploader', '$filter',
-	function($scope,$resource,$routeParams, $sce, $fileUploader, $filter, $q) {
+	['$scope','$resource', '$routeParams', '$sce', '$fileUploader', '$filter', '$q', '$timeout', '$http',
+	function($scope,$resource,$routeParams, $sce, $fileUploader, $filter, $q, $timeout, $http) {
 
 		var User = $resource('user/:userName',
 									{ userName: '@username' }, 
@@ -188,11 +188,24 @@ angular.module('cueanda').controller('UserController',
             }
         }
 
+        $scope.updateUserPassword = function(){
+            if( $scope.managePassAlert !== 'Match!' ){ $scope.updatePassError="You must provide a valid new password and confirm it."; return; }
+            if( _.isUndefined($scope.manage.currentPass) || $scope.manage.currentPass === "" ){ $scope.updatePassError="You must provide your current password"; return;  }
+
+            $http.post('user/'+$scope.userProfile.username, _.assign($scope.userProfile,{password:$scope.manage.newPass, currentPass:$scope.manage.currentPass}) )
+            .success(function(){  
+                $scope.manage = undefined;
+                alertify.log("Password updated!", 'standard', 4000);
+            })
+            .error(function(){
+                alertify.error("An error occurred when attempting to update your password!", 'standard', 4000);
+            });
+
+        } 
+
         $scope.updateUser  = function(){
-        	console.log($scope.userProfile);
             $scope.userProfile.$update(function(response){
-        		console.log('repsonse from user update:');
-        		console.log(response);
+        		alertify.log("User updated!", 'standard', 4000);
         	})
         }
 

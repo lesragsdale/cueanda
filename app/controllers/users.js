@@ -67,15 +67,33 @@ exports.update = function(req, res, next) {
     //console.log(req);
     //res.jsonp({title:"oh shit it worked"});
 
-    var user = {
+    /*var user = {
         bio: req.body.bio,
-        name: req.body.name
+        name: req.body.name,
+        password: req.body.password
     }
+
+    console.log(user);
 
     User.findByIdAndUpdate(req.user._id, user, function(err, user){
         if(!err){
             console.log('just updated the user..')           
             res.jsonp(_.omit(user,['_v','hashed_password','provider','salt']));
+        }
+    });*/
+
+    var usr = req.profile;
+
+    usr = _.extend(usr, req.body);
+
+    usr.save(function(err) {
+        if (err) {
+            return res.send('users/signup', {
+                errors: err.errors,
+                router: router
+            });
+        } else {
+            res.jsonp(usr);
         }
     });
     

@@ -18,6 +18,7 @@ angular.module('cueanda').controller('StreamController',
 		$scope.questionsCreatedByUser = [];
 		$( window ).scroll(function() {
 		  var eoq = document.getElementById("end-of-questions");
+		  if(!eoq){ return; }
 		  if( eoq.getBoundingClientRect().bottom - window.innerHeight < 5 ){
 		  	if(!$scope.addingPage && !$scope.currentSelectEmpty){
 		  		$scope.addingPage = true;

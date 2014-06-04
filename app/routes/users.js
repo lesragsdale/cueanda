@@ -5,6 +5,19 @@ var users = require('../controllers/users');
 //var bodyParser = require('../../node_modules/express/node_modules/connect/lib/middleware/bodyParser')
 var connect = require('../../node_modules/express/node_modules/connect')
 
+var isAdminOrSelf = function(req, res, next) {
+    //doACheck
+    if(
+        req.user.isAdmin || // You're admin, do as you wish
+        (  req.user.username === req.profile.username && !req.body.password ) || //you're you and you're not messing with the password
+        (  req.user.username === req.profile.username && req.body.password  && req.profile.authenticate(req.body.currentPass)  ) //you're you and you ARE messing with the password
+    )
+    { next() }
+    else{
+        return res.send(401, 'User is not authorized');
+    }
+};
+
 module.exports = function(app, passport) {
 
     app.get('/signin', users.signin);
@@ -13,7 +26,8 @@ module.exports = function(app, passport) {
     app.get('/userip', users.userip);
     app.get('/users/me', users.me);
     app.get('/user/:userId', users.show);
-    app.post('/user/:userId',connect.bodyParser(),users.update)
+
+    app.post('/user/:userId',connect.bodyParser(), isAdminOrSelf, users.update)
     //uploadUsrImg
     app.post('/user/:userId/img',connect.bodyParser(),users.uploadUsrImg)
     // Setting up the users api
