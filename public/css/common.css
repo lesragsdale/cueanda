@@ -313,3 +313,39 @@ body .cloaked {
   border-bottom-color:#525252;
 }
 
+/****************** FAQ PAGE ********************/
+
+.faq-page .question-title {
+  color:#fff;
+  font-weight:bold;
+  text-shadow:1px 1px #000;
+}
+.question-title li{
+  cursor: pointer;
+  margin-bottom:15px;
+}
+.row.question-title {
+  background-color: #575757;
+  margin-top: -20px;
+  padding: 20px 10px;
+  border-radius:0px 0px 10px 10px;
+  margin-bottom: 20px;
+}
+.faq-page .answer {
+  padding:0px 15px;
+  margin-bottom:20px;
+}
+
+/************ TERMS / POLICY *********************/
+
+.policies .title {
+  font-weight: bold;
+  margin:10px 0px;
+  font-size:1.2em;
+}
+.policies .title.one-dent {
+  margin-bottom: 0px;
+}
+.policies .one-dent {
+  padding-left:30px;
+}

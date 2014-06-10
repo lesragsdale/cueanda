@@ -31,8 +31,14 @@ angular.module('cueanda').config(['$routeProvider',
         when('/flagged', {
             templateUrl: 'views/question/flagged.html'
         }).
-        when('/about', {
-            templateUrl: 'views/about.html'
+        when('/faq', {
+            templateUrl: 'views/faq.html'
+        }).
+        when('/privacy', {
+            templateUrl: 'views/privacy.html'
+        }).
+        when('/terms', {
+            templateUrl: 'views/terms.html'
         }).
         when('/', {
             templateUrl: 'views/index.html'
