@@ -1,5 +1,5 @@
 body.newLayout {
-    background-color:#f1f1f1;
+    background-color:#f8f8f8;
     color:#333;
 }
 
@@ -8,7 +8,7 @@ body.newLayout a {
 }
 
 body.newLayout .question-info-icon {
-	color:#bababa;
+	color:#ccc;
 	text-shadow:1px 1px #fff;
 }
 
@@ -50,7 +50,7 @@ body.newLayout .question-list-item .right:after {
 }
 
 body.newLayout .categories .category {
-	background-color: #f1f1f1;
+	background-color: #f8f8f8;
 	text-shadow: none;
 	color:#575757;
 	border-left:none;
