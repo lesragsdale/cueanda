@@ -12,7 +12,10 @@ var mongoose = require('mongoose'),
  */
 var UserSchema = new Schema({
     name: String,
-    email: String,
+    email: { 
+        type: String,
+        unique: true
+    },
     bio: String,
     isAdmin: Boolean,
     username: {
