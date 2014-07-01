@@ -11,6 +11,15 @@ angular.module('cueanda.system').controller('HeaderController', ['$scope', 'Glob
         'link': 'articles/create'
     }];
 
+    $scope.enableNewCss = function(){
+        $('body').toggleClass('newLayout');
+        if($('body').hasClass('newLayout')){
+            $('input').removeClass('dark-input');
+        }else{
+            $('input').addClass('dark-input');
+        }
+    };
+
     $scope.path = 'http://'+$location.host()+':'+$location.port()+'/';
     
     $scope.isCollapsed = false;
