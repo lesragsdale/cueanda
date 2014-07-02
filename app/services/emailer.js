@@ -4,6 +4,7 @@ var sendgrid_username   = process.env.SENDGRID_USERNAME;
 var sendgrid_password   = process.env.SENDGRID_PASSWORD;
 var sendgrid   = require('sendgrid')(sendgrid_username, sendgrid_password);
 var fromEmail = 'Cueanda.com';
+var siteBaseUrl = 'http://cueanda.herokuapp.com/';
 
 exports.sendAccountCreateEmail = function(emailInfo) {
     var email      = new sendgrid.Email();
@@ -41,8 +42,8 @@ exports.sendPasswordResetRequestEmail = function(emailInfo) {
     email.addTo(to);
     email.setFrom(fromEmail);
     email.setSubject('Cueanda password reset request');
-    email.setText('Hello '+name+',\n\nYou\'ve requested a password reset. In order to complete this request please go to the link below to verify your email address.:\n\nhttp://cueanda.com/users/resest-password?token='+token);
-    email.setHtml('Hello %name%,<br><br>You\'ve requested a password reset. In order to complete this request please go to the link below to verify your email address.:<br><br>http://cueanda.com/users/resest-password?token=%token%');
+    email.setText('Hello '+name+',\n\nYou\'ve requested a password reset. In order to complete this request please go to the link below to verify your email address.:\n\n'+siteBaseUrl+'users/resest-password?token='+token);
+    email.setHtml('Hello %name%,<br><br>You\'ve requested a password reset. In order to complete this request please go to the link below to verify your email address.:<br><br>'+siteBaseUrl+'users/resest-password?token=%token%');
     email.addSubstitution("%name%", name);
     email.addSubstitution("%token%", token);
     email.addHeader('X-Sent-Using', 'SendGrid-API');
