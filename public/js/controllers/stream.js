@@ -99,7 +99,7 @@ angular.module('cueanda').controller('StreamController',
 					"draft_central":"glyphicon glyphicon-tasks",
 					"drop_keep":"glyphicon glyphicon-trash",
 					"head_head":"glyphicon glyphicon-retweet",
-					"fashion":"fa fa-cube",
+					"fashion":"fa fa-shopping-cart",
 					"start_sit":"glyphicon glyphicon-random"
 				};
 
