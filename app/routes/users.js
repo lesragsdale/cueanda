@@ -22,14 +22,19 @@ module.exports = function(app, passport) {
 
     app.get('/signin', users.signin);
     app.get('/signup', users.signup);
+    app.get('/forgot-password', users.forgotPass);
+    app.get('/users/password-reset', users.PassReset);
+    app.get('/user/password-reset', users.PassResetPage);
     app.get('/signout', users.signout);
     app.get('/userip', users.userip);
     app.get('/users/me', users.me);
     app.get('/user/:userId', users.show);
 
-    app.post('/user/:userId',connect.bodyParser(), isAdminOrSelf, users.update)
+    app.post('/users/requestPasswordToken', users.requestPassResetToken);
+
+    app.post('/user/:userId',connect.bodyParser(), isAdminOrSelf, users.update);
     //uploadUsrImg
-    app.post('/user/:userId/img',connect.bodyParser(),users.uploadUsrImg)
+    app.post('/user/:userId/img',connect.bodyParser(),users.uploadUsrImg);
     // Setting up the users api
     app.post('/users', users.create);
 

@@ -5,11 +5,16 @@
  */
 var mongoose = require('mongoose'),
     User = mongoose.model('User'),
+    PassResReq = mongoose.model('PasswordResetRequest'),
     Follow = mongoose.model('Follow'),
+    uuid = require('node-uuid'),
+    moment = require('moment'),
     AWS = require('aws-sdk'),
     fs = require('fs'),
     _ = require('lodash'),
+    emailer = require('../services/emailer'),
     gm = require('gm'),
+    generatePassword = require('password-generator'),
     imageMagick = gm.subClass({ imageMagick: true });
 
 
@@ -22,6 +27,81 @@ var s3 = new AWS.S3();
  */
 exports.authCallback = function(req, res) {
     res.redirect('/');
+};
+
+exports.PassReset = function(req, res) {
+    if(_.isUndefined(req.query.token)){
+        res.redirect('user/password-reset?missingToken=true');
+    }else{
+
+        PassResReq.findOne({token:req.query.token}).exec(function(err,prr){
+            if(!prr){ res.redirect('user/password-reset?invalidToken=true'); }
+            else if( moment().valueOf() - prr.created > 2592000000 ){
+                res.redirect('user/password-reset?invalidToken=true');
+            }else{
+
+                var genPass = generatePassword(10, false);
+
+                User.findOne({email: prr.email}).exec(function(err, user) {
+                    if(err || !user){
+                        res.redirect('user/password-reset?issueFindingUser=true');
+                    }else{
+                        emailer.sendPasswordResetEmail({to:prr.email,name:user.name,password:genPass});
+
+                        user.password = genPass;
+                        console.log(genPass)
+                        user.save(function(err,newUser){
+                            res.redirect('user/password-reset?success=true');
+                        });
+                    }
+                });
+            }
+        });
+    }
+
+};
+
+exports.requestPassResetToken = function(req, res) {
+    User.findOne({email: req.body.email}).exec(function(err, user) {
+        if(err || !user){
+            res.redirect('/forgot-password?fail=true');
+        }else{
+            var ptoken = uuid.v1();
+            var emailObject = {
+                to: req.body.email,
+                name: user.name,
+                token: ptoken
+            };
+            emailer.sendPasswordResetRequestEmail(emailObject);
+
+            var prr = new PassResReq({email:req.body.email,token: ptoken });
+            prr.save(function(err, passrr) { 
+                res.redirect('/forgot-password?success=true');
+            });
+        }
+    });
+};
+
+/**
+ * Show forgot pass form
+ */
+exports.PassResetPage = function(req, res) {
+    res.render('users/passwordReset', {
+        title: 'PasswordReset',
+        message: req.flash('error'),
+        query: req.query
+    });
+};
+
+/**
+ * Show forgot pass form
+ */
+exports.forgotPass = function(req, res) {
+    res.render('users/forgotPass', {
+        title: 'ForgotPassword',
+        message: req.flash('error'),
+        query: req.query
+    });
 };
 
 /**
@@ -220,7 +300,7 @@ exports.create = function(req, res, next) {
             switch (err.code) {
                 case 11000:
                 case 11001:
-                    message = 'Username already exists';
+                    message = 'Username or Email already exists';
                     break;
                 default:
                     message = 'Please fill all the required fields';

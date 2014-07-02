@@ -1,0 +1,14 @@
+extends auth
+
+block auth
+  div.alert.alert-info Submit your email address and we will send you an email with instructions about how to reset your password.
+  - if( locals.query.success )
+      div.alert.alert-success Your password reset request has been submitted. Please check your email.
+  - if( locals.query.fail )
+      div.alert.alert-danger An issue occurred when attempting to fulfil your password reset request. Please ensure that you've provided the correct email address.
+  form.signin(action="/users/requestPasswordToken", method="post")
+    .form-group
+      label.control-label(for='email') Email
+      input#email.form-control(type='text', name="email", placeholder='Email')
+    .form-group
+      button.btn.green-butt(type=submit) Submit Email

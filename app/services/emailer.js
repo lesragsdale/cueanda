@@ -30,6 +30,31 @@ exports.sendAccountCreateEmail = function(emailInfo) {
     });
 };
 
+exports.sendPasswordResetRequestEmail = function(emailInfo) {
+    var email      = new sendgrid.Email();
+
+    //variables
+    var to = emailInfo.to;
+    var name = emailInfo.name
+    var token = emailInfo.token
+
+    email.addTo(to);
+    email.setFrom(fromEmail);
+    email.setSubject('Cueanda password reset request');
+    email.setText('Hello '+name+',\n\nYou\'ve requested a password reset. In order to complete this request please go to the link below to verify your email address.:\n\nhttp://cueanda.com/users/resest-password?token='+token);
+    email.setHtml('Hello %name%,<br><br>You\'ve requested a password reset. In order to complete this request please go to the link below to verify your email address.:<br><br>http://cueanda.com/users/resest-password?token=%token%');
+    email.addSubstitution("%name%", name);
+    email.addSubstitution("%token%", token);
+    email.addHeader('X-Sent-Using', 'SendGrid-API');
+    email.addHeader('X-Transport', 'web');
+    //email.addFile({path: './gif.gif', filename: 'owl.gif'});
+
+    sendgrid.send(email, function(err, json) {
+      if (err) { return console.error(err); }
+      console.log(json);
+    });
+};
+
 
 exports.sendPasswordResetEmail = function(emailInfo) {
     var email      = new sendgrid.Email();
