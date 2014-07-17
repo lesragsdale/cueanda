@@ -35,6 +35,8 @@ angular.module('cueanda').controller('UserController',
             return q;
         }
 
+        var imageError = false;
+
         $scope.setUploader = function(){
             
             var uploader = $scope.uploader = $fileUploader.create({
@@ -46,7 +48,12 @@ angular.module('cueanda').controller('UserController',
             uploader.filters.push(function(item /*{File|HTMLInputElement}*/) {
                 var type = uploader.isHTML5 ? item.type : '/' + item.value.slice(item.value.lastIndexOf('.') + 1);
                 type = '|' + type.toLowerCase().slice(type.lastIndexOf('/') + 1) + '|';
-                return '|jpg|png|jpeg|bmp|gif|'.indexOf(type) !== -1;
+                if('|jpg|png|jpeg|bmp|'.indexOf(type) === -1 && !imageError){
+                    imageError = true;
+                    alertify.error("Image must be of type jpg, png, jpeg, or bmp.", 'standard', 4000);
+                    $timeout(function(){ imageError = false; },1000);
+                };
+                return '|jpg|png|jpeg|bmp|'.indexOf(type) !== -1;
             });
             // REGISTER HANDLERS
             uploader.bind('afteraddingfile', function (event, item) {
