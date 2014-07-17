@@ -153,6 +153,7 @@ angular.module('cueanda').directive('questionList',['$resource', '$timeout', '$w
 
 			    scope.isQuestionRecommended = function(question){
 			    	if(!question.recommendations){ return false; }
+			    	if(_.isUndefined(user)){ return false; }
 
 			    	var val = _.find(question.recommendations,function(v){
 			    		return v.recommendee._id == user._id;

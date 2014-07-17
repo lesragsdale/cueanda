@@ -37,7 +37,7 @@
     margin-top:20px;
     width:100%
 }
-.dark-input {
+/*.dark-input {
   border:thin solid #333;
   background-color:#525252;
   color:#e0e0e0;
@@ -46,7 +46,7 @@
   -moz-box-shadow: inset 1px 0px 3px #2E2E2E;
   box-shadow: inset 1px 0px 3px #2E2E2E;
 
-}
+}*/
 .categories {
   display:none;
 }
@@ -307,9 +307,9 @@ body .cloaked {
   color:#404040;
 }
 .nav>li>a:hover, .nav>li>a:focus {
-  background-color:#737373;
-  border-color:#737373;
-  color:#fff;
+  background-color:#ccc;
+  border-color:#ccc;
+  color:#333;
   border-bottom-color:#525252;
 }
 
