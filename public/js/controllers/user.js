@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('cueanda').controller('UserController',
-	['$scope','$resource', '$routeParams', '$sce', '$fileUploader', '$filter', '$q', '$timeout', '$http',
-	function($scope,$resource,$routeParams, $sce, $fileUploader, $filter, $q, $timeout, $http) {
+	['$scope','$resource', '$routeParams', '$sce', '$fileUploader', '$filter', '$q', '$timeout', '$http', '$location',
+	function($scope,$resource,$routeParams, $sce, $fileUploader, $filter, $q, $timeout, $http, $location) {
 
 		var User = $resource('user/:userName',
 									{ userName: '@username' }, 
@@ -102,6 +102,9 @@ angular.module('cueanda').controller('UserController',
 
         }
 
+        $scope.goToUser = function(name){
+            $location.path('user/'+name);
+        };
 
         $scope.loadUserData =function(){
             User.get({
