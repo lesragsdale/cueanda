@@ -48,7 +48,7 @@
 
         <!-- only show if count > page limit -->
         <div  ng-show="usePager" style="text-align:center">
-	        <ul class="pagination pagination-sm">
+	        <ul class="pagination pagination-sm" ng-show="questions.length > 0">
 	        	  <li ng-class="{'disabled':currentPage==0}" ng-click="changePage(-1)"><span>&laquo;</span></li>
 	        	 <!-- <li ng-show="currentPage > 5 && (questions.length/itemsPerPage) > 6" class="spacer"><span>. . .</span></li>
 	        	  	<li ng-repeat="i in getNumber() track by $index" ng-class="{'active':$index==currentPage}" ng-click="setPage($index)" ng-hide="(currentPage - $index > 1 || $index - currentPage > 1) && (questions.length/itemsPerPage) > 6 ">
@@ -59,6 +59,7 @@
 	        	  <li class="spacer"><span> {{currentPage+1}} / {{questions.length/itemsPerPage | ceil}} </span></li>
 				  <li ng-class="{'disabled': (currentPage + 1) >= (questions.length/itemsPerPage)}" ng-click="changePage(1)"><span>&raquo;</span></li>
 	        </ul>
+	        <div ng-hide="questions.length > 0" style="font-style:italic;color:#888;background-color:#e0e0e0;padding:10px;text-align:center;border-radius:5px;">No questions...</div>
         </div>
 
 
