@@ -6,7 +6,7 @@
 				{{userProfile.username}}
 				<span class="muted">({{userProfile.name}})</span>
 			</div>
-			<button ng-show="userProfile.username != currentUser.username && currentUser" class="btn" ng-click="toggleFollow()" ng-class="{'green-butt':!isFollowing,'red-butt':isFollowing}">{{(isFollowing?"Un-Follow Me":"Follow Me")}}</button>
+			<button ng-show="userProfile.username != currentUser.username && currentUser" class="btn" ng-click="toggleFollow()" ng-class="{'green-butt':!isFollowing,'red-butt':isFollowing}">{{(isFollowing?"UnFollow Me":"Follow Me")}}</button>
 			<a ng-show="userProfile.username == currentUser.username" href="#!/user/{{userProfile.username}}/edit">
 				<button class="btn blue-butt">Manage Account</button>
 			</a>

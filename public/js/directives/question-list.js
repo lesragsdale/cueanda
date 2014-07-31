@@ -73,7 +73,6 @@ angular.module('cueanda').directive('questionList',['$resource', '$timeout', '$w
 
 				var setMentionLinkClickAction = function(){
 					$timeout(function(){
-						console.log("MENTIONLINKFUNCCALL!");
 						$(".mention-link").on('click',function(event){
 							$('.modal').modal('hide');
 							var elmId = $(this).attr("id");
@@ -378,7 +377,7 @@ angular.module('cueanda').directive('questionList',['$resource', '$timeout', '$w
 							return rec;
 						});
 
-						alertify.log("Recommendations Sent!", 'standard', 4000);
+						alertify.log("Recommendation sent!", 'standard', 4000);
 						$(".recommend-well").removeClass("open");
 
 						$timeout(function(){
