@@ -59,8 +59,9 @@
 	        	  <li class="spacer"><span> {{currentPage+1}} / {{questions.length/itemsPerPage | ceil}} </span></li>
 				  <li ng-class="{'disabled': (currentPage + 1) >= (questions.length/itemsPerPage)}" ng-click="changePage(1)"><span>&raquo;</span></li>
 	        </ul>
-	        <div ng-hide="questions.length > 0" style="font-style:italic;color:#888;background-color:#e0e0e0;padding:10px;text-align:center;border-radius:5px;">No questions...</div>
         </div>
+
+        <div ng-hide="questions.length > 0" style="font-style:italic;color:#888;background-color:#e0e0e0;padding:10px;text-align:center;border-radius:5px;">No questions...</div>
 
 
         <div class="modal fade viewQuestion" id="{{'viewQuestion'+uniqueName}}">
