@@ -108,7 +108,7 @@
 		      </div>
 		        <div ng-show="activeQuestion.currentAnswer" class="extra-functions">
 		          <div class="buttons">
-		            <button class="btn btn-sm" ng-click="toggleRecommendSection()" ng-show="currentUser.follows.length > 0" data-toggle="tooltip" data-placement="bottom" title="Recommend this question to a friend"> <span class="glyphicon glyphicon-thumbs-up"></span> </button>
+		            <button class="btn btn-sm" ng-click="toggleRecommendSection()" ng-show="currentUser.follows.length > 0 && !activeQuestion.isPrivate" data-toggle="tooltip" data-placement="bottom" title="Recommend this question to a friend"> <span class="glyphicon glyphicon-thumbs-up"></span> </button>
 
 		            <button class="btn btn-sm" ng-show="currentUser.follows.length > 0 && !activeQuestion.allVotes" data-toggle="tooltip" ng-click="filterVotes(true)" data-placement="bottom" title="Toggle the filtering of votes to be only from people you follow"> <span class="fa fa-group"></span> </button>
 
