@@ -4,6 +4,7 @@ angular.module('cueanda').controller('SingleQuestionController',
 	['$scope', '$location', '$http', '$routeParams', '$timeout', '$window', '$filter', '$sce',
 	function($scope, $location, $http, $routeParams, $timeout, $window, $filter, $sce) {
 		$scope.currentUser = user;
+		$scope.uniqueName = 'rq';
 
 		$scope.loadQuestion = function(){
 			console.log($routeParams);
@@ -42,7 +43,9 @@ angular.module('cueanda').controller('SingleQuestionController',
 				//END OF CODE REPEATED IN question-list.js
 
 
-			});
+			}).error(function(data, status, headers, config) {
+		      $scope.errorLoadingQuestion = true;
+		    });
 		};
 
 		var compareUserAnswer = function(vote){
@@ -53,8 +56,7 @@ angular.module('cueanda').controller('SingleQuestionController',
 				ret = vote.anon == unAuthUserIp;
 			}
 			return ret;
-		}
-		
+		};	
 		
 
 	}]	

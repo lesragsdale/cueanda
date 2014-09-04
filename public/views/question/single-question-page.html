@@ -1,3 +1,4 @@
 <section data-ng-controller="SingleQuestionController" class="container viewQuestion" data-ng-init="loadQuestion()">
-	<question active-question="activeQuestion"></question>
+	<div class="alert alert-danger" ng-show="errorLoadingQuestion"><span class="fa fa-warning fa-2x" style="margin-right:15px;"></span> An error occurred when attempting to load this question. It seems this question may have been deleted. Feel free to <a href="#!/list">answer a different question</a>!</div>
+	<question active-question="activeQuestion" unique-name="'rq'" ng-show="!errorLoadingQuestion"></question>
 </section>

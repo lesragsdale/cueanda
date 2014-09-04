@@ -1,10 +1,11 @@
 'use strict';
 
-angular.module('cueanda').directive('question',['$resource', '$timeout', '$window', '$filter', '$sce',
-	function($resource, $timeout, $window, $filter, $sce) {
+angular.module('cueanda').directive('question',['$resource', '$timeout', '$window', '$filter', '$sce', '$location',
+	function($resource, $timeout, $window, $filter, $sce, $location) {
 		return {
 			scope: {
-				activeQuestion: "="
+				activeQuestion: "=",
+				uniqueName: "="
 			},
 			restrict: 'E',
 			replace: true,
@@ -13,6 +14,11 @@ angular.module('cueanda').directive('question',['$resource', '$timeout', '$windo
 
 				var Vote = $resource(	'vote/:questionId/:answerOption',
 											{ questionId: '@question',answerOption: '@answer' }, 
+											{ update: { method: 'PUT' } }
+										);
+
+				var Question = $resource(	'questions/:id',
+											{ id: '@id' }, 
 											{ update: { method: 'PUT' } }
 										);
 
@@ -55,8 +61,13 @@ angular.module('cueanda').directive('question',['$resource', '$timeout', '$windo
 			    	})
 			    };
 
+			    scope.toggleModal = function(id){
+					$('#'+id+scope.uniqueName).modal('toggle');
+				}
+
 			    scope.alreadyFlagged = function(){
 			    	if(!user){return;}
+			    	if(!scope.activeQuestion){return;}
 			    	var flaggers = _.pluck(scope.activeQuestion.flags,'flagger');
 			    	return _.indexOf(flaggers,user._id) >= 0;
 			    };
@@ -164,14 +175,22 @@ angular.module('cueanda').directive('question',['$resource', '$timeout', '$windo
 
 					qToDelete.$delete(function(reponse){
 						//scope.toggleModal('deleteQuestion');
+
 						$('.modal').modal('hide');
 
-						$('.qli-'+scope.questionToDelete).fadeOut(500,function(){
+						if($location.path() == '/list'){
+
+							$('.qli-'+scope.questionToDelete).fadeOut(500,function(){
+								alertify.log("Question Deleted", 'standard', 4000);
+								/*$scope.questions = _.reject(question,function(){
+									return question._id == scope.questionToDelete;
+								})*/
+							});
+
+						}else{
+							$location.path('list');
 							alertify.log("Question Deleted", 'standard', 4000);
-							$scope.questions = _.reject(question,function(){
-								return question._id == scope.questionToDelete;
-							})
-						});
+						}
 						
 
 						

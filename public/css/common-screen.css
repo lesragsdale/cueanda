@@ -2,6 +2,10 @@
 	width:750px;
 }
 
+.viewQuestion .modal-dialog.modal-xs {
+	width:600px;
+}
+
 body .question-modal-top-row .user-pocket {
 	text-align: center;
 	background-color: #f0f0f0;

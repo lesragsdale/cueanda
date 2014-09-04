@@ -92,6 +92,12 @@ body .viewQuestion .buttons .btn.facebook {
   border-color: #2C4373
 }
 
+body .viewQuestion .buttons .btn.del {
+  color:#fff;
+  background-color: #eb504f;
+  border-color: #993535
+}
+
 body a {
   color:#fff;
 }

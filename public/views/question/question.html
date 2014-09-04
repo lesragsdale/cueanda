@@ -8,7 +8,7 @@
   			</a>
   			<h6 class="question-date" style="margin-bottom:15px;font-size:.65em;color:#888">{{activeQuestion.created | ago}}</h6>
 
-  			<button class="btn btn-xs red-butt" style="margin-bottom:10px" ng-show="activeQuestion.user._id == currentUser._id" ng-click="prepareToDelete(activeQuestion._id)"> <span class="fa fa-times"></span> Delete</button>
+  			<!--button class="btn btn-xs red-butt" style="margin-bottom:10px" ng-show="activeQuestion.user._id == currentUser._id" ng-click="prepareToDelete(activeQuestion._id)"> <span class="fa fa-times"></span> Delete</button -->
   		</div>
   		<div class="col-sm-10 col question-title">
   			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -38,7 +38,7 @@
 
   	<div ng-show="activeQuestion.currentAnswer"> <voting-bar votes="activeQuestion.votes"></voting-bar> </div>
   </div>
-    <div ng-show="activeQuestion.currentAnswer" class="extra-functions">
+    <div class="extra-functions">
       <div class="buttons">
         <button class="btn btn-sm" ng-click="toggleRecommendSection()" ng-show="currentUser.follows.length > 0 && !activeQuestion.isPrivate" data-toggle="tooltip" data-placement="bottom" title="Recommend this question to a friend"> <span class="glyphicon glyphicon-thumbs-up"></span> </button>
 
@@ -51,6 +51,8 @@
         <button class="btn btn-sm twitter" ng-click="openWindow('https://twitter.com/share?url=[shortUrl]&via=AskCueanda&text=[questionTitle]','sharer','toolbar=0,status=0,width=580,height=325')" ng-hide="activeQuestion.isPrivate || !activeQuestion.shortUrl" data-toggle="tooltip" data-placement="bottom" title="Tweet this question!" > <span class="fa fa-twitter"></span> </button>
 
         <button class="btn btn-sm facebook" ng-click="openWindow('http://www.facebook.com/sharer.php?s=100&p[title]=TestmoreTOGOHERE&p[summary]=[questionTitle]&p[url]=[shortUrl]&p[images][0]=https://www.foobar.com/thumb.gif','sharer','toolbar=0,status=0,width=580,height=325')" ng-hide="true" data-toggle="tooltip" data-placement="bottom" title="Share this question on Facebook!"> <span class="fa fa-facebook"></span> </button>
+
+        <button class="btn btn-sm del" ng-show="activeQuestion.user._id == currentUser._id" ng-click="prepareToDelete(activeQuestion._id)" data-toggle="tooltip" data-placement="bottom" title="Delete this question"> <span class="fa fa-times"></span> </button>
 
       </div>
       <div class="well recommend-well">
@@ -73,4 +75,8 @@
   	</div>
 
   </div>
+
+  <!-- Modals -->
+  <div ng-include="'views/partial/question-modals.html'"></div>
+
 </div>

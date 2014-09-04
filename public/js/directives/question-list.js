@@ -88,10 +88,6 @@ angular.module('cueanda').directive('questionList',['$resource', '$timeout', '$w
 					scope.currentPage = number;                 
 				}
 
-				scope.toggleModal = function(id){
-					$('#'+id+scope.uniqueName).modal('toggle');
-				}
-
 				scope.catIcons = {
 					"business_finance": "fa fa-money",
 					"entertainment": "fa fa-ticket",
@@ -222,6 +218,7 @@ angular.module('cueanda').directive('questionList',['$resource', '$timeout', '$w
 						$("#viewQuestion"+scope.uniqueName+" .buttons .btn").tooltip();
 					}else{scope.disablePopup = false;}
 				}
+
 
 			}
 		};
