@@ -4,6 +4,7 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
+    request = require('request'),
     Question = mongoose.model('Question'),
     Comment = mongoose.model('Comment'),
     Follow = mongoose.model('Follow'),
@@ -19,10 +20,13 @@ var mongoose = require('mongoose'),
  * Find Question by id
  */
 exports.question = function(req, res, next, id) {
+    console.log('this is me trying to load  the qstn');
+    console.log(id);
     Question.load(id, function(err, question) {
         if (err) return next(err);
         if (!question) return next(new Error('Failed to load question ' + id));
-        req.question = question;
+        console.log(question)
+        req.questionObject = question;
         next();
     });
 };
@@ -45,6 +49,7 @@ exports.create = function(req, res) {
                     question: question
                 });
             } else {
+                getShortUrl(qstn);
                 Question.find({"_id":qstn._id}).sort('-created').populate('user', 'name username image').populate('category').exec(function(err, questions) {
                     if (err) { console.log(err); }
                     else{
@@ -56,6 +61,27 @@ exports.create = function(req, res) {
 
     });
 };
+
+var getShortUrl = function(q){
+    request( {
+                url: 'https://www.googleapis.com/urlshortener/v1/url'+ ( process.env.GOOGLE_SHORTURL_KEY ? '?key='+process.env.GOOGLE_SHORTURL_KEY : ''), 
+                method:"POST",
+                json: {"longUrl": "http://www.cueanda.com/#!/qstn/"+q._id.toString()}
+            } , 
+            function (error, response, body) {
+              console.log('got a response from google');
+              console.log(body);
+              //console.log(response);
+              if (!error && response.statusCode == 200) {
+                //var url = JSON.parse(body);
+                var url = body.id.substring(7);
+                Question.findByIdAndUpdate(q._id, { shortUrl: url }, function(err){
+                    console.log(err);
+                });
+              }
+            });
+
+}
 
 /**
  * Update a question
@@ -131,7 +157,8 @@ exports.destroy = function(req, res) {
  * Show an question
  */
 exports.show = function(req, res) {
-    res.jsonp(req.question);
+    req.query.justOneQuestion = req.question;
+    exports.all(req, res);
 };
 
 /**
@@ -219,6 +246,7 @@ var buildCriteria = function(req){
                             if(req.query.userAsked){ criteria = [{user : req.query.userAsked }]; }    
                             if(req.query.userVoted){ criteria = [{ _id : { $in: pass.votedQuestions } }]; }
                             if(req.query.userMentioned){ criteria = [{ mentions : req.query.userMentioned }]; }
+                            if(req.query.justOneQuestion){ criteria = [{ _id: req.query.justOneQuestion}]; }
 
                             criteria.push(privacyExp(req))
                             criteria = {$and: criteria}
@@ -293,6 +321,10 @@ var appendRecommendations = function(req, res, questions){
                 var questionsOut = _.map(questions,function(question){
                     return _.assign(question,{ recommendations:rPerQuestion[question._id] });
                 });
+
+                if(req.query.justOneQuestion){
+                    questionsOut = _.first(questionsOut);
+                }
 
                 res.jsonp(questionsOut);
     });

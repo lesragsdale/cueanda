@@ -28,6 +28,9 @@ angular.module('cueanda').config(['$routeProvider',
         when('/list/:communityId', {
             templateUrl: 'views/question/stream.html'
         }).
+        when('/qstn/:questionId', {
+            templateUrl: 'views/question/single-question-page.html'
+        }).
         when('/flagged', {
             templateUrl: 'views/question/flagged.html'
         }).

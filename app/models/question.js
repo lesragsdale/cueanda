@@ -21,6 +21,11 @@ var QuestionSchema = new Schema({
         default: '',
         trim: true
     },
+    shortUrl: {
+        type: String,
+        default: '',
+        trim: true
+    },
     question: {
         type: Schema.Types.Mixed
     },

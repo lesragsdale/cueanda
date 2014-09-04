@@ -36,7 +36,7 @@ module.exports = function(app) {
     app.get('/questions', questions.all);
     app.get('/questions/:communityId', questions.all);
     app.post('/questions', authorization.requiresLogin, questions.create);
-    app.get('/questions/:questionId', questions.show);
+    app.get('/question/:questionId', questions.show);
     app.put('/questions/:questionId', authorization.requiresLogin, hasAuthorization, questions.update);
     app.del('/questions/:questionId', questions.destroy);
 

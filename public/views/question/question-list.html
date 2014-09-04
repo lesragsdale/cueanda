@@ -50,12 +50,6 @@
         <div  ng-show="usePager" style="text-align:center">
 	        <ul class="pagination pagination-sm" ng-show="questions.length > 0">
 	        	  <li ng-class="{'disabled':currentPage==0}" ng-click="changePage(-1)"><span>&laquo;</span></li>
-	        	 <!-- <li ng-show="currentPage > 5 && (questions.length/itemsPerPage) > 6" class="spacer"><span>. . .</span></li>
-	        	  	<li ng-repeat="i in getNumber() track by $index" ng-class="{'active':$index==currentPage}" ng-click="setPage($index)" ng-hide="(currentPage - $index > 1 || $index - currentPage > 1) && (questions.length/itemsPerPage) > 6 ">
-	        	  		<span>{{$index+1}}</span>
-	        	  	</li>
-	        	  <li ng-show="" class="spacer" ng-hide="(questions.length/itemsPerPage) - $index <= 5 && (questions.length/itemsPerPage) > 6"><span>. . .</span></li> -->
-
 	        	  <li class="spacer"><span> {{currentPage+1}} / {{questions.length/itemsPerPage | ceil}} </span></li>
 				  <li ng-class="{'disabled': (currentPage + 1) >= (questions.length/itemsPerPage)}" ng-click="changePage(1)"><span>&raquo;</span></li>
 	        </ul>
@@ -65,83 +59,9 @@
 
 
         <div class="modal fade viewQuestion" id="{{'viewQuestion'+uniqueName}}">
-		  <div class="modal-dialog">
-		    <div class="modal-content">
-		      <div class="modal-header">
-		      	<div class="row question-modal-top-row">
-		      		<div class="col-sm-2 col user-pocket">
-		      			<a href="" ng-click="goToUser(activeQuestion.user.username)">
-		      				<img ng-show="activeQuestion.user.image" ng-src="{{activeQuestion.userImagePath}}" />
-		      				<h6 class="question-username">{{activeQuestion.user.username}}</h6>
-		      			</a>
-		      			<h6 class="question-date" style="margin-bottom:15px;font-size:.65em;color:#888">{{activeQuestion.created | ago}}</h6>
-
-		      			<button class="btn btn-xs red-butt" style="margin-bottom:10px" ng-show="activeQuestion.user._id == currentUser._id" ng-click="prepareToDelete(activeQuestion._id)"> <span class="fa fa-times"></span> Delete</button>
-		      		</div>
-		      		<div class="col-sm-10 col question-title">
-		      			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-		        	<h4 class="modal-title" ng-bind-html="activeQuestion.question.mainInput"></h4>
-		        	<a href="" ng-click="goToUser(activeQuestion.user.username)">
-		        		<h6 class="question-username">{{activeQuestion.user.username}}</h6>
-		        	</a>
-		      		<h6 class="question-date" style="margin-bottom:15px;font-size:.65em;color:#888">{{activeQuestion.created | ago}}</h6>
-		      		<embed-handler data="activeQuestion.question"></embed-handler>
-		      		</div>
-		      	</div>		        
-		      </div>
-		      <div class="modal-body">
-		      	<div class="options row" ng-class="{'has-embeds': activeQuestion.answers[0].showAttach == true || activeQuestion.answers[1].showAttach == true }">
-
-			      	<div ng-repeat="answer in activeQuestion.answers" class="col-sm-6 col">
-
-			      		<embed-handler data="answer"></embed-handler>
-
-			      		<div  ng-click="castVote($index)" class="answer answer-{{$index}} hover" ng-class="{'orange-butt':$index==0,'blue-butt':$index==1,'selected':activeQuestion.currentAnswer.answer == $index}" style="margin:10px 0px">
-			          		<span class="fa fa-check-circle"></span>
-			          		<span  ng-bind-html="answer.mainInput"></span>
-			          	</div>
-			      	</div>
-
-		      	</div>
-
-		      	<div ng-show="activeQuestion.currentAnswer"> <voting-bar votes="activeQuestion.votes"></voting-bar> </div>
-		      </div>
-		        <div ng-show="activeQuestion.currentAnswer" class="extra-functions">
-		          <div class="buttons">
-		            <button class="btn btn-sm" ng-click="toggleRecommendSection()" ng-show="currentUser.follows.length > 0 && !activeQuestion.isPrivate" data-toggle="tooltip" data-placement="bottom" title="Recommend this question to a friend"> <span class="glyphicon glyphicon-thumbs-up"></span> </button>
-
-		            <button class="btn btn-sm" ng-show="currentUser.follows.length > 0 && !activeQuestion.allVotes" data-toggle="tooltip" ng-click="filterVotes(true)" data-placement="bottom" title="Toggle the filtering of votes to be only from people you follow"> <span class="fa fa-group"></span> </button>
-
-		            <button class="btn btn-sm" ng-show="currentUser.follows.length > 0 && activeQuestion.allVotes" data-toggle="tooltip" ng-click="filterVotes(false)" data-placement="bottom" title="Toggle the filtering of votes to be from all users"> <span class="fa fa-globe"></span> </button>
-		            
-		            <button class="btn btn-sm" ng-show="currentUser" ng-click="toggleModal('flagQuestion')" ng-class="{'disabled': alreadyFlagged() }" data-toggle="tooltip" data-placement="bottom" title="Flag this question as inappropriate"> <span class="fa fa-flag"></span> </button>
-
-		            <button class="btn btn-sm twitter" ng-click="openWindow('https://twitter.com/share?url=http://cueanda.com/v/0&via=AskCueanda&text=[questionTitle]','sharer','toolbar=0,status=0,width=580,height=325')" ng-hide="activeQuestion.isPrivate" data-toggle="tooltip" data-placement="bottom" title="Tweet this question!" > <span class="fa fa-twitter"></span> </button>
-
-		            <button class="btn btn-sm facebook" ng-click="openWindow('http://www.facebook.com/sharer.php?s=100&p[title]=TestmoreTOGOHERE&p[summary]=[questionTitle]&p[url]=http://cueanda.com/v/0&p[images][0]=https://www.foobar.com/thumb.gif','sharer','toolbar=0,status=0,width=580,height=325')" ng-hide="activeQuestion.isPrivate" data-toggle="tooltip" data-placement="bottom" title="Share this question on Facebook!"> <span class="fa fa-facebook"></span> </button>
-
-		          </div>
-		          <div class="well recommend-well">
-		                <select ui-select2 multiple ng-model="activeQuestion.recommends" ng-click="recDropChange()" style="width:100%;" data-placeholder="Select who you want to recommend this question to...">
-		                  <option  ng-repeat="usr in currentUser.follows" ng-hide="hideRecommendOption(usr.followee._id)" ng-click="recDropChange()" value="{{usr.followee._id}}">{{usr.followee.username+" ("+usr.followee.name+")"}}</option>
-		                </select>
-		                <button class="btn btn-primary btn-xs" ng-click="sendRecommendations()" ng-show="activeQuestion.recommends.length > 0">Send Recommendation<span ng-show="activeQuestion.recommends.length > 1">s</span></button>
-		          </div>
-		        </div>
-
-		      <div class="modal-body">
-		      	<div ng-show="activeQuestion.currentAnswer && currentUser" class="create-comment">
-		      	<textarea id="commentBox" class="form-control" ng-model="activeQuestion.newComment" placeholder="Provide a comment..."></textarea>
-		        <button style="padding:10px" class="comment-submit green-butt" ng-click="createComment()" >Submit Comment</button>
-		      	</div>
-
-		      	<div ng-show="activeQuestion.currentAnswer" class="comments">
-		          <comment question="activeQuestion" unique-name="uniqueName" comment-to-delete="commentToDelete"></comment>
-		      	</div>
-
-		      </div>
-		    </div><!-- /.modal-content -->
-		  </div><!-- /.modal-dialog -->
+        	<div class="modal-dialog">
+        		<question active-question="activeQuestion"></question>
+        	</div>
 		</div><!-- /.modal -->
 
 		<div class="modal fade deleteQuestion" id="{{'deleteQuestion'+uniqueName}}">

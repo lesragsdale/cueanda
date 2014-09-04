@@ -28,6 +28,7 @@ angular.module('cueanda').controller('StreamController',
 		});
 
 		var makeHtmlContentSafe = function(q){
+			q.question.mainInputPlain = q.question.mainInput;
 			q.question.mainInput = $sce.trustAsHtml($filter('mentionLinks')(q.question.mainInput));
 			q.answers = _.map(q.answers,function(answer){
 				return _.assign(answer, {mainInput:  $sce.trustAsHtml($filter('mentionLinks')(answer.mainInput))  });

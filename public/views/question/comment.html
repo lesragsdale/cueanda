@@ -1,5 +1,7 @@
 <div>
-	<div class="comment-title" style="overflow:hidden;">
+	<div ng-show="question.comments.length == 0 && currentUser" style="font-style:italic;color:#888;background-color:#e0e0e0;padding:10px;text-align:center;border-radius:5px;" class="">No Comments...</div>
+
+	<div class="comment-title" style="overflow:hidden;" ng-show="question.comments.length > 0">
 		<div style="display:inline-block; float:left">
 	      <span class="badge pull-right" style="margin-left:5px;">{{question.comments.length}}</span>
 	      Comments
