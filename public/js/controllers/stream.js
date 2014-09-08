@@ -54,7 +54,7 @@ angular.module('cueanda').controller('StreamController',
 				$scope.newQuestionsSinceLoad = questionsNotMadeByUser;
 			});
 
-			$scope.newQuestionsTimeout = window.setTimeout(startListening, 10000);
+			$scope.newQuestionsTimeout = window.setTimeout(startListening, 30000);
 		};		
 
 		var Question = $resource(	'questions/:communityId',
