@@ -17,7 +17,7 @@ angular.module('cueanda').directive('newQuestionFormSection',[ '$resource', '$ti
 				scope.showPreview = false;
 				scope.showUploadPreview = false;
 
-				var pHNMap = {OptionA:"Option A",OptionB:"Option B",Question:"Question"};
+				var pHNMap = {OptionA:"Option A",OptionB:"Option B",Question:"Question",OptionC:"Option C",OptionD:"Option D"};
 				scope.placeHolderName = pHNMap[scope.name];
 
 

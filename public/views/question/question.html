@@ -24,11 +24,11 @@
   <div class="modal-body">
   	<div class="options row" ng-class="{'has-embeds': activeQuestion.answers[0].showAttach == true || activeQuestion.answers[1].showAttach == true }">
 
-      	<div ng-repeat="answer in activeQuestion.answers" class="col-sm-6 col">
+      	<div ng-repeat="answer in activeQuestion.answers" class="col-sm-6 col" ng-class="{'col-sm-offset-3': $index==2&&activeQuestion.answers.length==3}">
 
       		<embed-handler data="answer"></embed-handler>
 
-      		<div  ng-click="castVote($index)" class="answer answer-{{$index}} hover" ng-class="{'orange-butt':$index==0,'blue-butt':$index==1,'selected':activeQuestion.currentAnswer.answer == $index}" style="margin:10px 0px">
+      		<div  ng-click="castVote($index)" class="answer answer-{{$index}} hover" ng-class="{'orange-butt':$index==0,'blue-butt':$index==1,'purple-butt':$index==2,'teal-butt':$index==3,'selected':activeQuestion.currentAnswer.answer == $index}" style="margin:10px 0px">
           		<span class="fa fa-check-circle"></span>
           		<span  ng-bind-html="answer.mainInput"></span>
           	</div>

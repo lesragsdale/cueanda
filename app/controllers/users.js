@@ -294,6 +294,8 @@ exports.create = function(req, res, next) {
     var user = new User(req.body);
     var message = null;
 
+    user.username = user.username.toLowerCase().split(" ").join("");
+
     user.provider = 'local';
     user.save(function(err) {
         if (err) {

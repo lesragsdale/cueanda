@@ -2,7 +2,7 @@
 	<div class="row">
 
 		<div class="col-sm-3">
-			<button ng-show="currentUser" class="btn btn-primary orange-butt add-login-button" style="padding:8px; width:100%" ng-click="newQuestion = {category:'empty', question:{id:'qstn'}, optionA:{id:'opa'}, optionB:{id:'opb'}, private:'false' }" data-toggle="modal" data-target="#questionModal">Add a Question!</button>
+			<button ng-show="currentUser" class="btn btn-primary orange-butt add-login-button" style="padding:8px; width:100%" data-toggle="modal" data-target="#questionModal" ng-click="addQuestionReset()">Add a Question!</button>
 
       <a href="/signin"><button ng-hide="currentUser" class="btn btn-primary green-butt add-login-button" style="padding:8px; width:100%" ng-click="goSignUp()" >Sign Up</button></a>
 
@@ -72,11 +72,25 @@
     		<new-question-form-section field-data="newQuestion.question" name="Question" unique="qstn">
     		</new-question-form-section>
 
-    		<new-question-form-section field-data="newQuestion.optionA" name="OptionA" unique="opa">
-    		</new-question-form-section>
+        <div style="display:none" class="option optionAB">
+      		<new-question-form-section field-data="newQuestion.optionA" name="OptionA" unique="opa">
+      		</new-question-form-section>       
 
-    		<new-question-form-section field-data="newQuestion.optionB" name="OptionB" unique="opb">
-    		</new-question-form-section> 
+      		<new-question-form-section field-data="newQuestion.optionB" name="OptionB" unique="opb">
+      		</new-question-form-section> 
+        </div>
+
+        <div style="display:none" class="option optionC">
+          <new-question-form-section field-data="newQuestion.optionC" name="OptionC" unique="opc">
+          </new-question-form-section>
+        </div>
+
+        <div style="display:none" class="option optionD">
+          <new-question-form-section field-data="newQuestion.optionD" name="OptionD" unique="opd">
+          </new-question-form-section>
+        </div>
+
+        <div class="add-answer-section-button" ng-click="addAnswerSection()"></div>
 
         <div class="control-group" style="margin-bottom:0px;">
     			<div class="controls">

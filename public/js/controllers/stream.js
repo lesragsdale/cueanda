@@ -210,10 +210,25 @@ angular.module('cueanda').controller('StreamController',
 	    	var err = undefined;
 	    	if(question.category == "empty") { err =  "you must select a category"; }
 	    	if(_.isUndefined(question.question.mainInput)) { err =   "you must provide a question"; }
-	    	_.each(question.answers,function(answer){
-	    		if(_.isUndefined(answer.mainInput)) { err =   "you must provide two possible answers"; }
-	    	});
+	    	if(question.answers.length == 1){ err = "you must provide 0, 2, or 3 possible options"; }
 	    	return err;
+	    }
+
+	    $scope.addQuestionReset = function(){
+	    	$scope.newQuestion = {
+	    		category:'empty', 
+	    		question:{id:'qstn'}, 
+	    		optionA:{}, 
+	    		optionB:{},
+	    		optionC:{}, 
+	    		optionD:{}, 
+	    		private:'false' 
+	    	};
+	    	$scope.newQuestionError = undefined
+	    	$scope.questionOptionCount = 0
+	    	$("#questionModal .option").css("display","none");
+	    	$(".add-answer-section-button").removeClass("disabled");
+			$(".add-answer-section-button").html("add answer choices");
 	    }
 
 		$scope.createQuestion = function() {
@@ -221,12 +236,23 @@ angular.module('cueanda').controller('StreamController',
 				question: $scope.newQuestion.question,
 				answers: [
 							$scope.newQuestion.optionA,
-							$scope.newQuestion.optionB
+							$scope.newQuestion.optionB,
+							$scope.newQuestion.optionC,
+							$scope.newQuestion.optionD
 						],
 				category: $scope.newQuestion.category,
 				isPrivate: ($scope.newQuestion.private == 'true'?true:false),
 				privateList: $scope.newQuestion.privateList
 			};
+
+			var ids = ["opa","opb","opc","opd"];
+			question.answers = _.map(_.filter(question.answers,function(answer){
+				return !_.isUndefined(answer.mainInput);
+			}), function(item, index){
+				item.id = ids[index];
+				return item;
+			});
+
 
 			var validation = validateNewQuestion(question);
 
@@ -248,6 +274,8 @@ angular.module('cueanda').controller('StreamController',
 					"Is that the best question you've got? ... alright, we'll take it",
 					"Hah, nice question",
 					"Good luck finding someone to answer that one..",
+					"Ohhh, you're brave for asking that one..",
+					"What sort of person asked a question like that?",
 					"Your question has been submitted"
 				];
 
@@ -261,6 +289,27 @@ angular.module('cueanda').controller('StreamController',
 			});
 
 		};
+
+		$scope.addAnswerSection = function(){
+			$scope.questionOptionCount = $scope.questionOptionCount  || 0
+
+			if ($scope.questionOptionCount == 0){
+				$("#questionModal .optionAB").slideDown(300);
+				$scope.questionOptionCount = 2;
+				$(".add-answer-section-button").html("add another option");
+			}
+			else if ($scope.questionOptionCount == 2){
+				$("#questionModal .optionC").slideDown(300);
+				$scope.questionOptionCount = 3;
+			}
+			else if ($scope.questionOptionCount == 3){
+				$("#questionModal .optionD").slideDown(300);
+				$(".add-answer-section-button").addClass("disabled");
+				$(".add-answer-section-button").html("4 is the max");
+				$scope.questionOptionCount = 4;
+			}
+
+		}
 
 	}]	
 );
