@@ -274,7 +274,7 @@ exports.all = function(req, res){
 }
 
 exports.appendVotes = function(req, res, questions){
-    Vote.find().exec(function(err2, votes) {
+    Vote.find().populate('user','username').exec(function(err2, votes) {
         var vPerQuestion = _.groupBy(votes,'question')
         var questionsOut = _.map(questions,function(question){
             return _.assign(question,{ votes:vPerQuestion[question._id] });

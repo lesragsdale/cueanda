@@ -24,11 +24,11 @@
   <div class="modal-body">
   	<div class="options row" ng-class="{'has-embeds': activeQuestion.answers[0].showAttach == true || activeQuestion.answers[1].showAttach == true }">
 
-      	<div ng-repeat="answer in activeQuestion.answers" class="col-sm-6 col" ng-class="{'col-sm-offset-3': $index==2&&activeQuestion.answers.length==3}">
+      	<div ng-repeat="answer in activeQuestion.answers" class="col-sm-6 col" ng-class="{'col-sm-offset-3': $index==2&&activeQuestion.answers.length==3}" ng-hide="$index > 1">
 
       		<embed-handler data="answer"></embed-handler>
 
-      		<div  ng-click="castVote($index)" class="answer answer-{{$index}} hover" ng-class="{'orange-butt':$index==0,'blue-butt':$index==1,'purple-butt':$index==2,'teal-butt':$index==3,'selected':activeQuestion.currentAnswer.answer == $index}" style="margin:10px 0px">
+      		<div  ng-click="castVote($index)" class="answer answer-{{$index}} hover" ng-class="{'orange-butt':$index==0,'blue-butt':$index==1,'purple-butt':$index==3,'teal-butt':$index==2,'selected':activeQuestion.currentAnswer.answer == $index}" style="margin:10px 0px">
           		<span class="fa fa-check-circle"></span>
           		<span  ng-bind-html="answer.mainInput"></span>
           	</div>
@@ -36,7 +36,21 @@
 
   	</div>
 
-  	<div ng-show="activeQuestion.currentAnswer"> <voting-bar votes="activeQuestion.votes"></voting-bar> </div>
+    <div class="options row" ng-class="{'has-embeds': activeQuestion.answers[2].showAttach == true || activeQuestion.answers[3].showAttach == true }">
+
+        <div ng-repeat="answer in activeQuestion.answers" class="col-sm-6 col" ng-class="{'col-sm-offset-3': $index==2&&activeQuestion.answers.length==3}" ng-hide="$index < 2">
+
+          <embed-handler data="answer"></embed-handler>
+
+          <div  ng-click="castVote($index)" class="answer answer-{{$index}} hover" ng-class="{'orange-butt':$index==0,'blue-butt':$index==1,'purple-butt':$index==3,'teal-butt':$index==2,'selected':activeQuestion.currentAnswer.answer == $index}" style="margin:10px 0px">
+              <span class="fa fa-check-circle"></span>
+              <span  ng-bind-html="answer.mainInput"></span>
+            </div>
+        </div>
+
+    </div>
+
+  	<div ng-show="activeQuestion.currentAnswer"> <voting-bar votes="activeQuestion.votes" answers="activeQuestion.answers"></voting-bar> </div>
   </div>
     <div class="extra-functions">
       <div class="buttons">
@@ -47,6 +61,8 @@
         <button class="btn btn-sm" ng-show="currentUser.follows.length > 0 && activeQuestion.allVotes" data-toggle="tooltip" ng-click="filterVotes(false)" data-placement="bottom" title="Toggle the filtering of votes to be from all users"> <span class="fa fa-globe"></span> </button>
         
         <button class="btn btn-sm" ng-show="currentUser" ng-click="toggleModal('flagQuestion')" ng-class="{'disabled': alreadyFlagged() }" data-toggle="tooltip" data-placement="bottom" title="Flag this question as inappropriate"> <span class="fa fa-flag"></span> </button>
+
+        <button class="btn btn-sm tipper-show-votes"> <span class="fa fa-check"></span> </button>
 
         <button class="btn btn-sm twitter" ng-click="openWindow('https://twitter.com/share?url=[shortUrl]&via=AskCueanda&text=[questionTitle]','sharer','toolbar=0,status=0,width=580,height=325')" ng-hide="activeQuestion.isPrivate || !activeQuestion.shortUrl" data-toggle="tooltip" data-placement="bottom" title="Tweet this question!" > <span class="fa fa-twitter"></span> </button>
 
@@ -64,7 +80,7 @@
     </div>
 
   <div class="modal-body">
-  	<div ng-show="activeQuestion.currentAnswer && currentUser" class="create-comment">
+  	<div ng-show="(activeQuestion.currentAnswer && currentUser) || activeQuestion.answers.length == 0" class="create-comment">
   		<textarea id="commentBox" class="form-control" ng-model="activeQuestion.newComment" placeholder="Provide a comment..."></textarea>
     	<button style="padding:10px" class="comment-submit green-butt" ng-click="createComment()" >Submit Comment</button>
   	</div>

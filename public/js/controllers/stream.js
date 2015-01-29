@@ -27,6 +27,37 @@ angular.module('cueanda').controller('StreamController',
 		  }
 		});
 
+		$scope.cancelTipper = false;
+		$scope.aboutToCallTipper = false;
+		$(document).on("mouseenter", ".vote-sec",function(e){
+			$scope.aboutToCallTipper = true;
+			$timeout(function(){
+				if($scope.cancelTipper){
+					$scope.cancelTipper = false;
+				}else{
+					$scope.aboutToCallTipper = false;
+					var answer = $(e.target).attr("answer")
+					$(".tooltipper .text").html(answer)
+					$(".tooltipper").addClass("active");
+
+					$(".tooltipper").offset({
+						top: $(e.target).offset().top - ($(".tooltipper .text").height() + 32),
+						left: $(e.target).offset().left + ($(e.target).width()/2) - ($(".tooltipper").width()/2) 
+					})
+				}
+			},200)
+	    });
+
+	    $(document).on("mouseleave", ".vote-sec",function(e){
+	    	if($scope.aboutToCallTipper){
+	    		$scope.cancelTipper = true;
+	    		$scope.aboutToCallTipper = false;
+	    	}
+			var answer = $(e.target).attr("answer")
+			$(".tooltipper .text").html("")
+			$(".tooltipper").removeClass("active");
+	    });
+
 		var makeHtmlContentSafe = function(q){
 			q.question.mainInputPlain = q.question.mainInput;
 			q.question.mainInput = $sce.trustAsHtml($filter('mentionLinks')(q.question.mainInput));
@@ -275,7 +306,7 @@ angular.module('cueanda').controller('StreamController',
 					"Hah, nice question",
 					"Good luck finding someone to answer that one..",
 					"Ohhh, you're brave for asking that one..",
-					"What sort of person asked a question like that?",
+					"What sort of person asks a question like that?",
 					"Your question has been submitted"
 				];
 

@@ -18,11 +18,12 @@ angular.module('cueanda').directive('votingBar',
 					var qVotes = _.filter(votes,function(vote){ return _.isUndefined(vote.comment); } )
 					var counts = _.countBy(qVotes,function(vote){return vote.answer;});
 					var vCount = _.size(qVotes);
+					var answers = scope.$eval(attrs.answers);
 
 					var htmlOutput = "<div class='vote-bar "+(vCount == 0?'is-empty':'')+" '>";
 
 					_.each(counts,function(val,key){
-						htmlOutput += "<div class='vote-sec vote-sec-"+key+"'' style='width:"+((val/vCount)*100)+"%'></div>";
+						htmlOutput += "<div class='vote-sec vote-sec-"+key+"'' style='width:"+((val/vCount)*100)+"%' perc='"+((val/vCount)*100).toFixed(0)+"' votes='"+val+"' answer='"+answers[key].mainInput+"'></div>";
 					});
 
 					htmlOutput += "</div>";
@@ -32,9 +33,9 @@ angular.module('cueanda').directive('votingBar',
 					if(_.isUndefined(counts[1])){ counts[1] = 0; }
 
 					htmlOutput += "<div style='text-align:center' class='vote-numbers'> <span class='badge'>"+vCount+" vote"+(vCount != 1?'s':'')+"</span>";
-					_.each(counts,function(val,key){
+					/*_.each(counts,function(val,key){
 						htmlOutput += "<span class='badge  "+(vCount == 0?'hidden':'')+"  "+(key==0?'pull-left':'pull-right')+" '>"+((val/vCount)*100).toFixed(0)+"%</span>";
-					});
+					});*/
 					htmlOutput += "</div>";
 
 					$(element).html(htmlOutput);

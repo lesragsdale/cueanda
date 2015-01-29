@@ -518,3 +518,16 @@ body .select2-search input {
 	color:#575757;
 }
 
+.vote-nub-holder {
+	overflow: hidden;
+}
+.vote-nub-holder .name {
+	padding-right:10px;
+}
+.vote-nub-holder .vote-nub {
+	width:10px;
+	height:10px;
+	border-bottom-width: 1px;
+	float:right;
+}
+

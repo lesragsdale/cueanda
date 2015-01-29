@@ -44,6 +44,41 @@ angular.module('cueanda').directive('question',['$resource', '$timeout', '$windo
 											}
 										);
 
+				scope.cancelTipper = false;
+				scope.aboutToCallTipper = false;
+				$(document).on("mouseenter", ".tipper-show-votes",function(e){
+					scope.aboutToCallTipper = true;
+					$timeout(function(){
+						if(scope.cancelTipper){
+							scope.cancelTipper = false;
+						}else{
+							scope.aboutToCallTipper = false;
+							var text = _.reduce(_.sortBy(scope.activeQuestion.votes,function(v){ return (v.user?v.user.username:"zzzzz"); }), function(memo, vote){
+								return memo + "<div class='vote-nub-holder'><span class='name'>" + (vote.user?vote.user.username:"anon") + ":</span> <div class='vote-nub vote-sec-"  + vote.answer + "'> </div></div>";
+							},"");
+							console.log(text);
+							console.log($(e.target).offset());
+							$(".tooltipper .text").html(text);
+							$(".tooltipper").addClass("active");
+
+							$(".tooltipper").offset({
+								top: $(e.target).offset().top - ($(".tooltipper .text").height() + 32),
+								left: $(e.target).offset().left + ($(e.target).width()/2) - ($(".tooltipper").width()/2) 
+							})
+						}
+					},200)
+			    });
+
+			    $(document).on("mouseleave", ".tipper-show-votes",function(e){
+			    	if(scope.aboutToCallTipper){
+			    		scope.cancelTipper = true;
+			    		scope.aboutToCallTipper = false;
+			    	}
+					var answer = $(e.target).attr("answer")
+					$(".tooltipper .text").html("")
+					$(".tooltipper").removeClass("active");
+			    });
+
 				scope.submitFlagging = function(){
 			    	var aFlag = new Flag({
 			    		type: scope.reasonForFlagging,
