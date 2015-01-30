@@ -176,9 +176,9 @@ angular.module('cueanda').directive('questionList',['$resource', '$timeout', '$w
 
 			    var compareUserAnswer = function(vote){
 					var ret = false;
-					if(user){
-						ret = vote.user == user._id;
-					}else{
+					if(user && vote.user){
+						ret = vote.user._id == user._id;
+					}else if (!user && unAuthUserIp){
 						ret = vote.anon == unAuthUserIp;
 					}
 					return ret;
@@ -192,7 +192,7 @@ angular.module('cueanda').directive('questionList',['$resource', '$timeout', '$w
 
 						//CODE REPEATED IN singleQuestion.js
 						var questionVotes = _.filter(scope.activeQuestion.votes,function(vote){ return _.isUndefined(vote.comment); });
-						scope.activeQuestion.votesByUser =  _.groupBy(questionVotes,'user');
+						scope.activeQuestion.votesByUser =  _.groupBy(questionVotes,function(vote){return (vote.user? vote.user._id : vote.anon);});
 						scope.activeQuestion.currentAnswer = _.find(question.votes,function(vote){
 							return compareUserAnswer(vote) && _.isUndefined(vote.comment);
 						});

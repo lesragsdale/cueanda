@@ -143,6 +143,9 @@ footer p {
   text-shadow: 1px 1px #0B0D43;
   color:#fff;
 }
+.comment-1 .comment-img img {
+  border:3px solid #1b21a7;
+}
 
 .blue-butt:hover {
   background-color: #375bf6;
@@ -222,6 +225,9 @@ footer p {
   border:thin solid #601881;
   border-bottom:5px solid #601881;
 }
+.comment-3 .comment-img img {
+  border:3px solid #8d28bd;
+}
 
 .purple-butt:hover {
   color:#fff;
@@ -250,6 +256,10 @@ footer p {
   border:thin solid #0e7065;
   border-bottom:5px solid #0e7065;
 }
+.comment-2 .comment-img img {
+  border:3px solid #1aaa9b;
+}
+
 
 .teal-butt:hover {
   color:#fff;
@@ -273,7 +283,9 @@ footer p {
   box-shadow: 0px 1px 1px #FF9933 inset;
   text-shadow: 1px 1px #A24100;
 }
-
+.comment-0 .comment-img img {
+  border:3px solid #D85700;
+}
 .orange-butt:hover {
   background-color: #FF841A;
   background-image: none;

@@ -26,7 +26,8 @@ var VoteSchema = new Schema({
     },
     question: {
         type: Schema.ObjectId,
-        ref: 'Question'
+        ref: 'Question',
+        index: true
     },
     comment: {
         type: Schema.ObjectId,

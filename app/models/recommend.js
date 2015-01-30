@@ -13,15 +13,18 @@ var mongoose = require('mongoose'),
 var RecommendSchema = new Schema({
     recommender: {
         type: Schema.ObjectId,
-        ref: 'User'
+        ref: 'User',
+        index: true
     },
     recommendee: {
         type: Schema.ObjectId,
-        ref: 'User'
+        ref: 'User',
+        index: true
     },
     question: {
         type: Schema.ObjectId,
-        ref: 'Question'
+        ref: 'Question',
+        index: true
     }
 });
 

@@ -30,7 +30,7 @@
               <span style="font-size:1.5em;" class="pull-right {{catIcons[question.category.machine_name]}}" ></span>
             </div>
             <div class="question-title" ng-bind-html="question.question.mainInput"></div>
-            <div> <voting-bar votes="question.votes" answers="question.answers"></voting-bar> </div>
+            <div> <voting-bar question="question"></voting-bar> </div>
             <!--div class="answers" style="padding:5px;">
               <div class="answer opa side">
                 <div class="text" ng-bind-html="question.answers[0].mainInput"></div>

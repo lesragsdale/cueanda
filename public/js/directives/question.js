@@ -52,12 +52,16 @@ angular.module('cueanda').directive('question',['$resource', '$timeout', '$windo
 						if(scope.cancelTipper){
 							scope.cancelTipper = false;
 						}else{
+
+							var votes = getVotes();							
 							scope.aboutToCallTipper = false;
-							var text = _.reduce(_.sortBy(scope.activeQuestion.votes,function(v){ return (v.user?v.user.username:"zzzzz"); }), function(memo, vote){
-								return memo + "<div class='vote-nub-holder'><span class='name'>" + (vote.user?vote.user.username:"anon") + ":</span> <div class='vote-nub vote-sec-"  + vote.answer + "'> </div></div>";
+							var text = _.reduce(_.sortBy(votes[0],function(v){ return v.user.username; }), function(memo, vote){
+								return memo + "<div class='vote-nub-holder'><span class='name'>" + vote.user.username + ":</span> <div class='vote-nub vote-sec-"  + vote.answer + "'> </div></div>";
 							},"");
-							console.log(text);
-							console.log($(e.target).offset());
+							var otherVotes = _.groupBy(votes[1],function(vote){ return vote.answer; });
+							text = _.reduce(otherVotes, function(memo, val, key){
+								return memo + "<div class='vote-nub-holder'><span class='name'>" + val.length + " users:</span> <div class='vote-nub vote-sec-" + key + "'></div></div>";
+							}, text);
 							$(".tooltipper .text").html(text);
 							$(".tooltipper").addClass("active");
 
@@ -78,6 +82,29 @@ angular.module('cueanda').directive('question',['$resource', '$timeout', '$windo
 					$(".tooltipper .text").html("")
 					$(".tooltipper").removeClass("active");
 			    });
+
+			    var getVotes = function(){
+			    	var allVotes = _.cloneDeep(scope.activeQuestion.votes)
+					if(user){ //Do this only if it's not an anon user
+						var whoIFollow = _.map(_.filter(user.follows,function(f){ return f.follower._id == user._id; }), function(aFollow){
+							return aFollow.followee._id;
+						});
+						allVotes = _.groupBy(allVotes,function(vote){
+							if(vote.user != null){
+								return _.contains(whoIFollow, vote.user._id);
+							}else{
+								return false;
+							}
+						});
+						var votesFromFriends = allVotes[true];
+						var votesFromElse = allVotes[false];
+					}else{
+						var votesFromFriends = [];
+						var votesFromElse = allVotes;
+					}
+
+					return [votesFromFriends,votesFromElse]
+			    }
 
 				scope.submitFlagging = function(){
 			    	var aFlag = new Flag({
@@ -152,16 +179,34 @@ angular.module('cueanda').directive('question',['$resource', '$timeout', '$windo
 						answer:option
 					});
 					aVote.$save(function(response){
+
+						if(user){
+							response.user = _.pick(user,["_id","username"]);
+						}else{
+							response.user = null
+						}
+
 						scope.activeQuestion.currentAnswer = response;
 						if(oldAnswerExists){
+							console.log(scope.activeQuestion.votes);
 							scope.activeQuestion.votes = _.reject( scope.activeQuestion.votes, function(vote){
 								return (compareUserAnswer(vote) && vote.question == scope.activeQuestion._id);
 							} );
 						}				
 						scope.activeQuestion.votes = _.union([response],scope.activeQuestion.votes);
-						scope.activeQuestion.votesByUser =  _.groupBy(scope.activeQuestion.votes,function(vote){return vote.user;});								
+						scope.activeQuestion.votesByUser =  _.groupBy(scope.activeQuestion.votes,function(vote){return (vote.user? vote.user._id : vote.anon);});								
 					});
 
+				}
+
+				var compareUserAnswer = function(vote){
+					var ret = false;
+					if(user && vote.user){
+						ret = vote.user._id == user._id;
+					}else if (!user && unAuthUserIp){
+						ret = vote.anon == unAuthUserIp;
+					}
+					return ret;
 				}
 
 				scope.createComment = function(){
@@ -187,6 +232,10 @@ angular.module('cueanda').directive('question',['$resource', '$timeout', '$windo
 						setMentionLinkClickAction();
 
 					});
+				}
+
+				var setMentionLinkClickAction = function(){
+					scope.$broadcast('enableMentionLinkFunc');
 				}
 
 				scope.deleteComment = function(){

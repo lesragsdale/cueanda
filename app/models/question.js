@@ -14,7 +14,8 @@ var mongoose = require('mongoose'),
 var QuestionSchema = new Schema({
     created: {
         type: Number,
-        default: function(){ return moment().valueOf(); }
+        default: function(){ return moment().valueOf(); },
+        index: true
     },
     title: {
         type: String,

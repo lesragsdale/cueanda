@@ -23,7 +23,8 @@ var FlagSchema = new Schema({
     },
     question: {
         type: Schema.ObjectId,
-        ref: 'Question'
+        ref: 'Question',
+        index:true
     },
     created: {
         type: Number,

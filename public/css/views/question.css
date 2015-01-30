@@ -346,19 +346,7 @@ body .select2-search input {
 	display: table;
 	width:100%;
 }
-.comment.comment-0 {
-	background-color: #FFE2CC;
-	/*border-top:2px solid #FFF0E6;*/
-	border-bottom:1px solid #FF841A;
-}
-.comment.comment-1 {
-	background-color: #D4D6FA;
-	/*border-top:2px solid #ECEDFD;*/
-	border-bottom:1px solid #375bf6;
-}
-.comment.comment-1 .comment-main {
-	text-align: right;
-}
+
 .comment .comment-vote, .comment .comment-main, .comment .comment-img {
 	display: table-cell;
 	vertical-align: top;
@@ -372,27 +360,19 @@ body .select2-search input {
 	padding-bottom: 0px;
 	background-color: 
 }
-.comment-1 .comment-vote .vote-butt-up,
-.comment-1 .comment-vote .vote-butt-down {
-	background-color: #A6A9E5;
-	/*border: 1px solid #375bf6;*/
+.comment-vote .vote-score,
+.comment-vote .vote-butt-down,
+.comment-vote .vote-butt-up {
+	background-color:#eee;
 }
-.comment-1 .comment-vote .vote-score {
-	background-color: #A6A9E5;
-	border:none;
-	/*border-right: 1px solid #375bf6;
-	border-left: 1px solid #375bf6;*/
+.odd-comment .comment-vote .vote-score,
+.odd-comment .comment-vote .vote-butt-down,
+.odd-comment .comment-vote .vote-butt-up {
+	background-color:#dcdcdc;
 }
-.comment-0 .comment-vote .vote-butt-up,
-.comment-0 .comment-vote .vote-butt-down {
-	background-color: #FFCAA0;
-	/*border: 1px solid #FF841A;*/
-}
-.comment-0 .comment-vote .vote-score {
-	background-color: #FFCAA0;
-	border:none;
-	/*border-right: 1px solid #FF841A;
-	border-left: 1px solid #FF841A;*/
+.comment.odd-comment {
+	border-radius:5px;
+	background-color:#f1f1f1;
 }
 .comment .comment-vote .vote-butt-up {
 	border-bottom:none;
@@ -529,5 +509,6 @@ body .select2-search input {
 	height:10px;
 	border-bottom-width: 1px;
 	float:right;
+	margin-top:3px;
 }
 

@@ -23,6 +23,7 @@ angular.module('cueanda').directive('newQuestionFormSection',[ '$resource', '$ti
 
 				/********** MENTION.JS *************/
 				$timeout(function(){
+					if(!user){ return false; }
 					//get users that user follows
 					var mentionUsers = _.filter(user.follows,function(follow){ return follow.follower._id === user._id; });
 					//turn the image field into an actual image url

@@ -20,7 +20,7 @@ angular.module('cueanda').controller('SingleQuestionController',
 
 				//CODE REPEATED IN question-list.js
 				var questionVotes = _.filter($scope.activeQuestion.votes,function(vote){ return _.isUndefined(vote.comment); });
-				$scope.activeQuestion.votesByUser =  _.groupBy(questionVotes,'user');
+				$scope.activeQuestion.votesByUser =  _.groupBy(questionVotes,function(vote){return (vote.user? vote.user._id : vote.anon);});
 				$scope.activeQuestion.currentAnswer = _.find($scope.activeQuestion.votes,function(vote){
 					return compareUserAnswer(vote) && _.isUndefined(vote.comment);
 				});
@@ -49,14 +49,15 @@ angular.module('cueanda').controller('SingleQuestionController',
 		};
 
 		var compareUserAnswer = function(vote){
+			console.log(vote)
 			var ret = false;
-			if(user){
-				ret = vote.user == user._id;
-			}else{
+			if(user && vote.user){
+				ret = vote.user._id == user._id;
+			}else if (!user && unAuthUserIp){
 				ret = vote.anon == unAuthUserIp;
 			}
 			return ret;
-		};	
+		}
 		
 
 	}]	
